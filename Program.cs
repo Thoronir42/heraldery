@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldery {
+namespace Heraldry {
 
-    using LexAnalyzer;
-    using SyntAnalyzer;
-    using CrestGenerator;
+    using Heraldery.LexicalAnalysis;
+    using Heraldery.Rendering;
+    using Heraldery.SyntacticAnalysis;
 
     class Program {
         static void Main(string[] args) {
@@ -22,35 +22,14 @@ namespace Heraldery {
                 //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
                 //BEHOLD
                 LexAnalyzer lex = new LexAnalyzer();
-                lex.AnalyzeStuff(input);
+                var tokens = lex.ParseText(input);
 
-                SyntAnalyzer synt = new SyntAnalyzer();
-                synt.AnalyzeStuff(input);
+                SyntacticAnalyzer synt = new SyntacticAnalyzer();
+                var crest = synt.ParseTokens(tokens);
 
-                CrestGenerator gen = new CrestGenerator();
-                gen.CreateCrest();
+                CrestRenderer gen = new CrestRenderer();
+                gen.Render(crest); // todo: return value
             }
         }
-    }
-}
-
-namespace LexAnalyzer {
-    //this should be moved to its own project eventually
-    class LexAnalyzer {
-        public void AnalyzeStuff(string input) { }
-    }
-}
-
-namespace SyntAnalyzer {
-    //this should be moved to its own project eventually
-    class SyntAnalyzer {
-        public void AnalyzeStuff(string input) { }
-    }
-}
-
-namespace CrestGenerator {
-    //this should be moved to its own project eventually
-    class CrestGenerator {
-        public void CreateCrest() { }
     }
 }
