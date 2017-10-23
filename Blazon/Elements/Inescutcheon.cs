@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.BlazonElements
+namespace Heraldry.Blazon.Elements
 {
     /// <summary>
-    /// Tincture is a color or a pattern
+    /// Inescutcheon is an inner shield within an Escutcheon
     /// </summary>
-    class Tincture
+    class Inescutcheon : Escutcheon
     {
     }
 }

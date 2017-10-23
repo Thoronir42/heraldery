@@ -1,11 +1,11 @@
-﻿using Heraldery.BlazonElements;
+﻿using Heraldry.Blazon.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldery.SyntacticAnalysis
+namespace Heraldry.SyntacticAnalysis
 {
     class SyntacticAnalyzer
     {   

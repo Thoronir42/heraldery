@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.BlazonElements
+namespace Heraldry.Blazon.Elements
 {
     /// <summary>
-    /// Inescutcheon is an inner shield within an Escutcheon
+    /// Escutcheon is the shield displayed in a coat of arms.
     /// </summary>
-    class Inescutcheon : Escutcheon
+    class Escutcheon
     {
     }
 }
