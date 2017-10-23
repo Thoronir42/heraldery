@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Elements
 {
-    class Crest
+    class CoatOfArms
     {
-
+        public Escutcheon Escutcheon { get; set; }
+        public FieldDivision FieldDivision { get; set; }
     }
 }

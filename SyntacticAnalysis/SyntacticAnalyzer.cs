@@ -1,4 +1,4 @@
-﻿using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Heraldry.SyntacticAnalysis
 {
     class SyntacticAnalyzer
     {   
-        public Crest ParseTokens(List<LexicalAnalysis.Token> tokens) {
+        public BlazonInstance ParseTokens(List<LexicalAnalysis.Token> tokens) {
             return null;
         }
     }

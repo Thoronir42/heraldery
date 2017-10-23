@@ -7,7 +7,7 @@
     <ProjectGuid>{321B2B0A-2A4C-4E37-A3D2-CCC41D34181C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Heraldery</RootNamespace>
+    <RootNamespace>Heraldry</RootNamespace>
     <AssemblyName>Heraldery</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,18 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blazon\BlazonInstance.cs" />
+    <Compile Include="Blazon\Elements\Charge.cs" />
+    <Compile Include="Blazon\Elements\CoatOfArms.cs" />
     <Compile Include="Blazon\Elements\Crest.cs" />
     <Compile Include="Blazon\Elements\Escutcheon.cs" />
     <Compile Include="Blazon\Elements\FieldDivision.cs" />
+    <Compile Include="Blazon\Elements\FieldDivisionType.cs" />
     <Compile Include="Blazon\Elements\Inescutcheon.cs" />
-    <Compile Include="Blazon\Elements\Tincture.cs" />
-    <Compile Include="Blazon\BlazonDefinition.cs" />
-    <Compile Include="Blazon\IO\CsvLoader.cs" />
-    <Compile Include="Blazon\IO\FieldDivisionTypeProvider.cs" />
-    <Compile Include="Blazon\IO\TinctureProvider.cs" />
+    <Compile Include="Blazon\Elements\TinctureType.cs" />
+    <Compile Include="LexicalAnalysis\BlazonDefinition.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />
+    <Compile Include="LexicalAnalysis\Tokens\FieldDivisionToken.cs" />
+    <Compile Include="LexicalAnalysis\Tokens\TinctureToken.cs" />
+    <Compile Include="LexicalAnalysis\Tokens\TokenSpec.cs" />
     <Compile Include="LexicalAnalysis\TokenType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +72,7 @@
   <ItemGroup>
     <None Include="resources\en_olde\field_divisions.csv" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(SolutionDir)resources" "$(TargetDir)\resources\" /S /Y

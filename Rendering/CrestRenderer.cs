@@ -1,4 +1,4 @@
-﻿using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Heraldry.Rendering
 {
     class CrestRenderer
     {
-        public void Render(Crest crest) {
+        public void Render(BlazonInstance blazon) {
             // todo: return image
         }
     }

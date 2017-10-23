@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Heraldry
 {
-    using Heraldery.Blazon;
-    using Heraldery.CLI;
+    using Heraldry.Blazon;
+    using Heraldry.CLI;
     using Heraldry.LexicalAnalysis;
     using Heraldry.Rendering;
     using Heraldry.SyntacticAnalysis;
@@ -23,7 +23,7 @@ namespace Heraldry
 
             //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
             //BEHOLD
-            LexAnalyzer lex = new LexAnalyzer();
+            LexAnalyzer lex = new LexAnalyzer(blazon);
             var tokens = lex.ParseText("Todo: Todd, add real input. Wtf?");
 
             SyntacticAnalyzer synt = new SyntacticAnalyzer();
