@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blazon\Elements\FieldDivisionVariation.cs" />
+    <Compile Include="Blazon\Elements\FieldDivisionVariant.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
     <Compile Include="Blazon\Elements\Charge.cs" />
     <Compile Include="Blazon\Structure\CoatOfArms.cs" />
@@ -55,6 +55,7 @@
     <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionVariantDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
@@ -72,7 +73,9 @@
   <ItemGroup>
     <None Include="resources\en_olde\field_divisions.csv" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="resources\en_olde\field_division_variants.csv" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(SolutionDir)resources" "$(TargetDir)\resources\" /S /Y

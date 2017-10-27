@@ -13,6 +13,7 @@ namespace Heraldry.Blazon.Vocabulary
     {
         List<TinctureDefinition> Tinctures { get; set; } // todo: Todd, hide the setter, god dammit
         List<FieldDivisionDefinition> FieldDivisions { get; set; }
+        List<FieldDivisionVariantDefinition> FieldDivisionVariants { get; set; }
 
         public BlazonVocabulary(string blazonDirectory)
         {
@@ -21,8 +22,12 @@ namespace Heraldry.Blazon.Vocabulary
             Console.WriteLine(" " + this.Tinctures.Count() + " loaded");
 
             Console.Write("Loading Field Divisions...");
-            this.FieldDivisions = this.LoadFieldDIvisions(blazonDirectory + "field_divisions.csv");
+            this.FieldDivisions = this.LoadFieldDivisions(blazonDirectory + "field_divisions.csv");
             Console.WriteLine(" " + this.FieldDivisions.Count() + " loaded");
+
+            Console.Write("Load Field division types...");
+            this.FieldDivisionVariants = this.LoadFieldDivisionVariants(blazonDirectory + "field_division_variants.csv");
+            Console.WriteLine(" " + this.FieldDivisionVariants.Count() + " loaded");
         }
 
         private List<TinctureDefinition> LoadTinctures(string filename)
@@ -36,7 +41,7 @@ namespace Heraldry.Blazon.Vocabulary
             return ParseCsvFile(filename, f);
         }
 
-        private List<FieldDivisionDefinition> LoadFieldDIvisions(string filename)
+        private List<FieldDivisionDefinition> LoadFieldDivisions(string filename)
         {
             Func<string[], FieldDivisionDefinition> f = new Func<string[], FieldDivisionDefinition>(parts =>
             {
@@ -47,6 +52,19 @@ namespace Heraldry.Blazon.Vocabulary
             return ParseCsvFile(filename, f);
 
         }
+
+        private List<FieldDivisionVariantDefinition> LoadFieldDivisionVariants(string filename)
+        {
+            Func<string[], FieldDivisionVariantDefinition> f = new Func<string[], FieldDivisionVariantDefinition>(parts =>
+            {
+                FieldDivisionVariant type = (FieldDivisionVariant)Enum.Parse(typeof(FieldDivisionVariant), parts[1]);
+                return new FieldDivisionVariantDefinition() { Text = parts[0], Variant = type };
+            });
+
+            return ParseCsvFile(filename, f);
+
+        }
+
 
         private static List<T> ParseCsvFile<T>(string filename, Func<string[], T> parseLineFunction)
         {

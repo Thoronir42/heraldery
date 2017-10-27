@@ -9,8 +9,10 @@ namespace Heraldry.Blazon.Elements
     /// <summary>
     /// Variation of line within field division
     /// </summary>
-    enum FieldDivisionVariation
+    enum FieldDivisionVariant
     {
+        /// <summary> Straight line </summary>
+        Straight, 
         /// <summary> Squares </summary>
         Embattled,
         /// <summary> Gooey-like tears </summary>
@@ -24,7 +26,7 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Dessert-like waves </summary>
         Invected,
         /// <summary> Ocean-like waves calm </summary>
-        Wave,
+        Wavy,
         /// <summary> Tilted stairs </summary>
         Indented,
     }
