@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Elements
 {
+    /// <summary>
+    /// Layout of fields
+    /// </summary>
     public enum FieldDivisionType
     {
         /// <summary> Split in half vertically </summary>
@@ -36,25 +39,5 @@ namespace Heraldry.Blazon.Elements
 
         // todo: Todd, add more divisions
 
-    }
-
-    public enum FieldDivisionLine
-    {
-        /// <summary> Squares </summary>
-        Embattled,
-        /// <summary> Gooey-like tears </summary>
-        Nebuly,
-        /// <summary> Ocean-like waves pointy </summary>
-        Engrailed,
-        /// <summary> T-shaped zipper </summary>
-        Potenty,
-        /// <summary> Pot-shaped zipper </summary>
-        Dovetailed,
-        /// <summary> Dessert-like waves </summary>
-        Invected,
-        /// <summary> Ocean-like waves calm </summary>
-        Wave,
-        /// <summary> Tilted stairs </summary>
-        Indented,
     }
 }

@@ -9,8 +9,9 @@ namespace Heraldry.LexicalAnalysis
     class Token
     {
         public TokenType Type { get; set; }
-        public Object Value { get; set; }
+        public object Value { get; set; } // todo: generify Value type
 
         public int Position { get; set; }
+        public int OriginalText { get; set; }
     }
 }

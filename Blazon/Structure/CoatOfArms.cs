@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Elements
 {
-    /// <summary>
-    /// Inescutcheon is an inner shield within an Escutcheon
-    /// </summary>
-    class Inescutcheon : Escutcheon
+    class CoatOfArms
     {
+        public EscutcheonShape Escutcheon { get; set; }
+        public FieldDivision FieldDivision { get; set; }
     }
 }

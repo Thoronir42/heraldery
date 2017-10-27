@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.Blazon
+namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class BlazonInstance
+    class FieldDivisionDefinition : Definition
     {
-        public CoatOfArms CoatOfArms { get; set; }
-        public List<Charge> Supporters { get; set; }
+        public FieldDivisionType Type { get; set; }
     }
 }

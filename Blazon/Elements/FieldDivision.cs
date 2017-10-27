@@ -8,5 +8,9 @@ namespace Heraldry.Blazon.Elements
 {
     class FieldDivision
     {
+        public FieldDivision Division { get; set; }
+        public FieldDivisionVariation Line { get; set; }
+
+        public int NumOfFields { get; set; }
     }
 }

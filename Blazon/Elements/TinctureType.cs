@@ -8,6 +8,11 @@ namespace Heraldry.Blazon.Elements
 {
     public enum TinctureType
     {
-        Colour, Metal, Fur
+        /// <summary> Solid colour </summary>
+        Colour,
+        /// <summary> Metallic colour </summary>
+        Metal,
+        /// <summary> Fur or pattern </summary>
+        Fur
     }
 }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.Blazon.Elements
+namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class Charge
+    class Definition
     {
-
+        public string Text { get; set; }
+        
     }
 }

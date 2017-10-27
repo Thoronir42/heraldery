@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Heraldry
 {
     using Heraldry.Blazon;
+    using Heraldry.Blazon.Vocabulary;
     using Heraldry.CLI;
     using Heraldry.LexicalAnalysis;
     using Heraldry.Rendering;
@@ -19,7 +20,7 @@ namespace Heraldry
             CliSettings settings = new CliSettings(args);
 
             // Todo: fix resource loading
-            BlazonDefinition blazon = new BlazonDefinition(Environment.CurrentDirectory + "\\resources\\" + settings.Language + "\\");
+            BlazonVocabulary blazon = new BlazonVocabulary(Environment.CurrentDirectory + "\\resources\\" + settings.Language + "\\");
 
             //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
             //BEHOLD

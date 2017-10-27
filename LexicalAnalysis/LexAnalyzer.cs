@@ -1,4 +1,5 @@
 ﻿using Heraldry.Blazon;
+using Heraldry.Blazon.Vocabulary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace Heraldry.LexicalAnalysis
 {
     class LexAnalyzer
     {
-        private BlazonDefinition BlazonDefinition { get; }
+        private BlazonVocabulary BlazonVocabulary { get; }
 
-        public LexAnalyzer(BlazonDefinition blazonDefinition)
+        public LexAnalyzer(BlazonVocabulary blazonVocabulary)
         {
-            BlazonDefinition = blazonDefinition;
+            BlazonVocabulary = blazonVocabulary;
         }
 
         public List<Token> ParseText(string input) {

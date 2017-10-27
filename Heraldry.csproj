@@ -43,22 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blazon\BlazonInstance.cs" />
+    <Compile Include="Blazon\Elements\FieldDivisionVariation.cs" />
+    <Compile Include="Blazon\Structure\BlazonInstance.cs" />
     <Compile Include="Blazon\Elements\Charge.cs" />
-    <Compile Include="Blazon\Elements\CoatOfArms.cs" />
+    <Compile Include="Blazon\Structure\CoatOfArms.cs" />
     <Compile Include="Blazon\Elements\Crest.cs" />
-    <Compile Include="Blazon\Elements\Escutcheon.cs" />
+    <Compile Include="Blazon\Elements\EscutcheonShape.cs" />
     <Compile Include="Blazon\Elements\FieldDivision.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionType.cs" />
-    <Compile Include="Blazon\Elements\Inescutcheon.cs" />
     <Compile Include="Blazon\Elements\TinctureType.cs" />
-    <Compile Include="LexicalAnalysis\BlazonDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />
-    <Compile Include="LexicalAnalysis\Tokens\FieldDivisionToken.cs" />
-    <Compile Include="LexicalAnalysis\Tokens\TinctureToken.cs" />
-    <Compile Include="LexicalAnalysis\Tokens\TokenSpec.cs" />
     <Compile Include="LexicalAnalysis\TokenType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

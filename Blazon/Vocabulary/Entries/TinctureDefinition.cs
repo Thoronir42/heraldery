@@ -5,19 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.LexicalAnalysis.Tokens
+namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    /// <summary>
-    /// Tincture is a color or a pattern
-    /// </summary>
-    class TinctureToken : TokenSpec
-    {   
+    class TinctureDefinition : Definition
+    {
         public TinctureType Type { get; set; }
-        
+
 
         public override string ToString()
         {
-            return String.Format("Tincture {0}:{1} [{2}]", this.Name, this.Type);
+            return String.Format("Tincture {0}:{1} [{2}]", this.Text, this.Type);
         }
     }
 }
