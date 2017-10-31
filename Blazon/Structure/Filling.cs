@@ -1,4 +1,5 @@
 ﻿using Heraldry.Blazon.Elements;
+using Heraldry.Blazon.Vocabulary.Entries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,10 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Structure
 {
-    class CoatOfArms
+    class Filling
     {
-        public EscutcheonShape Escutcheon { get; set; } = EscutcheonShape.ModernFrench;
+        TinctureLayout Layout { get; set; }
 
-        public Field Content { get; set; }
-
-        public Charge Crest { get; set; }
-        
+        TinctureDefinition[] Tinctures { get; set; }
     }
 }

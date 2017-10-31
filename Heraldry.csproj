@@ -49,14 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blazon\Elements\FieldDivisionVariant.cs" />
+    <Compile Include="Blazon\Elements\TinctureLayout.cs" />
+    <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
     <Compile Include="Blazon\Elements\Charge.cs" />
     <Compile Include="Blazon\Structure\CoatOfArms.cs" />
-    <Compile Include="Blazon\Elements\Crest.cs" />
     <Compile Include="Blazon\Elements\EscutcheonShape.cs" />
-    <Compile Include="Blazon\Elements\FieldDivision.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionType.cs" />
     <Compile Include="Blazon\Elements\TinctureType.cs" />
+    <Compile Include="Blazon\Structure\Field.cs" />
     <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
