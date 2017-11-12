@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class Definition
+    abstract class Definition
     {
         public string Text { get; set; }
+
+        abstract public DefinitionType GetTokenType();
         
     }
 }

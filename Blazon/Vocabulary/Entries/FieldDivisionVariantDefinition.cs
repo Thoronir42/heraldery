@@ -11,5 +11,9 @@ namespace Heraldry.Blazon.Vocabulary.Entries
     {
         public FieldDivisionVariant Variant { get; set; }
 
+        public override DefinitionType GetTokenType()
+        {
+            return DefinitionType.FieldDivisionVariant;
+        }
     }
 }

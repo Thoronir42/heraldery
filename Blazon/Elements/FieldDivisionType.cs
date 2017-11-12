@@ -16,7 +16,7 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Split in half horizontally </summary>
         PartyPerFess,
         /// <summary> Quarters </summary>
-        Quaterly,
+        Quarterly,
 
         /// <summary> Split diagonally sinister top </summary>
         PartyPerBendSinister,

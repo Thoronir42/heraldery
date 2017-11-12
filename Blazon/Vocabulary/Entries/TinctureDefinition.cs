@@ -11,6 +11,10 @@ namespace Heraldry.Blazon.Vocabulary.Entries
     {
         public TinctureType Type { get; set; }
 
+        public override DefinitionType GetTokenType()
+        {
+            return DefinitionType.Tincture;
+        }
 
         public override string ToString()
         {
