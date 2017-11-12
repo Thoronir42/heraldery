@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 namespace Heraldry.SyntacticAnalysis
 {
     class SyntacticAnalyzer
-    {   
-        public BlazonInstance ParseTokens(List<LexicalAnalysis.Token> tokens) {
+    {
+        public BlazonInstance ParseTokens(List<LexicalAnalysis.Token> tokens)
+        {
+            foreach (var t in tokens)
+            {
+                Console.WriteLine(String.Format("{0} - {1}", t.Position, t.Type.ToString()));
+            }
             return null;
         }
     }
