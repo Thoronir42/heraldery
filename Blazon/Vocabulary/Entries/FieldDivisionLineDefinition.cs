@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class FieldDivisionVariantDefinition : Definition
+    class FieldDivisionLineDefinition : Definition
     {
-        public FieldDivisionVariant Variant { get; set; }
+        public FieldDivisionLine Line { get; set; }
 
         public override DefinitionType GetTokenType()
         {
-            return DefinitionType.FieldDivisionVariant;
+            return DefinitionType.FieldDivisionLine;
         }
     }
 }

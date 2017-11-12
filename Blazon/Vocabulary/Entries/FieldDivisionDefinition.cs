@@ -13,7 +13,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 
         public override DefinitionType GetTokenType()
         {
-            return DefinitionType.FieldDivisionType;
+            return DefinitionType.FieldDivision;
         }
     }
 }

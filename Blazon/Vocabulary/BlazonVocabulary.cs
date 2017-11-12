@@ -13,14 +13,14 @@ namespace Heraldry.Blazon.Vocabulary
     {
         List<TinctureDefinition> Tinctures { get; set; } // todo: Todd, hide the setter, god dammit
         List<FieldDivisionDefinition> FieldDivisions { get; set; }
-        List<FieldDivisionVariantDefinition> FieldDivisionVariants { get; set; }
+        List<FieldDivisionLineDefinition> FieldDivisionLines { get; set; }
         List<PositionDefinition> Positions { get; set; }
 
         public BlazonVocabulary(string blazonDirectory)
         {
             this.Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures);
             this.FieldDivisions = LoadList(blazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions);
-            this.FieldDivisionVariants = LoadList(blazonDirectory + "field_division_variants.csv", "Field division", LoadFieldDivisionVariants);
+            this.FieldDivisionLines = LoadList(blazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines);
             this.Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures);
             this.Positions = LoadList(blazonDirectory + "positions.csv", "Positions", LoadPositions);
 
@@ -35,7 +35,7 @@ namespace Heraldry.Blazon.Vocabulary
             var list = new List<Definition>();
             list.AddRange(this.Tinctures);
             list.AddRange(this.FieldDivisions);
-            list.AddRange(this.FieldDivisionVariants);
+            list.AddRange(this.FieldDivisionLines);
             list.AddRange(this.Positions);
 
 
@@ -79,12 +79,12 @@ namespace Heraldry.Blazon.Vocabulary
 
         }
 
-        private List<FieldDivisionVariantDefinition> LoadFieldDivisionVariants(string filename)
+        private List<FieldDivisionLineDefinition> LoadFieldDivisionLines(string filename)
         {
-            Func<string[], FieldDivisionVariantDefinition> f = new Func<string[], FieldDivisionVariantDefinition>(parts =>
+            Func<string[], FieldDivisionLineDefinition> f = new Func<string[], FieldDivisionLineDefinition>(parts =>
             {
-                FieldDivisionVariant type = (FieldDivisionVariant)Enum.Parse(typeof(FieldDivisionVariant), parts[1]);
-                return new FieldDivisionVariantDefinition() { Text = parts[0], Variant = type };
+                FieldDivisionLine type = (FieldDivisionLine)Enum.Parse(typeof(FieldDivisionLine), parts[1]);
+                return new FieldDivisionLineDefinition() { Text = parts[0], Line = type };
             });
 
             return ParseCsvFile(filename, f);

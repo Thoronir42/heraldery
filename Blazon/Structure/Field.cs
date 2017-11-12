@@ -13,7 +13,7 @@ namespace Heraldry.Blazon.Structure
         Charge Charge { get; set; }
 
         public FieldDivisionType? Division { get; set; } = null;
-        public FieldDivisionVariant? Line { get; set; } = null;
+        public FieldDivisionLine? Line { get; set; } = null;
 
         public Field[] Subfields { get; set; } = null;
     }

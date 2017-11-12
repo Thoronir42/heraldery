@@ -11,8 +11,7 @@ namespace Heraldry.Blazon.Vocabulary
         Escutcheon,
         Tincture,
         FieldDivision,
-        FieldDivisionType,
-        FieldDivisionVariant,
+        FieldDivisionLine,
         Charge,
         Motto,
 

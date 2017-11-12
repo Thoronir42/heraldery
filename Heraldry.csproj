@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blazon\Elements\FieldDivisionVariant.cs" />
+    <Compile Include="Blazon\Elements\FieldDivisionLine.cs" />
     <Compile Include="Blazon\Elements\Position.cs" />
     <Compile Include="Blazon\Elements\TinctureLayout.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
-    <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionVariantDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionLineDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="CLI\CliSettings.cs" />

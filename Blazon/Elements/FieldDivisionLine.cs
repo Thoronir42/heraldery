@@ -9,7 +9,7 @@ namespace Heraldry.Blazon.Elements
     /// <summary>
     /// Variation of line within field division
     /// </summary>
-    enum FieldDivisionVariant
+    enum FieldDivisionLine
     {
         /// <summary> Straight line </summary>
         Straight, 
