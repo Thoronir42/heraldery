@@ -35,7 +35,6 @@
   <ItemGroup>
     <Reference Include="Svg, Version=2.2.1.39233, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
       <HintPath>packages\Svg.2.3.0\lib\net35\Svg.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blazon\Elements\FieldDivisionVariant.cs" />
+    <Compile Include="Blazon\Elements\Position.cs" />
     <Compile Include="Blazon\Elements\TinctureLayout.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
@@ -62,6 +62,7 @@
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionVariantDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />

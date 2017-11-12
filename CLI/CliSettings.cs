@@ -9,6 +9,7 @@ namespace Heraldry.CLI
     class CliSettings
     {
         public string Language { get; set; } = "en_olde";
+        public string InputFile { get; set; } = "Arms of Churchil.txt";
 
         public CliSettings()
         {

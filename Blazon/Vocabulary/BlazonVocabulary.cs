@@ -14,20 +14,46 @@ namespace Heraldry.Blazon.Vocabulary
         List<TinctureDefinition> Tinctures { get; set; } // todo: Todd, hide the setter, god dammit
         List<FieldDivisionDefinition> FieldDivisions { get; set; }
         List<FieldDivisionVariantDefinition> FieldDivisionVariants { get; set; }
+        List<PositionDefinition> Positions { get; set; }
 
         public BlazonVocabulary(string blazonDirectory)
         {
-            Console.Write("Loading Tinctures...");
-            this.Tinctures = this.LoadTinctures(blazonDirectory + "tinctures.csv");
-            Console.WriteLine(" " + this.Tinctures.Count() + " loaded");
+            this.Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures);
+            this.FieldDivisions = LoadList(blazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions);
+            this.FieldDivisionVariants = LoadList(blazonDirectory + "field_division_variants.csv", "Field division", LoadFieldDivisionVariants);
+            this.Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures);
+            this.Positions = LoadList(blazonDirectory + "positions.csv", "Positions", LoadPositions);
 
-            Console.Write("Loading Field Divisions...");
-            this.FieldDivisions = this.LoadFieldDivisions(blazonDirectory + "field_divisions.csv");
-            Console.WriteLine(" " + this.FieldDivisions.Count() + " loaded");
+            foreach (var def in Positions)
+            {
+                Console.WriteLine(def.Text + " - " + def.Type.ToString() + "/" + def.Position.ToString());
+            }
+        }
 
-            Console.Write("Load Field division types...");
-            this.FieldDivisionVariants = this.LoadFieldDivisionVariants(blazonDirectory + "field_division_variants.csv");
-            Console.WriteLine(" " + this.FieldDivisionVariants.Count() + " loaded");
+        public List<Definition> GetAllDefinitions(Boolean sortByLength = false)
+        {
+            var list = new List<Definition>();
+            list.AddRange(this.Tinctures);
+            list.AddRange(this.FieldDivisions);
+            list.AddRange(this.FieldDivisionVariants);
+            list.AddRange(this.Positions);
+
+
+            if (sortByLength)
+            {
+                return list.OrderByDescending(o => o.Text.Length).ToList();
+            }
+
+            return list;
+        }
+
+        private List<T> LoadList<T>(string file, string itemsLabel, Func<string, List<T>> loadFunc)
+        {
+            Console.Write("Loading " + itemsLabel + "...");
+            List<T> list = loadFunc(file);
+            Console.WriteLine(" " + list.Count() + " loaded");
+
+            return list;
         }
 
         private List<TinctureDefinition> LoadTinctures(string filename)
@@ -65,6 +91,28 @@ namespace Heraldry.Blazon.Vocabulary
 
         }
 
+        private List<PositionDefinition> LoadPositions(string filename)
+        {
+            Func<string[], PositionDefinition> f = (parts =>
+            {
+                PositionType type = ParseEnumValue<PositionType>(parts[1]);
+                Position position = new Position();
+                switch (type)
+                {
+                    case PositionType.Horizontal:
+                        position.Horizontal = ParseEnumValue<HorizontalPosition>(parts[2]);
+                        break;
+                    case PositionType.Point:
+                    case PositionType.Vertical:
+                        position.Vertical = ParseEnumValue<VerticalPosition>(parts[2]);
+                        break;
+                }
+
+                return new PositionDefinition() { Text = parts[0], Type = type, Position = position };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
 
         private static List<T> ParseCsvFile<T>(string filename, Func<string[], T> parseLineFunction)
         {
@@ -87,5 +135,11 @@ namespace Heraldry.Blazon.Vocabulary
                 })
                 .ToList();
         }
+
+        private static T ParseEnumValue<T>(string value)
+        {
+            return (T)Enum.Parse(typeof(T), value);
+        }
+
     }
 }
