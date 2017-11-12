@@ -62,8 +62,10 @@
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionLineDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\KeyWordDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />

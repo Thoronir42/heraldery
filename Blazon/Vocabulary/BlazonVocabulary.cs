@@ -15,14 +15,15 @@ namespace Heraldry.Blazon.Vocabulary
         List<FieldDivisionDefinition> FieldDivisions { get; set; }
         List<FieldDivisionLineDefinition> FieldDivisionLines { get; set; }
         List<PositionDefinition> Positions { get; set; }
+        List<KeyWordDefinition> KeyWords { get; set; }
 
         public BlazonVocabulary(string blazonDirectory)
         {
             this.Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures);
             this.FieldDivisions = LoadList(blazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions);
             this.FieldDivisionLines = LoadList(blazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines);
-            this.Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures);
             this.Positions = LoadList(blazonDirectory + "positions.csv", "Positions", LoadPositions);
+            this.KeyWords = LoadList(blazonDirectory + "keywords.csv", "KeyWords", LoadKeyWords);
 
             foreach (var def in Positions)
             {
@@ -37,6 +38,7 @@ namespace Heraldry.Blazon.Vocabulary
             list.AddRange(this.FieldDivisions);
             list.AddRange(this.FieldDivisionLines);
             list.AddRange(this.Positions);
+            list.AddRange(this.KeyWords);
 
 
             if (sortByLength)
@@ -76,7 +78,6 @@ namespace Heraldry.Blazon.Vocabulary
             });
 
             return ParseCsvFile(filename, f);
-
         }
 
         private List<FieldDivisionLineDefinition> LoadFieldDivisionLines(string filename)
@@ -109,6 +110,17 @@ namespace Heraldry.Blazon.Vocabulary
                 }
 
                 return new PositionDefinition() { Text = parts[0], Type = type, Position = position };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
+
+        private List<KeyWordDefinition> LoadKeyWords(string filename)
+        {
+            Func<string[], KeyWordDefinition> f = new Func<string[], KeyWordDefinition>(parts =>
+            {
+                KeyWord word = ParseEnumValue<KeyWord>(parts[1]);
+                return new KeyWordDefinition() { Text = parts[0], KeyWord = word };
             });
 
             return ParseCsvFile(filename, f);
