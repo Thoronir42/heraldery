@@ -26,17 +26,18 @@ namespace Heraldry.LexicalAnalysis
                 Console.WriteLine(d.Text.PadRight(30, ' ') + d.GetType().Name);
             }*/
 
-            input = input.ToLower();
+            input = NormalizeInput(input);
             Console.WriteLine("Input text to be scanned:\n" + input);
 
             List<Token> tokens = new List<Token>();
             foreach (var def in definitions)
             {
+                var search = " " + def.Text + " ";
                 int i = 0;
-                while((i = input.IndexOf(def.Text)) != -1)
+                while((i = input.IndexOf(search)) != -1)
                 {
-                    input = input.Remove(i, def.Text.Length).Insert(i, "".PadRight(def.Text.Length, ' '));
-                    tokens.Add(CreateToken(def, i));
+                    input = input.Remove(i + 1, def.Text.Length).Insert(i + 1, "".PadRight(def.Text.Length, ' '));
+                    tokens.Add(CreateToken(def, i + 1));
                 }
             }
 
@@ -54,6 +55,26 @@ namespace Heraldry.LexicalAnalysis
             Console.WriteLine("Token text:\n" + tokenText);
 
             return tokens;
+        }
+
+        /// <summary>
+        /// Transforms input to lowercase
+        /// Removes trailing dot if present
+        /// Wraps input in spaces
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string NormalizeInput(string input)
+        {
+            input = input.ToLower();
+
+            // remove trailing dot
+            if(input[input.Length - 1] == '.')
+            {
+                input = input.Remove(input.Length - 1);
+            }
+
+            return " " + input + " ";
         }
 
         private Token CreateToken(Definition def, int index)
