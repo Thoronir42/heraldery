@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary
 {
-    enum DefinitionType
+    public enum DefinitionType
     {
         Escutcheon,
         Tincture,
@@ -16,7 +16,13 @@ namespace Heraldry.Blazon.Vocabulary
         Motto,
 
         KeyWord,
-        Position
+        Position,
+        Fur,
+
+        /// <summary>
+        /// And connector.
+        /// </summary>
+        And
         // todo: TODD! The token types.
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Elements
 {
-    enum TinctureLayout
+    public enum TinctureLayout
     {
         Solid,
         /// <summary> Vertical poles </summary>

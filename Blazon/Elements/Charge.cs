@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Elements
 {
-    class Charge
+    public class Charge
     {
 
     }

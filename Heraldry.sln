@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heraldery", "Heraldery.csproj", "{321B2B0A-2A4C-4E37-A3D2-CCC41D34181C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heraldry", "Heraldry.csproj", "{321B2B0A-2A4C-4E37-A3D2-CCC41D34181C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeraldryTest", "HeraldryTest\HeraldryTest.csproj", "{BCBF679A-FF81-4C95-80D1-F86043E93C5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{321B2B0A-2A4C-4E37-A3D2-CCC41D34181C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{321B2B0A-2A4C-4E37-A3D2-CCC41D34181C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{321B2B0A-2A4C-4E37-A3D2-CCC41D34181C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCBF679A-FF81-4C95-80D1-F86043E93C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCBF679A-FF81-4C95-80D1-F86043E93C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCBF679A-FF81-4C95-80D1-F86043E93C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCBF679A-FF81-4C95-80D1-F86043E93C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

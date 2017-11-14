@@ -8,10 +8,26 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Structure
 {
-    class Filling
+    public class Filling
     {
-        TinctureLayout Layout { get; set; }
+        public TinctureLayout Layout { get; set; }
 
-        TinctureDefinition[] Tinctures { get; set; }
+        public TinctureDefinition[] Tinctures { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Filling() { }
+
+        /// <summary>
+        /// Construct filling with solid tincture.
+        /// 
+        /// </summary>
+        /// <param name="tinctureDefinition">Definition of the tincture.</param>
+        public Filling(TinctureDefinition tinctureDefinition)
+        {
+            Layout = TinctureLayout.Solid;
+            Tinctures = new TinctureDefinition[] { tinctureDefinition };
+        }
     }
 }

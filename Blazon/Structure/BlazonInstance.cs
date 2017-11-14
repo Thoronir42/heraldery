@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Structure
 {
-    class BlazonInstance
+    /// <summary>
+    /// Class which describes whole shield of arms with supporters, crest, motto, ...
+    /// </summary>
+    public class BlazonInstance
     {
+        /// <summary>
+        /// Main part of amrs.
+        /// </summary>
         public CoatOfArms CoatOfArms { get; set; }
         public List<Charge> Supporters { get; set; }
     }

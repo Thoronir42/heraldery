@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class TinctureDefinition : Definition
+    public class TinctureDefinition : Definition
     {
         public TinctureType Type { get; set; }
 

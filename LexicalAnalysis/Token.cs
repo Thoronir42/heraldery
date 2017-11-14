@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.LexicalAnalysis
 {
-    class Token
+    public class Token
     {
         public Definition Definition { get; set; }
         public DefinitionType Type

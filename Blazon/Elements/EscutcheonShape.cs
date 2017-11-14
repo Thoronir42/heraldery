@@ -11,7 +11,7 @@ namespace Heraldry.Blazon.Elements
     /// 
     /// Refer to https://en.wikipedia.org/wiki/Escutcheon_(heraldry)
     /// </summary>
-    enum EscutcheonShape
+    public enum EscutcheonShape
     {
         Heater,
         ModernFrench,

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    abstract class Definition
+    public abstract class Definition
     {
         public string Text { get; set; }
 
