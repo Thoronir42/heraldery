@@ -95,7 +95,7 @@ namespace HeraldryTest
 
         /// <summary>
         /// Feed the analyzer with definition of coa with quaterly division.
-        /// Division is defined by four colours.
+        /// Division is defined by four 'number-colour' pairs.
         /// </summary>
         [TestMethod]
         public void TestQuaterlyDivision2()
@@ -107,7 +107,7 @@ namespace HeraldryTest
             divisionDefinition.Type = FieldDivisionType.Quarterly;
             tokens.Add(new Token(0, divisionDefinition));
 
-            // quaterly division qhich consists of two colours
+            // quaterly division qhich consists of four colours
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
             TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "GULES");
@@ -148,6 +148,63 @@ namespace HeraldryTest
             CheckFillingColour(TinctureType.Colour, tincture2.Text, t2);
             CheckFillingColour(TinctureType.Colour, tincture3.Text, t3);
             CheckFillingColour(TinctureType.Colour, tincture4.Text, t4);
+        }
+
+        /// <summary>
+        /// Feed the analyzer with definition of coa with quaterly division.
+        /// Division is defined by four 'number-colour' pairs but without any order.
+        /// </summary>
+        [TestMethod]
+        public void TestQuaterlyDivision3()
+        {
+            // todo:
+            // prepare data
+            List<Token> tokens = new List<Token>();
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition();
+            divisionDefinition.Type = FieldDivisionType.Quarterly;
+            tokens.Add(new Token(0, divisionDefinition));
+
+            // quaterly division qhich consists of four colours
+            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
+            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "GULES");
+            TinctureDefinition tincture4 = new TinctureDefinition(TinctureType.Colour, "SABLE");
+            tokens.Add(new Token(1, 4));
+            tokens.Add(new Token(2, tincture1));
+            tokens.Add(new Token(3, KeyWord.Semicolon));
+            tokens.Add(new Token(4, 2));
+            tokens.Add(new Token(5, tincture2));
+            tokens.Add(new Token(6, KeyWord.Semicolon));
+            tokens.Add(new Token(7, 1));
+            tokens.Add(new Token(8, tincture3));
+            tokens.Add(new Token(9, KeyWord.Semicolon));
+            tokens.Add(new Token(10, 3));
+            tokens.Add(new Token(11, tincture4));
+            tokens.Add(new Token(12, KeyWord.Semicolon));
+
+            // feed the parser
+            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            BlazonInstance blazon = sa.ParseTokens(tokens);
+
+            // check the result
+            Assert.IsNotNull(blazon);
+            Assert.IsNotNull(blazon.CoatOfArms);
+            Assert.IsNotNull(blazon.CoatOfArms.Content);
+            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
+            Field coa = blazon.CoatOfArms.Content;
+            Assert.AreEqual(FieldDivisionType.Quarterly, coa.Division);
+            Assert.IsNotNull(coa.Subfields);
+            Assert.AreEqual(4, coa.Subfields.Length);
+
+            Filling t1 = coa.Subfields[0].Background;
+            Filling t2 = coa.Subfields[1].Background;
+            Filling t3 = coa.Subfields[2].Background;
+            Filling t4 = coa.Subfields[3].Background;
+
+            CheckFillingColour(TinctureType.Colour, tincture3.Text, t1);
+            CheckFillingColour(TinctureType.Colour, tincture2.Text, t2);
+            CheckFillingColour(TinctureType.Colour, tincture4.Text, t3);
+            CheckFillingColour(TinctureType.Colour, tincture1.Text, t4);
         }
 
         /// <summary>

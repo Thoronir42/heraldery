@@ -43,14 +43,15 @@ namespace Heraldry.Blazon.Vocabulary.Entries
                 throw new Exception("Not all fields specified by quterly division.");
             }
 
-            Fields = new List<Field>(max);
+            Field[] tmpFields = new Field[max];
             foreach(int fieldNum in fieldMap.Keys)
             {
                 Field f = fieldMap[fieldNum];
                 // field numbering starts at 1 
-                // and list numbering starts at 0
-                Fields.Insert(fieldNum - 1, f);
+                // array numbering starts at 0
+                tmpFields[fieldNum - 1] = f;
             }
+            Fields = tmpFields.OfType<Field>().ToList();
         }
 
         /// <summary>
