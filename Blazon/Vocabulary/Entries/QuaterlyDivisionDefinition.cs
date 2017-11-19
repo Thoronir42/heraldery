@@ -28,6 +28,32 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         }
 
         /// <summary>
+        /// Constructor which allows to specify each field separately.
+        /// If the map is incosistent (doesn't start at 1, not every field is defined) exception is thrown.
+        /// 
+        /// </summary>
+        /// <param name="fieldMap">Structure which maps field number to its definition.</param>
+        public QuaterlyDivisionDefinition(Dictionary<int, Field> fieldMap) : this()
+        {
+            int min = fieldMap.Keys.Min();
+            int max = fieldMap.Keys.Max();
+
+            if(min != 1 || max != fieldMap.Count)
+            {
+                throw new Exception("Not all fields specified by quterly division.");
+            }
+
+            Fields = new List<Field>(max);
+            foreach(int fieldNum in fieldMap.Keys)
+            {
+                Field f = fieldMap[fieldNum];
+                // field numbering starts at 1 
+                // and list numbering starts at 0
+                Fields.Insert(fieldNum - 1, f);
+            }
+        }
+
+        /// <summary>
         /// Constructs divided fields from fillings array. Size of the division depends on 
         /// how many fillings is provided.
         /// </summary>

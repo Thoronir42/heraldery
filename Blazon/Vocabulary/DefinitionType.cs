@@ -18,11 +18,7 @@ namespace Heraldry.Blazon.Vocabulary
         KeyWord,
         Position,
         Fur,
-
-        /// <summary>
-        /// And connector.
-        /// </summary>
-        And
+        Number,
         // todo: TODD! The token types.
     }
 }

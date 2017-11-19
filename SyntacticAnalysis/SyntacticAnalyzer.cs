@@ -28,9 +28,18 @@ namespace Heraldry.SyntacticAnalysis
             //}
             //return null;
             BlazonInstance bi = new BlazonInstance();
+            Initialize();
             CoatOfArms coa = Coa(tokens);
             bi.CoatOfArms = coa;
             return bi;
+        }
+        
+        /// <summary>
+        /// Initialize parser. Called everytime before recursive descent starts.
+        /// </summary>
+        protected void Initialize()
+        {
+            position = 0;
         }
 
         /// <summary>
@@ -42,7 +51,6 @@ namespace Heraldry.SyntacticAnalysis
         /// <returns>Parsed coat of arms.</returns>
         protected CoatOfArms Coa(List<LexicalAnalysis.Token> tokens)
         {
-            position = 0;
             CoatOfArms coa = new CoatOfArms();
             Field content = Background(tokens);
             coa.Content = content;
@@ -99,7 +107,8 @@ namespace Heraldry.SyntacticAnalysis
             // first of all, type of the division is expected - quaterly, per pale, per fess, ...
             if (currentToken.Type == DefinitionType.FieldDivision)
             {
-                FieldDivisionType divisionType = (FieldDivisionType)currentToken.Value;
+                FieldDivisionDefinition divisionDefinition = (FieldDivisionDefinition)currentToken.Definition;
+                FieldDivisionType divisionType = divisionDefinition.Type;
                 switch (divisionType)
                 {
                     // todo: support line type definition
@@ -125,6 +134,7 @@ namespace Heraldry.SyntacticAnalysis
         protected Field QDivision(List<LexicalAnalysis.Token> tokens)
         {
             LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
+            Field res;
             switch (currentToken.Type)
             {
                 case DefinitionType.Tincture:
@@ -132,11 +142,55 @@ namespace Heraldry.SyntacticAnalysis
                     // load them and create field from them
                     Filling tincture1 = Tincture(tokens);
                     currentToken = PopCurrentToken(tokens);
-                    CheckTokenType(currentToken, DefinitionType.And);
+                    CheckAndToken(currentToken);
                     Filling tincture2 = Tincture(tokens);
                     QuaterlyDivisionDefinition divDef = new QuaterlyDivisionDefinition(tincture1, tincture2);
-                    Field f = new Field(divDef);
-                    return f;
+                    res = new Field(divDef);
+                    return res;
+                case DefinitionType.Number:
+                    // quaterly definition can be also defined by sequence of number-coa pairs
+                    // or number and number coa
+                    currentToken = PopCurrentToken(tokens);
+                    CheckNumberToken(currentToken);
+                    int num = ((NumberDefinition)currentToken.Definition).GetNumber();
+                    Dictionary<int, Field> subfields = new Dictionary<int, Field>();
+                    
+
+                    // now either field definition or sequence of other numbers may follow
+                    currentToken = SeekCurrentToken(tokens);
+                    if(currentToken.Type != DefinitionType.KeyWord)
+                    {
+                        // if the token is not and, assume field definition follows
+                        Field subField = Coa(tokens).Content;
+                        subfields.Add(num, subField);
+
+                        // semicolon should follow now
+                        currentToken = PopCurrentToken(tokens);
+                        if(currentToken.IsKeyWord(KeyWord.Semicolon))
+                        {
+                            Dictionary<int, Field> otherSubfields = NumDef(tokens);
+                            foreach (int fieldNum in otherSubfields.Keys)
+                            {
+                                subfields.Add(fieldNum, otherSubfields[fieldNum]);
+                            }
+                        } else
+                        {
+                            // todo: throw exception
+                        }
+
+                        // put it all together
+                        QuaterlyDivisionDefinition qDef = new QuaterlyDivisionDefinition(subfields);
+                        res = new Field(qDef);
+                        return res;
+                    } else
+                    {
+                        // and is expected with more numbers following
+                        CheckAndToken(currentToken);
+                        List<int> nums = Nums(tokens);
+
+                        return null;
+                    }
+                    break;
                 default:
                     // todo: support more ways of specifying the division
                     return null;
@@ -198,13 +252,87 @@ namespace Heraldry.SyntacticAnalysis
         }
 
         /// <summary>
+        /// A rule for parsing sequences of numbers in this form:
+        /// number and number and ... and number 
+        /// 
+        /// </summary>
+        /// <param name="tokens"></param>
+        /// <returns></returns>
+        protected List<int> Nums(List<LexicalAnalysis.Token> tokens)
+        {
+            List<int> numbers = new List<int>();
+            LexicalAnalysis.Token currentToken = PopCurrentToken(tokens);
+            CheckNumberToken(currentToken);
+            numbers.Add(((NumberDefinition)currentToken.Definition).GetNumber());
+
+            // after the number token, either AND or something else is expected.
+            currentToken = SeekCurrentToken(tokens);
+            switch(currentToken.Type)
+            {
+                case DefinitionType.KeyWord:
+                    currentToken = PopCurrentToken(tokens);
+                    CheckAndToken(currentToken);
+                    numbers.AddRange(Nums(tokens));
+                    return numbers;
+                default:
+                    // continue with parsing
+                    return numbers;
+            }
+        }
+
+        /// <summary>
+        /// Parsing rule for divisions defined by numbers (1 field, 2 field, 3 and 4 field, ...).
+        /// </summary>
+        /// <param name="tokens">Tokens to be parsed.</param>
+        /// <returns></returns>
+        protected Dictionary<int,Field> NumDef(List<LexicalAnalysis.Token> tokens)
+        {
+            List<int> numbers = Nums(tokens);
+            Field f = Coa(tokens).Content;
+            Dictionary<int, Field> fields = new Dictionary<int, Field>();
+            foreach(int num in numbers)
+            {
+                fields.Add(num,f);
+            }
+
+            // if semicolon follows, more definitions are expected.
+            LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
+            if(currentToken.Type == DefinitionType.KeyWord && ((KeyWordDefinition)currentToken.Definition).KeyWord == KeyWord.Semicolon)
+            {
+                // this one contains semicolon
+                PopCurrentToken(tokens);
+
+                // this is the next token
+                currentToken = SeekCurrentToken(tokens);
+
+                // if null, coa definition ends here
+                if(currentToken != null)
+                {
+                    Dictionary<int, Field> otherFields = NumDef(tokens);
+                    foreach (int num in otherFields.Keys)
+                    {
+                        fields.Add(num, otherFields[num]);
+                    }
+
+                }
+            }
+
+            return fields;
+        }
+
+        /// <summary>
         /// Returns the current token and increments the position counter.
+        /// If no more tokens are available, null is returned.
         /// 
         /// </summary>
         /// <param name="tokens">List of tokens from which the current one will be returned.</param>
         /// <returns>Current token.</returns>
         private LexicalAnalysis.Token PopCurrentToken(List<LexicalAnalysis.Token> tokens)
         {
+            if (position == tokens.Count)
+            {
+                return null;
+            }
             LexicalAnalysis.Token currentToken = tokens.ElementAt(position);
             position += 1;
             return currentToken;
@@ -212,14 +340,53 @@ namespace Heraldry.SyntacticAnalysis
 
         /// <summary>
         /// Return the current token but does not increment the position counter.
+        /// If no more tokens are available, null is returned.
         /// 
         /// </summary>
         /// <param name="tokens">List of tokens from which the current one will be returned.</param>
         /// <returns>Current token.</returns>
         private LexicalAnalysis.Token SeekCurrentToken(List<LexicalAnalysis.Token> tokens)
         {
+            if(position == tokens.Count)
+            {
+                return null;
+            }
             LexicalAnalysis.Token currentToken = tokens.ElementAt(position);
             return currentToken;
+        }
+
+        /// <summary>
+        /// Check whether the token is number and throws excpetion if not.
+        /// If the type is number, but number is missing exception is also thrown.
+        /// 
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        private void CheckNumberToken(LexicalAnalysis.Token token)
+        {
+            CheckTokenType(token, DefinitionType.Number);
+            NumberDefinition numberDefinition = (NumberDefinition)token.Definition;
+            if (numberDefinition.Text == null)
+            {
+                throw new Exception(String.Format("Number token at position {0} is missing its number value.",
+                    position));
+            }
+        }
+
+        /// <summary>
+        /// Check whether the token is AND connector and throws exception if not.
+        /// 
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        private void CheckAndToken(LexicalAnalysis.Token token)
+        {
+            CheckTokenType(token, DefinitionType.KeyWord);
+            KeyWordDefinition keyWordDefinition = (KeyWordDefinition)token.Definition;
+            if(keyWordDefinition.KeyWord != KeyWord.And)
+            {
+                throw new Exception(String.Format("Unexpected keyword token '{0}' at position {1}. Expected {2}.",
+                    keyWordDefinition.KeyWord, position, KeyWord.And
+                    ));
+            }
         }
 
         /// <summary>

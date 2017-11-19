@@ -63,6 +63,7 @@
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionLineDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\KeyWordDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\NumberDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\QuaterlyDivisionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />

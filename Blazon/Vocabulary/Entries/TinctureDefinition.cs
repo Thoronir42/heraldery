@@ -11,6 +11,25 @@ namespace Heraldry.Blazon.Vocabulary.Entries
     {
         public TinctureType Type { get; set; }
 
+        /// <summary>
+        /// Default constructor, does nothing.
+        /// </summary>
+        public TinctureDefinition()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor with tincture type and text specified.
+        /// </summary>
+        /// <param name="tinctureType">Type of the tincture</param>
+        /// <param name="text">Tincture text.</param>
+        public TinctureDefinition(TinctureType tinctureType, String text)
+        {
+            Type = tinctureType;
+            Text = text;
+        }
+
         public override DefinitionType GetTokenType()
         {
             return DefinitionType.Tincture;
