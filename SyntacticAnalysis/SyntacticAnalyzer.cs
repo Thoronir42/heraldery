@@ -163,34 +163,33 @@ namespace Heraldry.SyntacticAnalysis
                         // if the token is not and, assume field definition follows
                         Field subField = Coa(tokens).Content;
                         subfields.Add(num, subField);
-
-                        // semicolon should follow now
-                        currentToken = PopCurrentToken(tokens);
-                        if(currentToken.IsKeyWord(KeyWord.Semicolon))
-                        {
-                            Dictionary<int, Field> otherSubfields = NumDef(tokens);
-                            foreach (int fieldNum in otherSubfields.Keys)
-                            {
-                                subfields.Add(fieldNum, otherSubfields[fieldNum]);
-                            }
-                        } else
-                        {
-                            // todo: throw exception
-                        }
-
-                        // put it all together
-                        QuaterlyDivisionDefinition qDef = new QuaterlyDivisionDefinition(subfields);
-                        res = new Field(qDef);
-                        return res;
                     } else
                     {
-                        // and is expected with more numbers following
+                        // 'and' is expected with more numbers following
                         CheckAndToken(currentToken);
+                        PopCurrentToken(tokens);
                         List<int> nums = Nums(tokens);
-
-                        return null;
+                        nums.Add(num);
+                        Field subField = Coa(tokens).Content;
+                        foreach(int n in nums)
+                        {
+                            subfields.Add(n, subField);
+                        }
                     }
-                    break;
+
+                    // semicolon should follow now
+                    currentToken = PopCurrentToken(tokens);
+                    CheckKeywordToken(currentToken, KeyWord.Semicolon);
+                    Dictionary<int, Field> otherSubfields = NumDef(tokens);
+                    foreach (int fieldNum in otherSubfields.Keys)
+                    {
+                        subfields.Add(fieldNum, otherSubfields[fieldNum]);
+                    }
+
+                    // put it all together
+                    QuaterlyDivisionDefinition qDef = new QuaterlyDivisionDefinition(subfields);
+                    res = new Field(qDef);
+                    return res;
                 default:
                     // todo: support more ways of specifying the division
                     return null;
@@ -297,7 +296,7 @@ namespace Heraldry.SyntacticAnalysis
 
             // if semicolon follows, more definitions are expected.
             LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
-            if(currentToken.Type == DefinitionType.KeyWord && ((KeyWordDefinition)currentToken.Definition).KeyWord == KeyWord.Semicolon)
+            if(currentToken != null && currentToken.IsKeyWord(KeyWord.Semicolon))
             {
                 // this one contains semicolon
                 PopCurrentToken(tokens);
@@ -356,7 +355,7 @@ namespace Heraldry.SyntacticAnalysis
         }
 
         /// <summary>
-        /// Check whether the token is number and throws excpetion if not.
+        /// Checks whether the token is number and throws excpetion if not.
         /// If the type is number, but number is missing exception is also thrown.
         /// 
         /// </summary>
@@ -373,15 +372,26 @@ namespace Heraldry.SyntacticAnalysis
         }
 
         /// <summary>
-        /// Check whether the token is AND connector and throws exception if not.
+        /// Checks whether the token is AND connector and throws exception if not.
         /// 
         /// </summary>
         /// <param name="token">Token to be checked.</param>
         private void CheckAndToken(LexicalAnalysis.Token token)
         {
+            CheckKeywordToken(token, KeyWord.And);
+        }
+
+        /// <summary>
+        /// Checks whether the token represents expected keyword and throws exception if not.
+        /// 
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <param name="keyWord">Expected keyword.</param>
+        private void CheckKeywordToken(LexicalAnalysis.Token token, KeyWord keyWord)
+        {
             CheckTokenType(token, DefinitionType.KeyWord);
             KeyWordDefinition keyWordDefinition = (KeyWordDefinition)token.Definition;
-            if(keyWordDefinition.KeyWord != KeyWord.And)
+            if (!token.IsKeyWord(keyWord))
             {
                 throw new Exception(String.Format("Unexpected keyword token '{0}' at position {1}. Expected {2}.",
                     keyWordDefinition.KeyWord, position, KeyWord.And
@@ -390,7 +400,7 @@ namespace Heraldry.SyntacticAnalysis
         }
 
         /// <summary>
-        /// Check type of the token and thrown exception if it's wrong.
+        /// Checks type of the token and thrown exception if it's wrong.
         /// 
         /// </summary>
         /// <param name="token">Token to be checked.</param>
@@ -403,6 +413,20 @@ namespace Heraldry.SyntacticAnalysis
                     token.Type, position, expectedType
                     ));
             }
+        }
+
+        /// <summary>
+        /// Throws exception with formatted text:
+        /// Unexpected token '{0}' at position {1}. Expected {2}.
+        /// 
+        /// </summary>
+        /// <param name="unexpectedToken">Unexpected token ({0} parameter).</param>
+        /// <param name="position">Position of token ({1} parameter).</param>
+        /// <param name="expectedToken">String representation of expected token ({2} parameter).</param>
+        private void UnexpectedTokenException(LexicalAnalysis.Token unexpectedToken, int position, String expectedToken)
+        {
+            throw new Exception(String.Format("Unexpected token '{0}' at position {1}. Expected {2}.",
+                unexpectedToken, position, expectedToken));
         }
     }
 }
