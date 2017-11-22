@@ -16,6 +16,7 @@ namespace Heraldry.Blazon.Vocabulary
         List<FieldDivisionLineDefinition> FieldDivisionLines { get; set; }
         List<PositionDefinition> Positions { get; set; }
         List<KeyWordDefinition> KeyWords { get; set; }
+        List<NumberDefinition> Numbers { get; set; }
 
         public BlazonVocabulary(string blazonDirectory)
         {
@@ -24,11 +25,8 @@ namespace Heraldry.Blazon.Vocabulary
             this.FieldDivisionLines = LoadList(blazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines);
             this.Positions = LoadList(blazonDirectory + "positions.csv", "Positions", LoadPositions);
             this.KeyWords = LoadList(blazonDirectory + "keywords.csv", "KeyWords", LoadKeyWords);
+            this.Numbers = LoadList(blazonDirectory + "numbers.csv", "Numbers", LoadNumbers);
 
-            foreach (var def in Positions)
-            {
-                Console.WriteLine(def.Text + " - " + def.Type.ToString() + "/" + def.Position.ToString());
-            }
         }
 
         public List<Definition> GetAllDefinitions(Boolean sortByLength = false)
@@ -39,6 +37,7 @@ namespace Heraldry.Blazon.Vocabulary
             list.AddRange(this.FieldDivisionLines);
             list.AddRange(this.Positions);
             list.AddRange(this.KeyWords);
+            list.AddRange(this.Numbers);
 
 
             if (sortByLength)
@@ -121,6 +120,18 @@ namespace Heraldry.Blazon.Vocabulary
             {
                 KeyWord word = ParseEnumValue<KeyWord>(parts[1]);
                 return new KeyWordDefinition() { Text = parts[0], KeyWord = word };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
+
+        private List<NumberDefinition> LoadNumbers(string filename)
+        {
+            Func<string[], NumberDefinition> f = new Func<string[], NumberDefinition>(parts =>
+            {
+                NumberType type = ParseEnumValue<NumberType>(parts[1]);
+                int value = int.Parse(parts[2]);
+                return new NumberDefinition() { Text = parts[0], Type = type, Value = value };
             });
 
             return ParseCsvFile(filename, f);

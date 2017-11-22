@@ -65,9 +65,12 @@
     <Compile Include="Blazon\Vocabulary\Entries\KeyWordDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\NumberDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\SeparatorDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\QuaterlyDivisionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
+    <Compile Include="LexicalAnalysis\Numbers\NumberParser.cs" />
+    <Compile Include="LexicalAnalysis\Numbers\NumberParser_en_olde.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />

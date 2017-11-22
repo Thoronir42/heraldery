@@ -10,6 +10,7 @@ namespace Heraldry
     using Heraldry.Blazon.Vocabulary;
     using Heraldry.CLI;
     using Heraldry.LexicalAnalysis;
+    using Heraldry.LexicalAnalysis.Numbers;
     using Heraldry.Rendering;
     using Heraldry.SyntacticAnalysis;
     using System.IO;
@@ -30,7 +31,7 @@ namespace Heraldry
             //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
             //BEHOLD
             Console.WriteLine("=== Lexical analysis");
-            LexAnalyzer lex = new LexAnalyzer(blazon);
+            LexAnalyzer lex = new LexAnalyzer(blazon, new NumberParser_en_olde());
             var tokens = lex.ParseText(input);
 
             Console.WriteLine("=== Syntactic analysis");

@@ -15,9 +15,9 @@ namespace Heraldry.Blazon.Vocabulary
         Charge,
         Motto,
 
+        Separator,
         KeyWord,
         Position,
-        Fur,
         Number,
         // todo: TODD! The token types.
     }

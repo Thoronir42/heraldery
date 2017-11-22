@@ -18,9 +18,7 @@ namespace Heraldry.Blazon.Vocabulary
         Reference,
         /// <summary> ... as an augmentation banana </summary>
         Augmentation,
-        /// <summary>
-        /// Seicolon for separating looong definitions.
-        /// </summary>
-        Semicolon
+        /// <summary> comma, colon, etc... used to divide concepts </summary>
+        Separator,
     }
 }
