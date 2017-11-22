@@ -11,6 +11,11 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         public string Text { get; set; }
 
         abstract public DefinitionType GetTokenType();
-        
+
+        public virtual object GetSubtype()
+        {
+            return null;
+        }
+
     }
 }

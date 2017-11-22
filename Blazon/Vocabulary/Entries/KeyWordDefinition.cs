@@ -15,21 +15,9 @@ namespace Heraldry.Blazon.Vocabulary.Entries
             return DefinitionType.KeyWord;
         }
 
-        /// <summary>
-        /// Default constructor. Does nothing.
-        /// </summary>
-        public KeyWordDefinition()
+        public override object GetSubtype()
         {
-
-        }
-        
-        /// <summary>
-        /// Constructor with keyword specified.
-        /// </summary>
-        /// <param name="keyWord">Keyword to be used in this definition.</param>
-        public KeyWordDefinition(KeyWord keyWord)
-        {
-            KeyWord = keyWord;
+            return this.KeyWord;
         }
     }
 }

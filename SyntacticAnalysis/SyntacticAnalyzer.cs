@@ -107,8 +107,7 @@ namespace Heraldry.SyntacticAnalysis
             // first of all, type of the division is expected - quaterly, per pale, per fess, ...
             if (currentToken.Type == DefinitionType.FieldDivision)
             {
-                FieldDivisionDefinition divisionDefinition = (FieldDivisionDefinition)currentToken.Definition;
-                FieldDivisionType divisionType = divisionDefinition.Type;
+                FieldDivisionType divisionType = ((FieldDivisionDefinition)currentToken.Definition).Type;
                 switch (divisionType)
                 {
                     // todo: support line type definition
@@ -142,7 +141,7 @@ namespace Heraldry.SyntacticAnalysis
                     // load them and create field from them
                     Filling tincture1 = Tincture(tokens);
                     currentToken = PopCurrentToken(tokens);
-                    CheckAndToken(currentToken);
+                    CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.And);
                     Filling tincture2 = Tincture(tokens);
                     QuaterlyDivisionDefinition divDef = new QuaterlyDivisionDefinition(tincture1, tincture2);
                     res = new Field(divDef);
@@ -223,11 +222,13 @@ namespace Heraldry.SyntacticAnalysis
                 PopCurrentToken(tokens);
 
                 // process tincture
-                Filling filling = new Filling();
-                filling.Layout = TinctureLayout.Solid;
-                TinctureDefinition def = new TinctureDefinition();
-                def.Text = currentToken.Definition.Text;
-                filling.Tinctures = new TinctureDefinition[] {def};
+                TinctureDefinition def = new TinctureDefinition { Text = currentToken.Definition.Text };
+
+                Filling filling = new Filling {
+                    Layout = TinctureLayout.Solid,
+                    Tinctures = new TinctureDefinition[] { def }
+                };
+
                 return filling;
             }
             else
@@ -405,13 +406,11 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="token">Token to be checked.</param>
         /// <param name="expectedType">Expected token type.</param>
-        private void CheckTokenType(LexicalAnalysis.Token token, DefinitionType expectedType)
+        private void CheckTokenType(LexicalAnalysis.Token token, DefinitionType expectedType, object subtype = null)
         {
-            if (token.Type != expectedType)
+            if (token.Type != expectedType || (subtype != null && token.Subtype != subtype))
             {
-                throw new Exception(String.Format("Unexpected type of token '{0}' at position {1}. Expected {2}.",
-                    token.Type, position, expectedType
-                    ));
+                throw new UnexpectedTokenException(token, position, expectedType, subtype);
             }
         }
 

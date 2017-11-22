@@ -15,6 +15,10 @@ namespace Heraldry.LexicalAnalysis
         {
             get { return Definition.GetTokenType(); }
         }
+        public object Subtype
+        {
+            get { return Definition.GetSubtype(); }
+        }
 
         public object Value { get; set; } // todo: generify Value type
 

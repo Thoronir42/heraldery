@@ -80,6 +80,7 @@
     <Compile Include="Rendering\CrestRenderer.cs" />
     <Compile Include="Rendering\SvgLoader.cs" />
     <Compile Include="SyntacticAnalysis\SyntacticAnalyzer.cs" />
+    <Compile Include="SyntacticAnalysis\UnexpectedTokenException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
