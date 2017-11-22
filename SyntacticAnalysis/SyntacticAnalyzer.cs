@@ -3,6 +3,8 @@ using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.LexicalAnalysis;
+using Heraldry.SyntacticAnalysis.Formulas.FieldDivisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +35,7 @@ namespace Heraldry.SyntacticAnalysis
             bi.CoatOfArms = coa;
             return bi;
         }
-        
+
         /// <summary>
         /// Initialize parser. Called everytime before recursive descent starts.
         /// </summary>
@@ -72,7 +74,7 @@ namespace Heraldry.SyntacticAnalysis
             {
                 case DefinitionType.Tincture:
                     Filling fil = Tincture(tokens);
-                    f = new Field(fil);
+                    f = new Field { Background = fil };
                     break;
                 case DefinitionType.FieldDivision:
                     f = Division(tokens);
@@ -90,7 +92,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         protected void Variation(List<LexicalAnalysis.Token> tokens)
-        { 
+        {
             // todo: implement this
         }
 
@@ -143,34 +145,33 @@ namespace Heraldry.SyntacticAnalysis
                     currentToken = PopCurrentToken(tokens);
                     CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.And);
                     Filling tincture2 = Tincture(tokens);
-                    QuaterlyDivisionDefinition divDef = new QuaterlyDivisionDefinition(tincture1, tincture2);
-                    res = new Field(divDef);
-                    return res;
+                    return new QuaterlyDividedField(tincture1, tincture2);
                 case DefinitionType.Number:
                     // quaterly definition can be also defined by sequence of number-coa pairs
                     // or number and number coa
                     currentToken = PopCurrentToken(tokens);
                     CheckNumberToken(currentToken);
-                    int num = ((NumberDefinition)currentToken.Definition).GetNumber();
+                    int num = ((NumberDefinition)currentToken.Definition).Value;
                     Dictionary<int, Field> subfields = new Dictionary<int, Field>();
-                    
+
 
                     // now either field definition or sequence of other numbers may follow
                     currentToken = SeekCurrentToken(tokens);
-                    if(currentToken.Type != DefinitionType.KeyWord)
+                    if (currentToken.Type != DefinitionType.KeyWord)
                     {
                         // if the token is not and, assume field definition follows
                         Field subField = Coa(tokens).Content;
                         subfields.Add(num, subField);
-                    } else
+                    }
+                    else
                     {
                         // 'and' is expected with more numbers following
-                        CheckAndToken(currentToken);
+                        CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.And);
                         PopCurrentToken(tokens);
                         List<int> nums = Nums(tokens);
                         nums.Add(num);
                         Field subField = Coa(tokens).Content;
-                        foreach(int n in nums)
+                        foreach (int n in nums)
                         {
                             subfields.Add(n, subField);
                         }
@@ -178,7 +179,7 @@ namespace Heraldry.SyntacticAnalysis
 
                     // semicolon should follow now
                     currentToken = PopCurrentToken(tokens);
-                    CheckKeywordToken(currentToken, KeyWord.Semicolon);
+                    CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.Separator);
                     Dictionary<int, Field> otherSubfields = NumDef(tokens);
                     foreach (int fieldNum in otherSubfields.Keys)
                     {
@@ -186,8 +187,8 @@ namespace Heraldry.SyntacticAnalysis
                     }
 
                     // put it all together
-                    QuaterlyDivisionDefinition qDef = new QuaterlyDivisionDefinition(subfields);
-                    res = new Field(qDef);
+                    QuaterlyDividedField qDef = new QuaterlyDividedField(subfields);
+                    res = new Field { };
                     return res;
                 default:
                     // todo: support more ways of specifying the division
@@ -224,7 +225,8 @@ namespace Heraldry.SyntacticAnalysis
                 // process tincture
                 TinctureDefinition def = new TinctureDefinition { Text = currentToken.Definition.Text };
 
-                Filling filling = new Filling {
+                Filling filling = new Filling
+                {
                     Layout = TinctureLayout.Solid,
                     Tinctures = new TinctureDefinition[] { def }
                 };
@@ -263,15 +265,15 @@ namespace Heraldry.SyntacticAnalysis
             List<int> numbers = new List<int>();
             LexicalAnalysis.Token currentToken = PopCurrentToken(tokens);
             CheckNumberToken(currentToken);
-            numbers.Add(((NumberDefinition)currentToken.Definition).GetNumber());
+            numbers.Add(((NumberDefinition)currentToken.Definition).Value);
 
             // after the number token, either AND or something else is expected.
             currentToken = SeekCurrentToken(tokens);
-            switch(currentToken.Type)
+            switch (currentToken.Type)
             {
                 case DefinitionType.KeyWord:
                     currentToken = PopCurrentToken(tokens);
-                    CheckAndToken(currentToken);
+                    CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.And);
                     numbers.AddRange(Nums(tokens));
                     return numbers;
                 default:
@@ -285,19 +287,19 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">Tokens to be parsed.</param>
         /// <returns></returns>
-        protected Dictionary<int,Field> NumDef(List<LexicalAnalysis.Token> tokens)
+        protected Dictionary<int, Field> NumDef(List<LexicalAnalysis.Token> tokens)
         {
             List<int> numbers = Nums(tokens);
             Field f = Coa(tokens).Content;
             Dictionary<int, Field> fields = new Dictionary<int, Field>();
-            foreach(int num in numbers)
+            foreach (int num in numbers)
             {
-                fields.Add(num,f);
+                fields.Add(num, f);
             }
 
             // if semicolon follows, more definitions are expected.
-            LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
-            if(currentToken != null && currentToken.IsKeyWord(KeyWord.Semicolon))
+            Token currentToken = SeekCurrentToken(tokens);
+            if (ValidateTokenType(currentToken, DefinitionType.KeyWord, KeyWord.Separator))
             {
                 // this one contains semicolon
                 PopCurrentToken(tokens);
@@ -306,7 +308,7 @@ namespace Heraldry.SyntacticAnalysis
                 currentToken = SeekCurrentToken(tokens);
 
                 // if null, coa definition ends here
-                if(currentToken != null)
+                if (currentToken != null)
                 {
                     Dictionary<int, Field> otherFields = NumDef(tokens);
                     foreach (int num in otherFields.Keys)
@@ -347,7 +349,7 @@ namespace Heraldry.SyntacticAnalysis
         /// <returns>Current token.</returns>
         private LexicalAnalysis.Token SeekCurrentToken(List<LexicalAnalysis.Token> tokens)
         {
-            if(position == tokens.Count)
+            if (position == tokens.Count)
             {
                 return null;
             }
@@ -372,33 +374,7 @@ namespace Heraldry.SyntacticAnalysis
             }
         }
 
-        /// <summary>
-        /// Checks whether the token is AND connector and throws exception if not.
-        /// 
-        /// </summary>
-        /// <param name="token">Token to be checked.</param>
-        private void CheckAndToken(LexicalAnalysis.Token token)
-        {
-            CheckKeywordToken(token, KeyWord.And);
-        }
 
-        /// <summary>
-        /// Checks whether the token represents expected keyword and throws exception if not.
-        /// 
-        /// </summary>
-        /// <param name="token">Token to be checked.</param>
-        /// <param name="keyWord">Expected keyword.</param>
-        private void CheckKeywordToken(LexicalAnalysis.Token token, KeyWord keyWord)
-        {
-            CheckTokenType(token, DefinitionType.KeyWord);
-            KeyWordDefinition keyWordDefinition = (KeyWordDefinition)token.Definition;
-            if (!token.IsKeyWord(keyWord))
-            {
-                throw new Exception(String.Format("Unexpected keyword token '{0}' at position {1}. Expected {2}.",
-                    keyWordDefinition.KeyWord, position, KeyWord.And
-                    ));
-            }
-        }
 
         /// <summary>
         /// Checks type of the token and thrown exception if it's wrong.
@@ -406,26 +382,21 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="token">Token to be checked.</param>
         /// <param name="expectedType">Expected token type.</param>
-        private void CheckTokenType(LexicalAnalysis.Token token, DefinitionType expectedType, object subtype = null)
+        /// <param name="expSubtype">If specified, also matches token subtype</param>
+        private void CheckTokenType(Token token, DefinitionType expectedType, object expSubtype = null)
         {
-            if (token.Type != expectedType || (subtype != null && token.Subtype != subtype))
+            if (!ValidateTokenType(token, expectedType, expSubtype))
             {
-                throw new UnexpectedTokenException(token, position, expectedType, subtype);
+                throw new UnexpectedTokenException(token, position, expectedType, expSubtype);
             }
         }
 
         /// <summary>
-        /// Throws exception with formatted text:
-        /// Unexpected token '{0}' at position {1}. Expected {2}.
-        /// 
+        /// Checks whether token type matches expected type and if provided, if tokens subtype matches expected subtype
         /// </summary>
-        /// <param name="unexpectedToken">Unexpected token ({0} parameter).</param>
-        /// <param name="position">Position of token ({1} parameter).</param>
-        /// <param name="expectedToken">String representation of expected token ({2} parameter).</param>
-        private void UnexpectedTokenException(LexicalAnalysis.Token unexpectedToken, int position, String expectedToken)
+        private bool ValidateTokenType(Token token, DefinitionType expectedType, object expSubtype = null)
         {
-            throw new Exception(String.Format("Unexpected token '{0}' at position {1}. Expected {2}.",
-                unexpectedToken, position, expectedToken));
+            return token.Type == expectedType && (expSubtype == null || expSubtype.Equals(token.Subtype));
         }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Blazon\Elements\FieldDivisionLine.cs" />
     <Compile Include="Blazon\Elements\Position.cs" />
     <Compile Include="Blazon\Elements\TinctureLayout.cs" />
+    <Compile Include="Blazon\Structure\ChargeField.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
     <Compile Include="Blazon\Elements\Charge.cs" />
@@ -66,7 +67,8 @@
     <Compile Include="Blazon\Vocabulary\Entries\NumberDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\SeparatorDefinition.cs" />
-    <Compile Include="Blazon\Vocabulary\Entries\QuaterlyDivisionDefinition.cs" />
+    <Compile Include="Blazon\Structure\FieldDivisions\DividedField.cs" />
+    <Compile Include="Blazon\Structure\FieldDivisions\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
     <Compile Include="LexicalAnalysis\Numbers\NumberParser.cs" />
@@ -93,7 +95,9 @@
   <ItemGroup>
     <None Include="resources\en_olde\field_division_variants.csv" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SyntacticAnalysis\Formulas\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="resources\rendering\iconmonstr-shield-1.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

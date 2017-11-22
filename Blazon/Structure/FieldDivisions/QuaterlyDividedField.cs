@@ -1,18 +1,19 @@
-﻿using Heraldry.Blazon.Structure;
+﻿using Heraldry.Blazon.Elements;
+using Heraldry.Blazon.Structure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.Blazon.Vocabulary.Entries
+namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
 {
     /// <summary>
     /// Definition of quaterly divided field.
     /// Doesn't have to be only 2x2, can be even 2x3, 3x3, .... depends on how many colors
     /// is specified.
     /// </summary>
-    public class QuaterlyDivisionDefinition : FieldDivisionDefinition
+    public class QuaterlyDividedField : DividedField
     {
         /// <summary>
         /// Fields of the division.
@@ -22,9 +23,9 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// <summary>
         /// Default constructor. Sets division type to Quaterly.
         /// </summary>
-        public QuaterlyDivisionDefinition() 
+        public QuaterlyDividedField() 
         {
-            Type = Elements.FieldDivisionType.Quarterly;
+            this.Division = FieldDivisionType.Quarterly;
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// 
         /// </summary>
         /// <param name="fieldMap">Structure which maps field number to its definition.</param>
-        public QuaterlyDivisionDefinition(Dictionary<int, Field> fieldMap) : this()
+        public QuaterlyDividedField(Dictionary<int, Field> fieldMap) : this()
         {
             int min = fieldMap.Keys.Min();
             int max = fieldMap.Keys.Max();
@@ -59,7 +60,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// how many fillings is provided.
         /// </summary>
         /// <param name="tinctures">Array of fillings. Each item represents a fillings of 1 field, so for 2x2 division 4 fillings need to be provided.</param>
-        public QuaterlyDivisionDefinition(Filling[] tinctures)
+        public QuaterlyDividedField(Filling[] tinctures)
             : this()
         {
             // todo: accept also other divisions
@@ -67,7 +68,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
             {
                 Fields = new List<Field>();
                 foreach(Filling tDef in tinctures) {
-                    Field f = new Field(tDef);
+                    Field f = new Field { Background = tDef};
                     Fields.Add(f);
                 }
             }
@@ -83,7 +84,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// </summary>
         /// <param name="tincture1">Tincture of the 1st and 4th quadrant.</param>
         /// <param name="tincture2">Tincture of the 2nd and 3rd quadrant.</param>
-        public QuaterlyDivisionDefinition(Filling tincture1, Filling tincture2) :
+        public QuaterlyDividedField(Filling tincture1, Filling tincture2) :
             this(new Filling[] { tincture1, tincture2, tincture2, tincture1 })
         {
             

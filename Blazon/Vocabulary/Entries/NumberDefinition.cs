@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class NumberDefinition : Definition
+    public class NumberDefinition : Definition
     {
         public NumberType Type { get; set; }
         public int Value { get; set; }

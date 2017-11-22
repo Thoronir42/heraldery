@@ -25,9 +25,7 @@ namespace HeraldryTest
             // prepare data
             List<Token> tokens = new List<Token>();
             Token background = new Token();
-            TinctureDefinition tincture = new TinctureDefinition();
-            tincture.Text = "AZURE";
-            tincture.Type = TinctureType.Colour;
+            TinctureDefinition tincture = new TinctureDefinition { Text = "AZURE", Type = TinctureType.Colour };
             background.Definition = tincture;
             tokens.Add(background);
 
@@ -53,20 +51,17 @@ namespace HeraldryTest
             // todo:
             // prepare data
             List<Token> tokens = new List<Token>();
-            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition();
-            divisionDefinition.Type = FieldDivisionType.Quarterly;
-            tokens.Add(new Token(0, divisionDefinition));
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            tokens.Add(new Token { Position = 0, Definition = divisionDefinition });
 
             // quaterly division qhich consists of two colours
-            TinctureDefinition tincture1 = new TinctureDefinition();
-            tincture1.Text = "AZURE";
-            tincture1.Type = TinctureType.Colour;
+            TinctureDefinition tincture1 = new TinctureDefinition { Text = "AZURE", Type = TinctureType.Colour };
             TinctureDefinition tincture2 = new TinctureDefinition();
             tincture1.Text = "OR";
             tincture2.Type = TinctureType.Colour;
-            tokens.Add(new Token(1, tincture1));
-            tokens.Add(new Token(2, new KeyWordDefinition(KeyWord.And)));
-            tokens.Add(new Token(3,tincture2));
+            tokens.Add(new Token { Position = 10, Definition = tincture1 });
+            tokens.Add(new Token { Position = 16, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 30, Definition = tincture2 });
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -103,26 +98,25 @@ namespace HeraldryTest
             // todo:
             // prepare data
             List<Token> tokens = new List<Token>();
-            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition();
-            divisionDefinition.Type = FieldDivisionType.Quarterly;
-            tokens.Add(new Token(0, divisionDefinition));
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            tokens.Add(new Token { Definition = divisionDefinition });
 
             // quaterly division qhich consists of four colours
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
             TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "GULES");
             TinctureDefinition tincture4 = new TinctureDefinition(TinctureType.Colour, "SABLE");
-            tokens.Add(new Token(1, 1));
-            tokens.Add(new Token(2, tincture1));
-            tokens.Add(new Token(3, KeyWord.Semicolon));
-            tokens.Add(new Token(4, 2));
-            tokens.Add(new Token(5, tincture2));
-            tokens.Add(new Token(6, KeyWord.Semicolon));
-            tokens.Add(new Token(7, 3));
-            tokens.Add(new Token(8, tincture3));
-            tokens.Add(new Token(9, KeyWord.Semicolon));
-            tokens.Add(new Token(10, 4));
-            tokens.Add(new Token(11, tincture4));
+            tokens.Add(new Token { Position = 1, Definition = new NumberDefinition { Value = 1 } });
+            tokens.Add(new Token { Position = 2, Definition = tincture1 });
+            tokens.Add(new Token { Position = 3, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 4, Definition = new NumberDefinition { Value = 2 } });
+            tokens.Add(new Token { Position = 5, Definition = tincture2 });
+            tokens.Add(new Token { Position = 6, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 7, Definition = new NumberDefinition { Value = 3 } });
+            tokens.Add(new Token { Position = 8, Definition = tincture3 });
+            tokens.Add(new Token { Position = 9, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 10, Definition = new NumberDefinition { Value = 4 } });
+            tokens.Add(new Token { Position = 11, Definition = tincture4 });
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -159,27 +153,26 @@ namespace HeraldryTest
             // todo:
             // prepare data
             List<Token> tokens = new List<Token>();
-            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition();
-            divisionDefinition.Type = FieldDivisionType.Quarterly;
-            tokens.Add(new Token(0, divisionDefinition));
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            tokens.Add(new Token { Position = 0, Definition = divisionDefinition });
 
             // quaterly division qhich consists of four colours
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
             TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "GULES");
             TinctureDefinition tincture4 = new TinctureDefinition(TinctureType.Colour, "SABLE");
-            tokens.Add(new Token(1, 4));
-            tokens.Add(new Token(2, tincture1));
-            tokens.Add(new Token(3, KeyWord.Semicolon));
-            tokens.Add(new Token(4, 2));
-            tokens.Add(new Token(5, tincture2));
-            tokens.Add(new Token(6, KeyWord.Semicolon));
-            tokens.Add(new Token(7, 1));
-            tokens.Add(new Token(8, tincture3));
-            tokens.Add(new Token(9, KeyWord.Semicolon));
-            tokens.Add(new Token(10, 3));
-            tokens.Add(new Token(11, tincture4));
-            tokens.Add(new Token(12, KeyWord.Semicolon));
+            tokens.Add(new Token { Position = 1, Definition = new NumberDefinition { Value = 4 } });
+            tokens.Add(new Token { Position = 2, Definition = tincture1 });
+            tokens.Add(new Token { Position = 3, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 4, Definition = new NumberDefinition { Value = 2 } });
+            tokens.Add(new Token { Position = 5, Definition = tincture2 });
+            tokens.Add(new Token { Position = 6, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 7, Definition = new NumberDefinition { Value = 1 } });
+            tokens.Add(new Token { Position = 8, Definition = tincture3 });
+            tokens.Add(new Token { Position = 9, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 10, Definition = new NumberDefinition { Value = 3 } });
+            tokens.Add(new Token { Position = 11, Definition = tincture4 });
+            tokens.Add(new Token { Position = 12, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -216,24 +209,23 @@ namespace HeraldryTest
             // todo:
             // prepare data
             List<Token> tokens = new List<Token>();
-            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition();
-            divisionDefinition.Type = FieldDivisionType.Quarterly;
-            tokens.Add(new Token(0, divisionDefinition));
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            tokens.Add(new Token { Position = 0, Definition = divisionDefinition });
 
             // quaterly division qhich consists of two colours:
             // 4 and 3 and 2 colour; 1 colour
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
-            tokens.Add(new Token(1, 4));
-            tokens.Add(new Token(2, KeyWord.And));
-            tokens.Add(new Token(3, 3));
-            tokens.Add(new Token(4, KeyWord.And));
-            tokens.Add(new Token(5, 2));
-            tokens.Add(new Token(6, tincture1));
-            tokens.Add(new Token(7, KeyWord.Semicolon));
-            tokens.Add(new Token(8, 1));
-            tokens.Add(new Token(9, tincture2));
-            //tokens.Add(new Token(10, KeyWord.Semicolon));
+            tokens.Add(new Token { Position = 1, Definition = new NumberDefinition { Value = 4 } });
+            tokens.Add(new Token { Position = 2, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 3, Definition = new NumberDefinition { Value = 3 } });
+            tokens.Add(new Token { Position = 4, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 5, Definition = new NumberDefinition { Value = 2 } });
+            tokens.Add(new Token { Position = 6, Definition = tincture1 });
+            tokens.Add(new Token { Position = 7, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 8, Definition = new NumberDefinition { Value = 1 } });
+            tokens.Add(new Token { Position = 9, Definition = tincture2 });
+            //tokens.Add(new Token{Position = 10, Definition = KeyWord.Semicolon});
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -270,35 +262,34 @@ namespace HeraldryTest
             // todo:
             // prepare data
             List<Token> tokens = new List<Token>();
-            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition();
-            divisionDefinition.Type = FieldDivisionType.Quarterly;
-            tokens.Add(new Token(0, divisionDefinition));
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            tokens.Add(new Token { Position = 0, Definition = divisionDefinition });
 
             // quaterly division qhich consists of two colours:
             // 4 and 3 and 2 colour; 1 quaterly 4 and 3 and 2 colour; 1 colour
             // note that the nested division is in the 1st field
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
-            tokens.Add(new Token(1, 4));
-            tokens.Add(new Token(2, KeyWord.And));
-            tokens.Add(new Token(3, 3));
-            tokens.Add(new Token(4, KeyWord.And));
-            tokens.Add(new Token(5, 2));
-            tokens.Add(new Token(6, tincture1));
-            tokens.Add(new Token(7, KeyWord.Semicolon));
-            tokens.Add(new Token(8, 1));
-            tokens.Add(new Token(9, divisionDefinition));
-                tokens.Add(new Token(10, 4));
-                tokens.Add(new Token(11, KeyWord.And));
-                tokens.Add(new Token(12, 3));
-                tokens.Add(new Token(13, KeyWord.And));
-                tokens.Add(new Token(14, 2));
-                tokens.Add(new Token(15, tincture1));
-                tokens.Add(new Token(16, KeyWord.Semicolon));
-                tokens.Add(new Token(17, 1));
-                tokens.Add(new Token(18, tincture2));
-                //tokens.Add(new Token(19, KeyWord.Semicolon));
-            //tokens.Add(new Token(20, KeyWord.Semicolon));
+            tokens.Add(new Token { Position = 1, Definition = new NumberDefinition { Value = 4 } });
+            tokens.Add(new Token { Position = 2, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 3, Definition = new NumberDefinition { Value = 3 } });
+            tokens.Add(new Token { Position = 4, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 5, Definition = new NumberDefinition { Value = 2 } });
+            tokens.Add(new Token { Position = 6, Definition = tincture1 });
+            tokens.Add(new Token { Position = 7, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 8, Definition = new NumberDefinition { Value = 1 } });
+            tokens.Add(new Token { Position = 9, Definition = divisionDefinition });
+            tokens.Add(new Token { Position = 10, Definition = new NumberDefinition { Value = 4 } });
+            tokens.Add(new Token { Position = 11, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 12, Definition = new NumberDefinition { Value = 3 } });
+            tokens.Add(new Token { Position = 13, Definition = new KeyWordDefinition { KeyWord = KeyWord.And } });
+            tokens.Add(new Token { Position = 14, Definition = new NumberDefinition { Value = 2 } });
+            tokens.Add(new Token { Position = 15, Definition = tincture1 });
+            tokens.Add(new Token { Position = 16, Definition = new KeyWordDefinition { KeyWord = KeyWord.Separator } });
+            tokens.Add(new Token { Position = 17, Definition = new NumberDefinition { Value = 1 } });
+            tokens.Add(new Token { Position = 18, Definition = tincture2 });
+            //tokens.Add(new Token{Position = 19, Definition = KeyWord.Semicolon});
+            //tokens.Add(new Token{Position = 20, Definition = KeyWord.Semicolon});
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();

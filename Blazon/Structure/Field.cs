@@ -10,37 +10,14 @@ namespace Heraldry.Blazon.Structure
 {
     public class Field
     {
+        // todo: move these to ChargeField
         public Filling Background { get; set; }
         public Charge Charge { get; set; }
 
+        // todo: move these to FieldDivision class
         public FieldDivisionType? Division { get; set; } = null;
-        public FieldDivisionLine? Line { get; set; } = null;
+        public FieldDivisionLine Line { get; set; } = FieldDivisionLine.Straight;
 
         public Field[] Subfields { get; set; } = null;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Field(){}
-
-        /// <summary>
-        /// Constructs field with solid color as a background.
-        /// </summary>
-        /// <param name="tincture"></param>
-        public Field(Filling tincture) 
-        {
-            Background = tincture;
-        }
-
-        /// <summary>
-        /// Construct field from quaterly definition.
-        /// Line type is defined as straight.
-        /// </summary>
-        /// <param name="divDefinition">Quaterly definition from which the field will be constructed.</param>
-        public Field(QuaterlyDivisionDefinition divDefinition) {
-            Division = divDefinition.Type;
-            Line = FieldDivisionLine.Straight;
-            Subfields = divDefinition.Fields.ToArray();
-        }
     }
 }

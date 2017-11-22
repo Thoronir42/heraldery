@@ -18,7 +18,8 @@ namespace Heraldry.Blazon.Vocabulary
         Reference,
         /// <summary> ... as an augmentation banana </summary>
         Augmentation,
-        /// <summary> comma, colon, etc... used to divide concepts </summary>
+        /// <summary> comma, colon, etc... used to divide concepts, 
+        /// todo: might want to split this into separate enum values </summary>
         Separator,
     }
 }

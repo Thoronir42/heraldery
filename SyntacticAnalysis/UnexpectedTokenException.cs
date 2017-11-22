@@ -10,7 +10,6 @@ namespace Heraldry.SyntacticAnalysis
 {
     class UnexpectedTokenException : Exception
     {
-        private int tokenPosition;
         private Token token;
 
         public int TokenPosition
@@ -33,8 +32,8 @@ namespace Heraldry.SyntacticAnalysis
         {
             String iStr = iThToken != -1 ? iThToken + ": " : "";
             String typeError = "";
-            bool subtypeMismatch = (subtype != null && token.Subtype != subtype);
 
+            bool subtypeMismatch = (subtype != null && token.Subtype != subtype);
             if(expectedType != token.Type || subtypeMismatch)
             {
                 String expectedTypeStr = "" + expectedType;
@@ -46,7 +45,7 @@ namespace Heraldry.SyntacticAnalysis
                     typeError = " of type " + actualTypeStr+ ". Expecting type " + expectedTypeStr;
                 }
             }
-            return String.Format("Unexpected token {0}{1}{2} at position {3}", iStr, token.Definition.Text, typeError, token.Position);
+            return String.Format("Unexpected token {0}\"{1}\"{2} at char position {3}", iStr, token.Definition.Text, typeError, token.Position);
         }
     }
 }
