@@ -3,8 +3,6 @@ using Heraldry.Blazon.Structure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
 {
@@ -15,11 +13,6 @@ namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
     /// </summary>
     public class QuaterlyDividedField : DividedField
     {
-        /// <summary>
-        /// Fields of the division.
-        /// </summary>
-        public List<Field> Fields {get; set; }
-
         /// <summary>
         /// Default constructor. Sets division type to Quaterly.
         /// </summary>
@@ -52,7 +45,7 @@ namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
                 // array numbering starts at 0
                 tmpFields[fieldNum - 1] = f;
             }
-            Fields = tmpFields.OfType<Field>().ToList();
+            Subfields = tmpFields;
         }
 
         /// <summary>
@@ -66,11 +59,13 @@ namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
             // todo: accept also other divisions
             if (tinctures.Count() == 4)
             {
-                Fields = new List<Field>();
+                List<Field> Fields = new List<Field>();
                 foreach(Filling tDef in tinctures) {
                     Field f = new Field { Background = tDef};
                     Fields.Add(f);
                 }
+
+                Subfields = Fields.ToArray();
             }
             else
             {

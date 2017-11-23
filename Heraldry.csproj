@@ -67,8 +67,8 @@
     <Compile Include="Blazon\Vocabulary\Entries\NumberDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\SeparatorDefinition.cs" />
-    <Compile Include="Blazon\Structure\FieldDivisions\DividedField.cs" />
-    <Compile Include="Blazon\Structure\FieldDivisions\QuaterlyDividedField.cs" />
+    <Compile Include="SyntacticAnalysis\Formulas\DividedField.cs" />
+    <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
     <Compile Include="LexicalAnalysis\Numbers\NumberParser.cs" />
@@ -96,7 +96,7 @@
     <None Include="resources\en_olde\field_division_variants.csv" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SyntacticAnalysis\Formulas\" />
+    <Folder Include="Blazon\Structure\FieldDivisions\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="resources\rendering\iconmonstr-shield-1.svg">

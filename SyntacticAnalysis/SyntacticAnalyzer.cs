@@ -1,5 +1,4 @@
-﻿using Heraldry.Blazon;
-using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
@@ -8,8 +7,6 @@ using Heraldry.SyntacticAnalysis.Formulas.FieldDivisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis
 {
@@ -188,8 +185,7 @@ namespace Heraldry.SyntacticAnalysis
 
                     // put it all together
                     QuaterlyDividedField qDef = new QuaterlyDividedField(subfields);
-                    res = new Field { };
-                    return res;
+                    return qDef;
                 default:
                     // todo: support more ways of specifying the division
                     return null;
@@ -298,8 +294,9 @@ namespace Heraldry.SyntacticAnalysis
             }
 
             // if semicolon follows, more definitions are expected.
+            // however, blazon may end here and in that case, next token will be null
             Token currentToken = SeekCurrentToken(tokens);
-            if (ValidateTokenType(currentToken, DefinitionType.KeyWord, KeyWord.Separator))
+            if (currentToken != null && ValidateTokenType(currentToken, DefinitionType.KeyWord, KeyWord.Separator))
             {
                 // this one contains semicolon
                 PopCurrentToken(tokens);
@@ -367,11 +364,6 @@ namespace Heraldry.SyntacticAnalysis
         {
             CheckTokenType(token, DefinitionType.Number);
             NumberDefinition numberDefinition = (NumberDefinition)token.Definition;
-            if (numberDefinition.Text == null)
-            {
-                throw new Exception(String.Format("Number token at position {0} is missing its number value.",
-                    position));
-            }
         }
 
 
