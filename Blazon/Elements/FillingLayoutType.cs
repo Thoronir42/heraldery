@@ -6,13 +6,19 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Elements
 {
-    public enum TinctureLayout
+    /// <summary>
+    /// Particular type of filling layout.
+    /// </summary>
+    public enum FillingLayoutType
     {
+        /// <summary>
+        /// Solid layout type - use this for single tincture background.
+        /// </summary>
         Solid,
         /// <summary> Vertical poles </summary>
-        Paly,
+        PalyOf,
         /// <summary> Horizontal bars </summary>
-        Barry,
+        BarryOf,
         /// <summary> Checkered board </summary>
         Chequy,
         /// <summary> Diagonal checkered board </summary>
@@ -20,7 +26,7 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Twice as high as wide lozengy </summary>
         Fusilly,
         /// <summary> Diagonal bars </summary>
-        Bendy,
+        BendyOf,
         /// <summary> Cloth-like intertwined diagonal bars </summary>
         Fretty
     }

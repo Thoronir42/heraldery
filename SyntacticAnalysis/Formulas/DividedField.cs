@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
 {
+    /// <summary>
+    /// Base class for divided fields.
+    /// </summary>
     public abstract class DividedField : Field
     {
         

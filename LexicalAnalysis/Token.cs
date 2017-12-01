@@ -23,5 +23,19 @@ namespace Heraldry.LexicalAnalysis
         //public object Value { get; set; } // todo: generify Value type
 
         public int Position { get; set; }
+
+        public Token() { }
+
+        /// <summary>
+        /// Constructor which takes position and definition as a parameter.
+        /// Used mainly for testing.
+        /// </summary>
+        /// <param name="position">Token position.</param>
+        /// <param name="definition">Token definition.</param>
+        public Token(int position, Definition definition)
+        {
+            Definition = definition;
+            Position = position;
+        }
     }
 }

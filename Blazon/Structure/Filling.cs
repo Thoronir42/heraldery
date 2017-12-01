@@ -10,7 +10,7 @@ namespace Heraldry.Blazon.Structure
 {
     public class Filling
     {
-        public TinctureLayout Layout { get; set; }
+        public FillingLayout Layout { get; set; }
 
         public TinctureDefinition[] Tinctures { get; set; }
 
@@ -26,8 +26,26 @@ namespace Heraldry.Blazon.Structure
         /// <param name="tinctureDefinition">Definition of the tincture.</param>
         public Filling(TinctureDefinition tinctureDefinition)
         {
-            Layout = TinctureLayout.Solid;
+            Layout = FillingLayout.Solid();
             Tinctures = new TinctureDefinition[] { tinctureDefinition };
+        }
+
+        /// <summary>
+        /// Fills tincture definition array from the list of fillings. Only fillings with solid tinctures are accepted.
+        /// </summary>
+        /// <param name="fillings">List of fillings.</param>
+        public void AddTinctureDefinitions(List<Filling> fillings)
+        {
+            List<TinctureDefinition> tmpDefs = new List<TinctureDefinition>();
+            foreach(Filling f in fillings)
+            {
+                if(f.Layout.FillingLayoutType == FillingLayoutType.Solid)
+                {
+                    tmpDefs.Add(f.Tinctures[0]);
+                }
+            }
+
+            Tinctures = tmpDefs.ToArray();
         }
     }
 }

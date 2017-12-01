@@ -3,6 +3,7 @@ using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.LexicalAnalysis;
+using Heraldry.SyntacticAnalysis.Formulas;
 using Heraldry.SyntacticAnalysis.Formulas.FieldDivisions;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         private int position;
 
-        public BlazonInstance ParseTokens(List<LexicalAnalysis.Token> tokens)
+        public BlazonInstance ParseTokens(List<Token> tokens)
         {
 
             //foreach (var t in tokens)
@@ -48,7 +49,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed using recursive descent</param>
         /// <returns>Parsed coat of arms.</returns>
-        protected CoatOfArms Coa(List<LexicalAnalysis.Token> tokens)
+        protected CoatOfArms Coa(List<Token> tokens)
         {
             CoatOfArms coa = new CoatOfArms();
             Field content = Background(tokens);
@@ -62,9 +63,9 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Parsed field.</returns>
-        protected Field Background(List<LexicalAnalysis.Token> tokens)
+        protected Field Background(List<Token> tokens)
         {
-            LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
+            Token currentToken = SeekCurrentToken(tokens);
             Field f;
             // todo: support for variation
             switch (currentToken.Type)
@@ -76,6 +77,9 @@ namespace Heraldry.SyntacticAnalysis
                 case DefinitionType.FieldDivision:
                     f = Division(tokens);
                     break;
+                case DefinitionType.Variation:
+                    f = Variation(tokens);
+                    break;
                 default:
                     f = null;
                     break;
@@ -84,24 +88,14 @@ namespace Heraldry.SyntacticAnalysis
         }
 
         /// <summary>
-        /// Variation of the field. 
-        /// 
-        /// </summary>
-        /// <param name="tokens">List of tokens to be parsed.</param>
-        protected void Variation(List<LexicalAnalysis.Token> tokens)
-        {
-            // todo: implement this
-        }
-
-        /// <summary>
         /// Division of the field.
         /// 
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Divided field.</returns>
-        protected Field Division(List<LexicalAnalysis.Token> tokens)
+        protected Field Division(List<Token> tokens)
         {
-            LexicalAnalysis.Token currentToken = PopCurrentToken(tokens);
+            Token currentToken = PopCurrentToken(tokens);
 
             // first of all, type of the division is expected - quaterly, per pale, per fess, ...
             if (currentToken.Type == DefinitionType.FieldDivision)
@@ -125,13 +119,80 @@ namespace Heraldry.SyntacticAnalysis
         }
 
         /// <summary>
+        /// Rule which will parse field variations.
+        /// 
+        /// </summary>
+        /// <param name="tokens">List of tokens to be parsed.</param>
+        /// <returns>Field with defined variation.</returns>
+        // TODO: tests
+        protected Field Variation(List<Token> tokens)
+        {
+            Token currentToken = PopCurrentToken(tokens);
+
+            // first, the type of variation follows, then variation tinctures should be defined
+            CheckTokenType(currentToken, DefinitionType.Variation, null);
+            FieldVariationType variationType = ((FieldVariationDefinition)currentToken.Definition).VariationType;
+
+            // for some types of variation, number (one number: number of stripes, waves, ...) definition may be expected
+            // negative value cannot be used in blazon so it may be used here in code to determine whether or not 
+            // was number defined
+            currentToken = SeekCurrentToken(tokens);
+            int number = Int32.MinValue; 
+            if(ValidateTokenType(currentToken, DefinitionType.Number))
+            {
+                PopCurrentToken(tokens);
+                number = ((NumberDefinition)currentToken.Definition).Value;
+            } 
+
+            // tinctures of a variation
+            List<Filling> variationFillings = VariationFillings(tokens);
+            
+            FillingLayout fillingLayout = new FillingLayout();
+            fillingLayout.SetVariationLayoutType(variationType);
+            if(number != Int32.MinValue)
+            {
+                fillingLayout.Number = number;
+            }
+            Filling variatedFilling = new Filling();
+            variatedFilling.Layout = fillingLayout;
+            variatedFilling.AddTinctureDefinitions(variationFillings);
+
+
+            return new Field { Background = variatedFilling };
+        }
+
+        /// <summary>
+        /// Rule which will parse fillings for a variation.
+        /// Basically: TINCTURE AND TINCTURE
+        /// 
+        /// </summary>
+        /// <param name="tokens">Tokens to be parsed.</param>
+        /// <returns>List of defined tinctures.</returns>
+        protected List<Filling> VariationFillings(List<Token> tokens)
+        {
+            List<Filling> fillings = new List<Filling>();
+            
+            // first filling
+            fillings.Add(Tincture(tokens));
+
+            // and
+            Token currentToken = PopCurrentToken(tokens);
+            CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.And);
+
+            // second filling
+            fillings.Add(Tincture(tokens));
+
+            return fillings;
+        }
+
+        /// <summary>
         /// Definition of quaterly division is parsed by this rule.
         /// 
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
-        protected Field QDivision(List<LexicalAnalysis.Token> tokens)
+        protected Field QDivision(List<Token> tokens)
         {
-            LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
+            Token currentToken = SeekCurrentToken(tokens);
             Field res;
             switch (currentToken.Type)
             {
@@ -199,9 +260,9 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Parsed filling - tincture or fur.</returns>
-        protected Filling Tincture(List<LexicalAnalysis.Token> tokens)
+        protected Filling Tincture(List<Token> tokens)
         {
-            LexicalAnalysis.Token currentToken = SeekCurrentToken(tokens);
+            Token currentToken = SeekCurrentToken(tokens);
 
             // check that current token is really a tincture
             CheckTokenType(currentToken, DefinitionType.Tincture);
@@ -223,7 +284,7 @@ namespace Heraldry.SyntacticAnalysis
 
                 Filling filling = new Filling
                 {
-                    Layout = TinctureLayout.Solid,
+                    Layout = FillingLayout.Solid(),
                     Tinctures = new TinctureDefinition[] { def }
                 };
 
@@ -242,9 +303,9 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Parsed fur.</returns>
-        protected Filling Furs(List<LexicalAnalysis.Token> tokens)
+        protected Filling Furs(List<Token> tokens)
         {
-            LexicalAnalysis.Token currentToken = PopCurrentToken(tokens);
+            Token currentToken = PopCurrentToken(tokens);
             // todo: implement this
             return null;
         }
@@ -256,10 +317,10 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        protected List<int> Nums(List<LexicalAnalysis.Token> tokens)
+        protected List<int> Nums(List<Token> tokens)
         {
             List<int> numbers = new List<int>();
-            LexicalAnalysis.Token currentToken = PopCurrentToken(tokens);
+            Token currentToken = PopCurrentToken(tokens);
             CheckNumberToken(currentToken);
             numbers.Add(((NumberDefinition)currentToken.Definition).Value);
 
@@ -283,7 +344,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">Tokens to be parsed.</param>
         /// <returns></returns>
-        protected Dictionary<int, Field> NumDef(List<LexicalAnalysis.Token> tokens)
+        protected Dictionary<int, Field> NumDef(List<Token> tokens)
         {
             List<int> numbers = Nums(tokens);
             Field f = Coa(tokens).Content;
@@ -326,13 +387,13 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens from which the current one will be returned.</param>
         /// <returns>Current token.</returns>
-        private LexicalAnalysis.Token PopCurrentToken(List<LexicalAnalysis.Token> tokens)
+        private Token PopCurrentToken(List<Token> tokens)
         {
             if (position == tokens.Count)
             {
                 return null;
             }
-            LexicalAnalysis.Token currentToken = tokens.ElementAt(position);
+            Token currentToken = tokens.ElementAt(position);
             position += 1;
             return currentToken;
         }
@@ -344,13 +405,13 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens from which the current one will be returned.</param>
         /// <returns>Current token.</returns>
-        private LexicalAnalysis.Token SeekCurrentToken(List<LexicalAnalysis.Token> tokens)
+        private Token SeekCurrentToken(List<Token> tokens)
         {
             if (position == tokens.Count)
             {
                 return null;
             }
-            LexicalAnalysis.Token currentToken = tokens.ElementAt(position);
+            Token currentToken = tokens.ElementAt(position);
             return currentToken;
         }
 
@@ -360,7 +421,7 @@ namespace Heraldry.SyntacticAnalysis
         /// 
         /// </summary>
         /// <param name="token">Token to be checked.</param>
-        private void CheckNumberToken(LexicalAnalysis.Token token)
+        private void CheckNumberToken(Token token)
         {
             CheckTokenType(token, DefinitionType.Number);
             NumberDefinition numberDefinition = (NumberDefinition)token.Definition;

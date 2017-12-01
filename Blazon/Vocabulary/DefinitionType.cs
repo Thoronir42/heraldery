@@ -12,6 +12,7 @@ namespace Heraldry.Blazon.Vocabulary
         Tincture,
         FieldDivision,
         FieldDivisionLine,
+        Variation,
         Charge,
         Motto,
 

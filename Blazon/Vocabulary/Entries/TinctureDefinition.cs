@@ -37,7 +37,19 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 
         public override string ToString()
         {
-            return String.Format("Tincture {0}:{1} [{2}]", this.Text, this.Type);
+            return String.Format("Tincture {0}:{1}", this.Text, this.Type);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj == null || obj.GetType() != typeof(TinctureDefinition))
+            {
+                return false;
+            }
+
+            TinctureDefinition other = (TinctureDefinition)obj;
+
+            return Type == other.Type && Text == other.Text;
         }
     }
 }
