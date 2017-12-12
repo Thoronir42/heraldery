@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class SeparatorDefinition : Definition
+    public class SeparatorDefinition : Definition
     {
         public Separator Separator { get; set; }
 

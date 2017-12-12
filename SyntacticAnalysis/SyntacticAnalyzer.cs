@@ -237,7 +237,7 @@ namespace Heraldry.SyntacticAnalysis
 
                     // semicolon should follow now
                     currentToken = PopCurrentToken(tokens);
-                    CheckTokenType(currentToken, DefinitionType.KeyWord, KeyWord.Separator);
+                    CheckSemicolonToken(currentToken);
                     Dictionary<int, Field> otherSubfields = NumDef(tokens);
                     foreach (int fieldNum in otherSubfields.Keys)
                     {
@@ -357,7 +357,7 @@ namespace Heraldry.SyntacticAnalysis
             // if semicolon follows, more definitions are expected.
             // however, blazon may end here and in that case, next token will be null
             Token currentToken = SeekCurrentToken(tokens);
-            if (currentToken != null && ValidateTokenType(currentToken, DefinitionType.KeyWord, KeyWord.Separator))
+            if (currentToken != null && ValidateSemicolonToken(currentToken))
             {
                 // this one contains semicolon
                 PopCurrentToken(tokens);
@@ -442,6 +442,26 @@ namespace Heraldry.SyntacticAnalysis
             {
                 throw new UnexpectedTokenException(token, position, expectedType, expSubtype);
             }
+        }
+
+        /// <summary>
+        /// Check whether the token is a semicolon separator and throws exception if not.
+        /// 
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        private void CheckSemicolonToken(Token token)
+        {
+            CheckTokenType(token, DefinitionType.Separator, Separator.Semicolon);
+        }
+
+        /// <summary>
+        /// Check whether the token is a semicolon separator.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <returns>True if the token is semicolon.</returns>
+        private bool ValidateSemicolonToken(Token token) 
+        {
+            return ValidateTokenType(token, DefinitionType.Separator, Separator.Semicolon);
         }
 
         /// <summary>

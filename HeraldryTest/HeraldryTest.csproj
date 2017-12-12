@@ -51,10 +51,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="App\AppTest.cs" />
     <Compile Include="Blazon\VocabularyDefinitionsTest.cs" />
     <Compile Include="LexicalAnalysis\LexicalAnalyzerTest.cs" />
     <Compile Include="LexicalAnalysis\TokenTest.cs" />
-    <Compile Include="SyntacticAnalyzerTest.cs" />
+    <Compile Include="SyntacticAnalyzer\SyntacticAnalyzerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

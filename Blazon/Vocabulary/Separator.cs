@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary
 {
-    enum Separator
+    public enum Separator
     {
         Comma,
         Dot,
