@@ -6,3 +6,6 @@ packages/
 
 bin/*
 obj/*
+
+HeraldryTest/obj/
+HeraldryTest/bin/
