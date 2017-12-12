@@ -12,12 +12,16 @@ namespace Heraldry.Blazon.Vocabulary.Entries
     /// </summary>
     public class FieldVariationDefinition : Definition
     {
-
         public FieldVariationType VariationType { get; set; }
 
         public override DefinitionType GetTokenType()
         {
             return DefinitionType.Variation;
+        }
+
+        public override object GetSubtype()
+        {
+            return VariationType;
         }
     }
 }

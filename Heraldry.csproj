@@ -70,6 +70,8 @@
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\SeparatorDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldVariationDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Separator.cs" />
+    <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\DividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />

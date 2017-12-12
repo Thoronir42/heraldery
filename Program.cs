@@ -23,7 +23,8 @@ namespace Heraldry
 
             // Todo: fix resource loading
             Console.WriteLine("=== Loading blazon vocabulary from " + settings.Language);
-            BlazonVocabulary blazon = new BlazonVocabulary(Environment.CurrentDirectory + "\\resources\\" + settings.Language + "\\");
+            BlazonVocabulary vocabulary = VocabularyLoader.LoadFromDirectory(Environment.CurrentDirectory + "\\resources\\" + settings.Language + "\\");
+
 
             // todo: editable input source
             String input = File.ReadAllText(Environment.CurrentDirectory + "\\resources\\input\\" + settings.InputFile);
@@ -31,7 +32,7 @@ namespace Heraldry
             //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
             //BEHOLD
             Console.WriteLine("=== Lexical analysis");
-            LexAnalyzer lex = new LexAnalyzer(blazon, new NumberParser_en_olde());
+            LexAnalyzer lex = new LexAnalyzer(vocabulary, new NumberParser_en_olde());
             var tokens = lex.ParseText(input);
 
             Console.WriteLine("=== Syntactic analysis");

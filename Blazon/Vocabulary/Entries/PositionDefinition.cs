@@ -16,5 +16,23 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         {
             return DefinitionType.Position;
         }
+
+        public override bool Equals(object obj)
+        {
+            var definition = obj as PositionDefinition;
+            return definition != null &&
+                   base.Equals(obj) &&
+                   Type == definition.Type &&
+                   EqualityComparer<Position>.Default.Equals(Position, definition.Position);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1554171551;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
+            hashCode = hashCode * -1521134295 + Type.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Position>.Default.GetHashCode(Position);
+            return hashCode;
+        }
     }
 }

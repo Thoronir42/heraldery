@@ -15,5 +15,10 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         {
             return DefinitionType.FieldDivision;
         }
+
+        public override object GetSubtype()
+        {
+            return Type;
+        }
     }
 }

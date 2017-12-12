@@ -25,7 +25,7 @@ namespace HeraldryTest
             // prepare data
             List<Token> tokens = new List<Token>();
             Token background = new Token();
-            TinctureDefinition tincture = new TinctureDefinition { Text = "AZURE", Type = TinctureType.Colour };
+            TinctureDefinition tincture = new TinctureDefinition { Text = "AZURE", TinctureType = TinctureType.Colour };
             background.Definition = tincture;
             tokens.Add(background);
 
@@ -54,10 +54,10 @@ namespace HeraldryTest
             tokens.Add(new Token ( 0, divisionDefinition ));
 
             // quaterly division qhich consists of two colours
-            TinctureDefinition tincture1 = new TinctureDefinition { Text = "AZURE", Type = TinctureType.Colour };
+            TinctureDefinition tincture1 = new TinctureDefinition { Text = "AZURE", TinctureType = TinctureType.Colour };
             TinctureDefinition tincture2 = new TinctureDefinition();
             tincture1.Text = "OR";
-            tincture2.Type = TinctureType.Colour;
+            tincture2.TinctureType = TinctureType.Colour;
             tokens.Add(new Token ( 10, tincture1 ));
             tokens.Add(new Token ( 16,new KeyWordDefinition { KeyWord = KeyWord.And } ));
             tokens.Add(new Token ( 30, tincture2 ));
@@ -368,7 +368,7 @@ namespace HeraldryTest
             Assert.IsNotNull(filling.Tinctures);
             Assert.AreEqual(1, filling.Tinctures.Length);
             TinctureDefinition tDef = filling.Tinctures[0];
-            Assert.AreEqual(expectedType, tDef.Type);
+            Assert.AreEqual(expectedType, tDef.TinctureType);
             Assert.AreEqual(expectedText, tDef.Text);
         }
     }

@@ -112,6 +112,18 @@ namespace Heraldry.LexicalAnalysis
             return separators;
         }
 
+        private Separator StringToSeparator(String s)
+        {
+            switch(s)
+            {
+                case ".": return Separator.Dot;
+                case ",": return Separator.Comma;
+                case ";": return Separator.Semicolon;
+            }
+
+            return Separator.Other;
+        }
+
         private List<Token> ParseNumberTokens(String input, out String output)
         {
             List<Token> tokens = new List<Token>();

@@ -11,6 +11,22 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         public NumberType Type { get; set; }
         public int Value { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            var definition = obj as NumberDefinition;
+            return definition != null &&
+                   Type == definition.Type &&
+                   Value == definition.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1265339359;
+            hashCode = hashCode * -1521134295 + Type.GetHashCode();
+            hashCode = hashCode * -1521134295 + Value.GetHashCode();
+            return hashCode;
+        }
+
         public override DefinitionType GetTokenType()
         {
             return DefinitionType.Number;

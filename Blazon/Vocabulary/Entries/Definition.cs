@@ -17,5 +17,24 @@ namespace Heraldry.Blazon.Vocabulary.Entries
             return null;
         }
 
+        public override bool Equals(object obj)
+        {
+            var definition = obj as Definition;
+            return definition != null &&
+                Object.Equals(GetType(), definition.GetType()) &&
+                Object.Equals(GetSubtype(), definition.GetSubtype());
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1265339359;
+            hashCode = hashCode * -1521134295 + GetType().GetHashCode();
+            var subtype = GetSubtype();
+            if (subtype != null)
+            {
+                hashCode = hashCode * -1521134295 + subtype.GetHashCode();
+            }
+            return hashCode;
+        }
     }
 }

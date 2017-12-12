@@ -275,7 +275,7 @@ namespace Heraldry.SyntacticAnalysis
                     ));
             }
             TinctureDefinition tinctureDef = (TinctureDefinition)currentToken.Definition;
-            if (tinctureDef.Type == TinctureType.Colour || tinctureDef.Type == TinctureType.Metal)
+            if (tinctureDef.TinctureType == TinctureType.Colour || tinctureDef.TinctureType == TinctureType.Metal)
             {
                 PopCurrentToken(tokens);
 

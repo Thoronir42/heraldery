@@ -9,7 +9,8 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class TinctureDefinition : Definition
     {
-        public TinctureType Type { get; set; }
+        public TinctureType TinctureType { get; set; }
+        public String Value { get; set; }
 
         /// <summary>
         /// Default constructor, does nothing.
@@ -26,7 +27,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// <param name="text">Tincture text.</param>
         public TinctureDefinition(TinctureType tinctureType, String text)
         {
-            Type = tinctureType;
+            TinctureType = tinctureType;
             Text = text;
         }
 
@@ -37,19 +38,24 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 
         public override string ToString()
         {
-            return String.Format("Tincture {0}:{1}", this.Text, this.Type);
+            return String.Format("Tincture {0}:{1}", this.Text, this.TinctureType);
         }
 
         public override bool Equals(object obj)
         {
-            if(obj == null || obj.GetType() != typeof(TinctureDefinition))
-            {
-                return false;
-            }
+            var definition = obj as TinctureDefinition;
+            return definition != null &&
+                   base.Equals(obj) &&
+                   TinctureType == definition.TinctureType &&
+                   Value == definition.Value;
+        }
 
-            TinctureDefinition other = (TinctureDefinition)obj;
-
-            return Type == other.Type && Text == other.Text;
+        public override int GetHashCode()
+        {
+            var hashCode = -1556832619;
+            hashCode = hashCode * -1521134295 + TinctureType.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Value);
+            return hashCode;
         }
     }
 }
