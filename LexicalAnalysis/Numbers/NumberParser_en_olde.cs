@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.LexicalAnalysis.Numbers
 {
-    class NumberParser_en_olde : NumberParser
+    public class NumberParser_en_olde : NumberParser
     {
         private String nThPattern = "(\\d+)(st|nd|rd|th)";
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.LexicalAnalysis.Numbers
 {
-    abstract class NumberParser
+    public abstract class NumberParser
     {
         public abstract Token FindNumber(String text);
     }

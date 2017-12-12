@@ -37,5 +37,21 @@ namespace Heraldry.LexicalAnalysis
             Definition = definition;
             Position = position;
         }
+
+        public override bool Equals(object obj)
+        {
+            var token = obj as Token;
+            return token != null &&
+                   EqualityComparer<Definition>.Default.Equals(Definition, token.Definition) &&
+                   Position == token.Position;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1698227724;
+            hashCode = hashCode * -1521134295 + EqualityComparer<Definition>.Default.GetHashCode(Definition);
+            hashCode = hashCode * -1521134295 + Position.GetHashCode();
+            return hashCode;
+        }
     }
 }

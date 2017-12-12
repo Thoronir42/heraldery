@@ -51,6 +51,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Blazon\VocabularyDefinitionsTest.cs" />
+    <Compile Include="LexicalAnalysis\LexicalAnalyzerTest.cs" />
+    <Compile Include="LexicalAnalysis\TokenTest.cs" />
     <Compile Include="SyntacticAnalyzerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -60,6 +63,7 @@
       <Name>Heraldry</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

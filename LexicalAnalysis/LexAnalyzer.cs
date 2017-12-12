@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace Heraldry.LexicalAnalysis
 {
-    class LexAnalyzer
+    public class LexAnalyzer
     {
         private BlazonVocabulary BlazonVocabulary { get; }
         private NumberParser NumberParser { get; }
@@ -42,7 +42,7 @@ namespace Heraldry.LexicalAnalysis
                 while ((i = input.IndexOf(search)) != -1)
                 {
                     input = input.Remove(i + 1, def.Text.Length).Insert(i + 1, "".PadRight(def.Text.Length, ' '));
-                    tokens.Add(CreateToken(def, i + 1));
+                    tokens.Add(CreateToken(def, i));
                 }
             }
 
@@ -98,7 +98,8 @@ namespace Heraldry.LexicalAnalysis
             var i = 0;
             while ((match = Regex.Match(text, separatorRegex)).Success)
             {
-                var def = new SeparatorDefinition() { Text = match.Value };
+
+                var def = new SeparatorDefinition() { Text = match.Value, Separator = StringToSeparator(match.Captures[0].Value) };
                 separators.Add(new Token() { Definition = def, Position = match.Index });
                 text = text.Remove(match.Index, match.Value.Length)
                            .Insert(match.Index, "".PadRight(match.Value.Length));
@@ -132,6 +133,7 @@ namespace Heraldry.LexicalAnalysis
             Token numTok;
             while ((numTok = NumberParser.FindNumber(text)) != null)
             {
+                numTok.Position--;
                 text = text.Remove(numTok.Position, numTok.Definition.Text.Length)
                            .Insert(numTok.Position, "".PadLeft(numTok.Definition.Text.Length));
                 tokens.Add(numTok);
