@@ -34,24 +34,19 @@ namespace Heraldry.LexicalAnalysis
             var numbers = ParseNumberTokens(input, out input);
             tokens.AddRange(numbers);
 
-            List<Definition> definitions = BlazonVocabulary.GetAllDefinitions(true);
-            foreach (var def in definitions)
-            {
-                var search = " " + def.Text + " ";
-                int i = 0;
-                while ((i = input.IndexOf(search)) != -1)
-                {
-                    input = input.Remove(i + 1, def.Text.Length).Insert(i + 1, "".PadRight(def.Text.Length, ' '));
-                    tokens.Add(CreateToken(def, i));
-                }
-            }
+            var definedTokens = FindDefinedTokens(input, out input);
+            tokens.AddRange(definedTokens);
+
+            var charges = CollectRemainingTokensAsCharges(input, out input);
+            tokens.AddRange(charges);
+
 
             Console.WriteLine("".PadRight(12, '-'));
             Console.WriteLine("Unprocessed text:\n" + input);
 
             tokens = tokens.OrderBy(t => t.Position).ToList();
 
-            String tokenText = "".PadRight(input.Length, ' ');
+            String tokenText = "".PadRight(input.Length + 1, ' ');
             foreach (var t in tokens)
             {
                 tokenText = tokenText.Remove(t.Position, t.Definition.Text.Length).Insert(t.Position, t.Definition.Text);
@@ -115,7 +110,7 @@ namespace Heraldry.LexicalAnalysis
 
         private Separator StringToSeparator(String s)
         {
-            switch(s)
+            switch (s)
             {
                 case ".": return Separator.Dot;
                 case ",": return Separator.Comma;
@@ -135,12 +130,51 @@ namespace Heraldry.LexicalAnalysis
             {
                 text = text.Remove(numTok.Position, numTok.Definition.Text.Length)
                            .Insert(numTok.Position, "".PadLeft(numTok.Definition.Text.Length));
-
-                numTok.Position--;
                 tokens.Add(numTok);
             }
 
             output = text;
+            return tokens;
+        }
+
+
+        private List<Token> FindDefinedTokens(String input, out String output)
+        {
+            List<Definition> definitions = BlazonVocabulary.GetAllDefinitions(true);
+            List<Token> tokens = new List<Token>();
+
+            foreach (var def in definitions)
+            {
+                var search = " " + def.Text + " ";
+                int i = 0;
+                while ((i = input.IndexOf(search)) != -1)
+                {
+                    input = input.Remove(i + 1, def.Text.Length).Insert(i + 1, "".PadRight(def.Text.Length, ' '));
+                    tokens.Add(CreateToken(def, i + 1));
+                }
+            }
+
+            output = input;
+            return tokens;
+        }
+
+        private List<Token> CollectRemainingTokensAsCharges(String input, out String output)
+        {
+            List<Token> tokens = new List<Token>();
+
+            Regex pattern = new Regex("([-\\w]+( [\\w]+)?)");
+
+
+            Match match;
+            while ((match = pattern.Match(input)).Success)
+            {
+                var chargeText = match.Captures[0].Value;
+
+                input = input.Remove(match.Index, match.Length).Insert(match.Index, "".PadRight(match.Length, ' '));
+                tokens.Add(CreateToken(new ChargeDefinition() { Text = chargeText }, match.Index));
+            }
+
+            output = input;
             return tokens;
         }
     }
