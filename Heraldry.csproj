@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blazon\Charges\Cross.cs" />
+    <Compile Include="Blazon\Charges\CrossType.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionLine.cs" />
     <Compile Include="Blazon\Elements\FieldVariationType.cs" />
     <Compile Include="Blazon\Elements\Position.cs" />
@@ -55,7 +57,7 @@
     <Compile Include="Blazon\Structure\ChargeField.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
-    <Compile Include="Blazon\Elements\Charge.cs" />
+    <Compile Include="Blazon\Charges\Charge.cs" />
     <Compile Include="Blazon\Structure\CoatOfArms.cs" />
     <Compile Include="Blazon\Elements\EscutcheonShape.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionType.cs" />

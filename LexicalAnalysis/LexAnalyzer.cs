@@ -133,9 +133,10 @@ namespace Heraldry.LexicalAnalysis
             Token numTok;
             while ((numTok = NumberParser.FindNumber(text)) != null)
             {
-                numTok.Position--;
                 text = text.Remove(numTok.Position, numTok.Definition.Text.Length)
                            .Insert(numTok.Position, "".PadLeft(numTok.Definition.Text.Length));
+
+                numTok.Position--;
                 tokens.Add(numTok);
             }
 

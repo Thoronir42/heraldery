@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.Blazon.Elements
+namespace Heraldry.Blazon.Charges
 {
-    public class Charge
+    class Cross : Charge
     {
-
+        public CrossType Type { get; set; }
     }
 }
