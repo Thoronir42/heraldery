@@ -40,4 +40,29 @@ namespace Heraldry.Blazon.Elements
         // todo: Todd, add more divisions
 
     }
+
+    /// <summary>
+    /// Some helper methods for field division types.
+    /// </summary>
+    public static class FieldDivisionTypeMethods
+    {
+        /// <summary>
+        /// Returns true if the type is party per * division.
+        /// </summary>
+        /// <returns>True or false. Surprise, eh?</returns>
+        public static bool IsPartyPerDivision(this FieldDivisionType type)
+        {
+            switch (type)
+            {
+                case FieldDivisionType.PartyPerBend:
+                case FieldDivisionType.PartyPerBendSinister:
+                case FieldDivisionType.PartyPerChevron:
+                case FieldDivisionType.PartyPerFess:
+                case FieldDivisionType.PartyPerPale:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
 }

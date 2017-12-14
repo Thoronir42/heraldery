@@ -15,7 +15,8 @@ namespace Heraldry.Blazon.Structure
         public Charge Charge { get; set; }
 
         // todo: move these to FieldDivision class
-        public FieldDivisionType? Division { get; set; } = null;
+        // field is virtual so that setters can be overrided in child classes
+        public virtual FieldDivisionType? Division { get; set; } = null;
         public FieldDivisionLine Line { get; set; } = FieldDivisionLine.Straight;
 
         public Field[] Subfields { get; set; } = null;

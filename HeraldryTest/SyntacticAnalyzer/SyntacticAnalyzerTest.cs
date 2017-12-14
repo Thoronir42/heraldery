@@ -359,6 +359,146 @@ namespace HeraldryTest
 
 
         /// <summary>
+        /// Feed the parser with some basic party per division definitions.
+        /// </summary>
+        [TestMethod]
+        public void TestPartyPerDivision1()
+        {
+            // test all pp types for two colors
+            TestPartyPerSomethingTwoColoursDivision(FieldDivisionType.PartyPerBend);
+            TestPartyPerSomethingTwoColoursDivision(FieldDivisionType.PartyPerPale);
+            TestPartyPerSomethingTwoColoursDivision(FieldDivisionType.PartyPerBendSinister);
+            TestPartyPerSomethingTwoColoursDivision(FieldDivisionType.PartyPerChevron);
+            TestPartyPerSomethingTwoColoursDivision(FieldDivisionType.PartyPerFess);
+        }
+
+        /// <summary>
+        /// Feed the parser with party per division definitions with nested fields.
+        /// </summary>
+        [TestMethod]
+        public void TestPartyPerDivision2()
+        {
+            // test all pp types for nested fields
+            TestPartyPerSomethinComplexDivision(FieldDivisionType.PartyPerBend);
+            TestPartyPerSomethinComplexDivision(FieldDivisionType.PartyPerPale);
+            TestPartyPerSomethinComplexDivision(FieldDivisionType.PartyPerBendSinister);
+            TestPartyPerSomethinComplexDivision(FieldDivisionType.PartyPerChevron);
+            TestPartyPerSomethinComplexDivision(FieldDivisionType.PartyPerFess);
+        }
+
+        /// <summary>
+        /// Creates a field with party per * division defined by two colors, parses it a checks results.
+        /// </summary>
+        /// <param name="ppType">Particular pp type to be tested.</param>
+        private void TestPartyPerSomethingTwoColoursDivision(FieldDivisionType ppType)
+        {
+            Assert.IsTrue(ppType.IsPartyPerDivision());
+            List<Token> tokens = new List<Token>();
+
+            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
+            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = ppType };
+
+            // create token list
+            tokens.Add(new Token(0, divisionDefinition));
+            tokens.Add(new Token(10, tincture1));
+            tokens.Add(new Token(16, new KeyWordDefinition { KeyWord = KeyWord.And }));
+            tokens.Add(new Token(30, tincture2));
+
+
+            // feed the parser
+            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            BlazonInstance blazon = sa.ParseTokens(tokens);
+
+            // check the result
+            Assert.IsNotNull(blazon);
+            Assert.IsNotNull(blazon.CoatOfArms);
+            Assert.IsNotNull(blazon.CoatOfArms.Content);
+            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
+            Field coa = blazon.CoatOfArms.Content;
+            Assert.AreEqual(ppType, coa.Division);
+            Assert.IsNotNull(coa.Subfields);
+            Assert.AreEqual(2, coa.Subfields.Length);
+
+            Filling f1 = coa.Subfields[0].Background;
+            Filling f2 = coa.Subfields[1].Background;
+            CheckFillingColour(TinctureType.Colour, tincture1.Text, f1);
+            CheckFillingColour(TinctureType.Colour, tincture2.Text, f2);
+        }
+
+        /// <summary>
+        /// Creates a field with party per * division defined by two various fields.
+        /// </summary>
+        /// <param name="ppType">Particular pp type to be tested.</param>
+        private void TestPartyPerSomethinComplexDivision(FieldDivisionType ppType)
+        {
+            Assert.IsTrue(ppType.IsPartyPerDivision());
+            List<Token> tokens = new List<Token>();
+            FieldDivisionDefinition divisionDefinition = new FieldDivisionDefinition { Type = ppType };
+
+            // create token list
+            tokens.Add(new Token(0, divisionDefinition));
+
+            // first field will be variated: paly of three azure and or
+            FieldVariationDefinition variationDefinition = new FieldVariationDefinition { VariationType = FieldVariationType.PalyOf };
+            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
+            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            tokens.Add(new Token(1, variationDefinition));
+            tokens.Add(new Token(2, new NumberDefinition { Value = 3 }));
+            tokens.Add(new Token(3, tincture1));
+            tokens.Add(new Token(4, new KeyWordDefinition { KeyWord = KeyWord.And }));
+            tokens.Add(new Token(5, tincture2));
+
+            tokens.Add(new Token(6, new KeyWordDefinition { KeyWord = KeyWord.And }));
+
+            // second field will be quarterly divided
+            TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "GULES");
+            TinctureDefinition tincture4 = new TinctureDefinition(TinctureType.Colour, "SABLE");
+            FieldDivisionDefinition quarterlyDivsion = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            tokens.Add(new Token(7, quarterlyDivsion));
+            tokens.Add(new Token(8, tincture3));
+            tokens.Add(new Token(9, new KeyWordDefinition { KeyWord = KeyWord.And }));
+            tokens.Add(new Token(10, tincture4));
+
+            // feed the parser
+            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            BlazonInstance blazon = sa.ParseTokens(tokens);
+
+            // check the result
+            Assert.IsNotNull(blazon);
+            Assert.IsNotNull(blazon.CoatOfArms);
+            Assert.IsNotNull(blazon.CoatOfArms.Content);
+            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
+            Field coa = blazon.CoatOfArms.Content;
+            Assert.AreEqual(ppType, coa.Division);
+            Assert.IsNotNull(coa.Subfields);
+            Assert.AreEqual(2, coa.Subfields.Length);
+
+            // variated field
+            Field f1 = coa.Subfields[0];
+            Filling variatedBackground = f1.Background;
+            Assert.AreEqual(FillingLayoutType.PalyOf, variatedBackground.Layout.FillingLayoutType);
+            Assert.AreEqual(3, variatedBackground.Layout.Number);
+            Assert.AreEqual(2, variatedBackground.Tinctures.Length);
+            Assert.AreEqual(tincture1, variatedBackground.Tinctures[0]);
+            Assert.AreEqual(tincture2, variatedBackground.Tinctures[1]);
+
+            // quarterly divided field
+            Field f2 = coa.Subfields[1];
+            Assert.IsNotNull(f2.Subfields);
+            Assert.AreEqual(4, f2.Subfields.Length);
+            Filling t1 = f2.Subfields[0].Background;
+            Filling t2 = f2.Subfields[1].Background;
+            Filling t3 = f2.Subfields[2].Background;
+            Filling t4 = f2.Subfields[3].Background;
+            CheckFillingColour(TinctureType.Colour, tincture3.Text, t1);
+            CheckFillingColour(TinctureType.Colour, tincture4.Text, t2);
+            CheckFillingColour(TinctureType.Colour, tincture4.Text, t3);
+            CheckFillingColour(TinctureType.Colour, tincture3.Text, t4);
+        }
+
+
+        /// <summary>
         /// Creates a new semicolon token and returns it.
         /// </summary>
         /// <param name="position">Token's position.</param>

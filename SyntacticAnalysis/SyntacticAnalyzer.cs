@@ -47,14 +47,25 @@ namespace Heraldry.SyntacticAnalysis
         /// COA is an abbreviation for Coat Of Arms and this basically represents the whole shield of arms.
         /// 
         /// </summary>
-        /// <param name="tokens">List of tokens to be parsed using recursive descent</param>
+        /// <param name="tokens">List of tokens to be parsed using recursive descent.</param>
         /// <returns>Parsed coat of arms.</returns>
         protected CoatOfArms Coa(List<Token> tokens)
         {
             CoatOfArms coa = new CoatOfArms();
-            Field content = Background(tokens);
+            Field content = Field(tokens);
             coa.Content = content;
             return coa;
+        }
+
+        /// <summary>
+        /// Field rule. Field definition consists of backgound definition and optional principal charge.
+        /// 
+        /// </summary>
+        /// <param name="tokens">List of tokens to be parsed using recursive descent.</param>
+        /// <returns>One field.</returns>
+        protected Field Field(List<Token> tokens)
+        {
+            return Background(tokens);
         }
 
         /// <summary>
@@ -101,14 +112,18 @@ namespace Heraldry.SyntacticAnalysis
             if (currentToken.Type == DefinitionType.FieldDivision)
             {
                 FieldDivisionType divisionType = ((FieldDivisionDefinition)currentToken.Definition).Type;
-                switch (divisionType)
+                if (divisionType == FieldDivisionType.Quarterly)
                 {
-                    // todo: support line type definition
-                    case FieldDivisionType.Quarterly:
-                        return QDivision(tokens);
-                    default:
-                        return null;
-                        // todo: throw exception when undefined division type is found
+                    return QDivision(tokens);
+                } else if(divisionType.IsPartyPerDivision())
+                {
+                    Field f = PpDivision(tokens);
+                    f.Division = divisionType;
+                    return f;
+                } else
+                {
+                    // todo: throw exception when undefined division type is found
+                    return null;
                 }
             }
             else
@@ -124,7 +139,6 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Field with defined variation.</returns>
-        // TODO: tests
         protected Field Variation(List<Token> tokens)
         {
             Token currentToken = PopCurrentToken(tokens);
@@ -251,6 +265,25 @@ namespace Heraldry.SyntacticAnalysis
                     // todo: support more ways of specifying the division
                     return null;
             }
+        }
+
+        /// <summary>
+        /// Party per * division rule.
+        /// 
+        /// Party per * division is defined by two fields definitions.
+        /// 
+        /// </summary>
+        /// <param name="tokens">List of tokens to be parsed.</param>
+        /// <returns>Field defined by party per * division.</returns>
+        protected Field PpDivision(List<Token> tokens)
+        {
+            Field field1 = Field(tokens);
+            Token currentToken = PopCurrentToken(tokens);
+            CheckAndToken(currentToken);
+            Field field2 = Field(tokens);
+
+            Field ppDividedField = new PartyPerDividedField(field1, field2);
+            return ppDividedField;
         }
 
         /// <summary>
@@ -452,6 +485,15 @@ namespace Heraldry.SyntacticAnalysis
         private void CheckSemicolonToken(Token token)
         {
             CheckTokenType(token, DefinitionType.Separator, Separator.Semicolon);
+        }
+
+        /// <summary>
+        /// Checks whther the token is an and token and throws exception if not.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        private void CheckAndToken(Token token)
+        {
+            CheckTokenType(token, DefinitionType.KeyWord, KeyWord.And);
         }
 
         /// <summary>
