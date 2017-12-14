@@ -31,15 +31,16 @@ namespace Heraldry
 
             //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
             //BEHOLD
-            Console.WriteLine("=== Lexical analysis");
+
+            Console.WriteLine("\n=== Lexical analysis");
             LexAnalyzer lex = new LexAnalyzer(vocabulary, new NumberParser_en_olde());
             var tokens = lex.ParseText(input);
 
-            Console.WriteLine("=== Syntactic analysis");
+            Console.WriteLine("\n=== Syntactic analysis");
             SyntacticAnalyzer synt = new SyntacticAnalyzer();
             var crest = synt.ParseTokens(tokens);
 
-            Console.WriteLine("=== Rendering");
+            Console.WriteLine("\n=== Rendering");
             CrestRenderer gen = new CrestRenderer();
             gen.Render(crest);
 

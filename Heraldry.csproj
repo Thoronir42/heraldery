@@ -51,9 +51,11 @@
     <Compile Include="Blazon\Charges\CrossType.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionLine.cs" />
     <Compile Include="Blazon\Elements\FieldVariationType.cs" />
+    <Compile Include="Blazon\Elements\Ordinary.cs" />
     <Compile Include="Blazon\Elements\Position.cs" />
     <Compile Include="Blazon\Elements\FillingLayout.cs" />
     <Compile Include="Blazon\Elements\FillingLayoutType.cs" />
+    <Compile Include="Blazon\Elements\Subordinary.cs" />
     <Compile Include="Blazon\Structure\ChargeField.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
@@ -69,9 +71,11 @@
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionLineDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\KeyWordDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\NumberDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\OrdinaryDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\PositionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\SeparatorDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldVariationDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\SubordinaryDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Separator.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\DividedField.cs" />

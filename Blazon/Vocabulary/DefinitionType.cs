@@ -20,6 +20,8 @@ namespace Heraldry.Blazon.Vocabulary
         KeyWord,
         Position,
         Number,
+        Ordinary,
+        Subordinary,
         // todo: TODD! The token types.
     }
 }

@@ -22,7 +22,9 @@ namespace Heraldry.Blazon.Vocabulary
                 FieldDivisionLines = LoadList(blazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines),
                 Positions = LoadList(blazonDirectory + "positions.csv", "Positions", LoadPositions),
                 KeyWords = LoadList(blazonDirectory + "keywords.csv", "KeyWords", LoadKeyWords),
-                Numbers = LoadList(blazonDirectory + "numbers.csv", "Numbers", LoadNumbers)
+                Numbers = LoadList(blazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
+                Ordinaries = LoadList(blazonDirectory + "ordinaries.csv", "Ordinaries", LoadOrdinaries),
+                Subordinaries = LoadList(blazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
             };
         }
 
@@ -112,6 +114,31 @@ namespace Heraldry.Blazon.Vocabulary
                 NumberType type = ParseEnumValue<NumberType>(parts[1]);
                 int value = int.Parse(parts[2]);
                 return new NumberDefinition() { Text = parts[0], Type = type, Value = value };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
+
+        private static List<OrdinaryDefinition> LoadOrdinaries(string filename)
+        {
+            Func<string[], OrdinaryDefinition> f = new Func<string[], OrdinaryDefinition>(parts =>
+            {
+                Ordinary type = ParseEnumValue<Ordinary>(parts[1]);
+                OrdinarySize size = ParseEnumValue<OrdinarySize>(parts[2]);
+
+                return new OrdinaryDefinition() { Text = parts[0], Type = type, Size = size };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
+
+        private static List<SubordinaryDefinition> LoadSubordinaries(string filename)
+        {
+            Func<string[], SubordinaryDefinition> f = new Func<string[], SubordinaryDefinition>(parts =>
+            {
+                Subordinary type = ParseEnumValue<Subordinary>(parts[1]);
+
+                return new SubordinaryDefinition() { Text = parts[0], Type = type };
             });
 
             return ParseCsvFile(filename, f);

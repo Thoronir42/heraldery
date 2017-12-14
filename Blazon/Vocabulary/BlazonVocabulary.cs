@@ -17,6 +17,8 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<PositionDefinition> Positions { get; set; }
         internal List<KeyWordDefinition> KeyWords { get; set; }
         internal List<NumberDefinition> Numbers { get; set; }
+        internal List<OrdinaryDefinition> Ordinaries { get; set; }
+        internal List<SubordinaryDefinition> Subordinaries { get; set; }
 
         internal BlazonVocabulary()
         {   
@@ -26,13 +28,15 @@ namespace Heraldry.Blazon.Vocabulary
         public List<Definition> GetAllDefinitions(Boolean sortByLength = false)
         {
             var list = new List<Definition>();
+
             list.AddRange(this.Tinctures);
             list.AddRange(this.FieldDivisions);
             list.AddRange(this.FieldDivisionLines);
             list.AddRange(this.Positions);
             list.AddRange(this.KeyWords);
             list.AddRange(this.Numbers);
-
+            list.AddRange(this.Ordinaries);
+            list.AddRange(this.Subordinaries);
 
             if (sortByLength)
             {

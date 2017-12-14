@@ -8,14 +8,18 @@ namespace Heraldry.Blazon.Vocabulary
 {
     public enum KeyWord
     {
+        /// <summary> determiner (a, an, the) </summary>
+        Determiner,
         /// <summary> eg: first and fourth, ... </summary>
         And,
         /// <summary> positioner </summary>
         In,
         /// <summary> joins idea, eg: ... on a canton dickbutt Argent </summary>
-        Combination,
+        On,
         /// <summary> of the </summary>
         Reference,
+        /// <summary> ... overall (current field) a feline beast </summary>
+        Overall,
         /// <summary> ... as an augmentation banana </summary>
         Augmentation,
         /// <summary> comma, colon, etc... used to divide concepts, 
