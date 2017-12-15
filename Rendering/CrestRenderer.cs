@@ -1,34 +1,28 @@
 ﻿using Heraldry.Blazon;
 using Heraldry.Blazon.Structure;
+using Heraldry.Rendering.Svg;
+using Heraldry.Rendering.Text;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Drawing;
-using System.Threading.Tasks;
-using Svg;
 
 namespace Heraldry.Rendering
 {
-    class CrestRenderer
+    abstract class CrestRenderer
     {
-        private SvgLoader Loader { get; set; }
+        public abstract Boolean Render(BlazonInstance instance, String outputPath);
 
-        public CrestRenderer() : this(new SvgLoader(100, 100)) { /* default constructor */ }
+        public static CrestRenderer GetByType(RenderType type)
+        {
+            switch(type)
+            {
+                case RenderType.Svg: return new SvgRenderer();
+                case RenderType.Text: return new TextRenderer();
+            }
 
-        public CrestRenderer(SvgLoader loader) {
-            this.Loader = loader;
-        }
-
-        public Bitmap Render(BlazonInstance blazon) {
-            SvgDocument tmp = Loader.GetSvgFromFile("iconmonstr-shield-1.svg");
-            tmp.Children[0].Fill = new SvgColourServer(Color.Red);
-            return GetBitmapFromSvg(tmp);
-        }
-
-        private Bitmap GetBitmapFromSvg(SvgDocument input) {
-            Bitmap retval = input.Draw(100, 100);
-            return retval;
+            throw new ArgumentException("Render type " + type.ToString() + " is not supported yet");
         }
     }
 }

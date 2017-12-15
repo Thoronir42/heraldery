@@ -41,8 +41,14 @@ namespace Heraldry
             var crest = synt.ParseTokens(tokens);
 
             Console.WriteLine("\n=== Rendering");
-            CrestRenderer gen = new CrestRenderer();
-            gen.Render(crest);
+            CrestRenderer gen = CrestRenderer.GetByType(settings.RenderType);
+            if(gen.Render(crest, settings.OutputFile))
+            {
+                Console.WriteLine("Rendition finished successfully.");
+            } else
+            {
+                Console.WriteLine("Error occurred during rendition");
+            }
 
             Console.WriteLine("Done. Press Enter to exit.");
             Console.ReadLine();

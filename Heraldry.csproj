@@ -81,6 +81,9 @@
     <Compile Include="Blazon\Vocabulary\Entries\SubordinaryDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Separator.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
+    <Compile Include="Rendering\RenderType.cs" />
+    <Compile Include="Rendering\Svg\SvgRenderer.cs" />
+    <Compile Include="Rendering\Text\TextRenderer.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\DividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\PartyPerDividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
@@ -95,7 +98,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\CrestRenderer.cs" />
-    <Compile Include="Rendering\SvgLoader.cs" />
+    <Compile Include="Rendering\Svg\SvgLoader.cs" />
     <Compile Include="SyntacticAnalysis\SyntacticAnalyzer.cs" />
     <Compile Include="SyntacticAnalysis\UnexpectedTokenException.cs" />
   </ItemGroup>
