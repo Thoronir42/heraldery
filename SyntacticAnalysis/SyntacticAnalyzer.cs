@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon.Charges;
+using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
@@ -65,7 +66,45 @@ namespace Heraldry.SyntacticAnalysis
         /// <returns>One field.</returns>
         protected Field Field(List<Token> tokens)
         {
-            return Background(tokens);
+            Field field = Background(tokens);
+            Token nextToken = SeekCurrentToken(tokens);
+            if(nextToken != null && IsTokenCharge(nextToken))
+            {
+                // charge definition follows
+                Charge charge = PrincipalCharge(tokens);
+                field.Charge = charge;
+            }
+            return field;
+        }
+
+        /// <summary>
+        /// Rule which will parse principal charge.
+        /// 
+        /// </summary>
+        /// <param name="tokens">List of tokens to be parsed.</param>
+        /// <returns>Principal charge.</returns>
+        protected Charge PrincipalCharge(List<Token> tokens)
+        {
+            return Ordinary(tokens);
+        }
+
+        /// <summary>
+        /// Rule which will parse ordinary charges.
+        /// Ordinates consist of ordinary type and tincture.
+        /// 
+        /// </summary>
+        /// <param name="tokens">List of tokens to be parsed.</param>
+        /// <returns>Ordinary charge.</returns>
+        protected Charge Ordinary(List<Token> tokens)
+        {
+            Token currentToken = PopCurrentToken(tokens);
+            CheckTokenType(currentToken, DefinitionType.Ordinary);
+            Filling ordinaryFilling = Tincture(tokens);
+            Ordinary ordinaryType = ((OrdinaryDefinition)currentToken.Definition).Type;
+            OrdinarySize ordinarySize = ((OrdinaryDefinition)currentToken.Definition).Size;
+
+            OrdinaryCharge charge = new OrdinaryCharge { OrdinaryType = ordinaryType, Filling = ordinaryFilling};
+            return charge;
         }
 
         /// <summary>
@@ -207,7 +246,6 @@ namespace Heraldry.SyntacticAnalysis
         protected Field QDivision(List<Token> tokens)
         {
             Token currentToken = SeekCurrentToken(tokens);
-            Field res;
             switch (currentToken.Type)
             {
                 case DefinitionType.Tincture:
@@ -242,7 +280,7 @@ namespace Heraldry.SyntacticAnalysis
                         PopCurrentToken(tokens);
                         List<int> nums = Nums(tokens);
                         nums.Add(num);
-                        Field subField = Coa(tokens).Content;
+                        Field subField = Field(tokens);
                         foreach (int n in nums)
                         {
                             subfields.Add(n, subField);
@@ -512,6 +550,19 @@ namespace Heraldry.SyntacticAnalysis
         private bool ValidateTokenType(Token token, DefinitionType expectedType, object expSubtype = null)
         {
             return token.Type == expectedType && (expSubtype == null || expSubtype.Equals(token.Subtype));
+        }
+
+        /// <summary>
+        /// Checks whether the definition of the token is charge: charge, ordinary, ...
+        /// </summary>
+        /// <param name="token">Token whose definition will be checked.</param>
+        /// <returns>True if the token contains charge definition.</returns>
+        private bool IsTokenCharge(Token token)
+        {
+            return token.Definition != null && (
+                    token.Definition.GetType() == typeof(ChargeDefinition) ||
+                    token.Definition.GetType() == typeof(OrdinaryDefinition)
+                );
         }
     }
 }

@@ -7,6 +7,7 @@ using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.SyntacticAnalysis;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Elements;
+using Heraldry.Blazon.Charges;
 
 namespace HeraldryTest
 {
@@ -289,14 +290,9 @@ namespace HeraldryTest
             BlazonInstance blazon = sa.ParseTokens(tokens);
 
             // check the result
-            Assert.IsNotNull(blazon);
-            Assert.IsNotNull(blazon.CoatOfArms);
-            Assert.IsNotNull(blazon.CoatOfArms.Content);
-            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
+            CheckBlazonInstanceContent(blazon);
             Field coa = blazon.CoatOfArms.Content;
-            Assert.AreEqual(FieldDivisionType.Quarterly, coa.Division);
-            Assert.IsNotNull(coa.Subfields);
-            Assert.AreEqual(4, coa.Subfields.Length);
+            CheckFieldDivision(coa, FieldDivisionType.Quarterly, 4);
 
             // check colors in quaterly division
             Filling t2 = coa.Subfields[1].Background;
@@ -387,6 +383,127 @@ namespace HeraldryTest
         }
 
         /// <summary>
+        /// Create one tincture field with ordinary charge, feed it to parser and check the results.
+        /// </summary>
+        [TestMethod]
+        public void TestSimpleFiledWithOrdinaryCharge1()
+        {
+            List<Token> tokens = new List<Token>();
+
+            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
+            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            OrdinaryDefinition ordinaryDefinition = new OrdinaryDefinition { Type = Ordinary.Bend, Size = OrdinarySize.Honourable };
+
+            // create token list
+            // blazon: azure honourable bend or
+            tokens.Add(new Token(0, tincture1));
+            tokens.Add(new Token(10, ordinaryDefinition));
+            tokens.Add(new Token(30, tincture2));
+
+            // feed the parser
+            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            BlazonInstance blazon = sa.ParseTokens(tokens);
+
+            // check the result
+            CheckBlazonInstanceContent(blazon);
+            Field content = blazon.CoatOfArms.Content;
+            CheckFillingColour(tincture1.TinctureType, tincture1.Text, content.Background);
+            CheckOrdinaryCharge(content, ordinaryDefinition, new Filling { Layout = FillingLayout.Solid(), Tinctures = new TinctureDefinition[] { tincture2 } });
+        }
+
+        /// <summary>
+        /// Create variated field with ordinary charge, feed it to parser and check the results.
+        /// </summary>
+        [TestMethod]
+        public void TestVariatedFieldWithOrdinaryCharge()
+        {
+            List<Token> tokens = new List<Token>();
+
+            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
+            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "GULES");
+            TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "OR");
+            FieldVariationDefinition variationDefinition = new FieldVariationDefinition { VariationType = FieldVariationType.BarryOf };
+            OrdinaryDefinition ordinaryDefinition = new OrdinaryDefinition { Type = Ordinary.Bend, Size = OrdinarySize.Honourable };
+            int variationNumber = 3;
+
+            // create token list
+            // blazon: azure honourable bend or
+            TokenListBuilder tokenBuilder = new TokenListBuilder()
+                .Add(variationDefinition)
+                .Add(new NumberDefinition { Value = variationNumber })
+                .Add(tincture1)
+                .Add(new KeyWordDefinition { KeyWord = KeyWord.And })
+                .Add(tincture2)
+                .Add(ordinaryDefinition)
+                .Add(tincture3);
+            tokens = tokenBuilder.Build();
+
+
+            // feed the parser
+            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            BlazonInstance blazon = sa.ParseTokens(tokens);
+            Filling expectedFilling = new Filling {
+                Layout = new FillingLayout { FillingLayoutType = FillingLayoutType.BarryOf, Number = variationNumber, Charge = null },
+                Tinctures = new TinctureDefinition[] {tincture1, tincture2}
+            };
+
+            // check the result
+            CheckBlazonInstanceContent(blazon);
+            Field content = blazon.CoatOfArms.Content;
+            Assert.IsNotNull(content.Background);
+            CheckFilling(content.Background, expectedFilling);
+            CheckOrdinaryCharge(content, ordinaryDefinition, new Filling { Layout = FillingLayout.Solid(), Tinctures = new TinctureDefinition[] { tincture3 } });
+        }
+
+        /// <summary>
+        /// Create divided field with ordinary charge, feed it to parser and check the results.
+        /// </summary>
+        [TestMethod]
+        public void TestDividedFieldWithOrdinaryCharge()
+        {
+            List<Token> tokens = new List<Token>();
+
+            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
+            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "GULES");
+            TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "OR");
+            FieldDivisionDefinition fieldDivisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
+            OrdinaryDefinition ordinaryDefinition = new OrdinaryDefinition { Type = Ordinary.Bend, Size = OrdinarySize.Honourable };
+
+            // create token list
+            // blazon: azure honourable bend or
+            TokenListBuilder tokenBuilder = new TokenListBuilder()
+                .Add(fieldDivisionDefinition)
+                .Add(tincture1)
+                .Add(new KeyWordDefinition { KeyWord = KeyWord.And })
+                .Add(tincture2)
+                .Add(ordinaryDefinition)
+                .Add(tincture3);
+            tokens = tokenBuilder.Build();
+
+
+            // feed the parser
+            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            BlazonInstance blazon = sa.ParseTokens(tokens);
+
+            // check the results
+            CheckBlazonInstanceContent(blazon);
+            Field coa = blazon.CoatOfArms.Content;
+            CheckFieldDivision(coa, FieldDivisionType.Quarterly, 4);
+
+            Filling t1 = coa.Subfields[0].Background;
+            Filling t2 = coa.Subfields[1].Background;
+            Filling t3 = coa.Subfields[2].Background;
+            Filling t4 = coa.Subfields[3].Background;
+
+            CheckFillingColour(TinctureType.Colour, tincture1.Text, t1);
+            CheckFillingColour(TinctureType.Colour, tincture2.Text, t2);
+            CheckFillingColour(TinctureType.Colour, tincture2.Text, t3);
+            CheckFillingColour(TinctureType.Colour, tincture1.Text, t4);
+
+            CheckOrdinaryCharge(coa, ordinaryDefinition, new Filling { Layout = FillingLayout.Solid(), Tinctures = new TinctureDefinition[] { tincture3 } });
+        }
+
+        /// <summary>
         /// Creates a field with party per * division defined by two colors, parses it a checks results.
         /// </summary>
         /// <param name="ppType">Particular pp type to be tested.</param>
@@ -411,14 +528,9 @@ namespace HeraldryTest
             BlazonInstance blazon = sa.ParseTokens(tokens);
 
             // check the result
-            Assert.IsNotNull(blazon);
-            Assert.IsNotNull(blazon.CoatOfArms);
-            Assert.IsNotNull(blazon.CoatOfArms.Content);
-            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
+            CheckBlazonInstanceContent(blazon);
             Field coa = blazon.CoatOfArms.Content;
-            Assert.AreEqual(ppType, coa.Division);
-            Assert.IsNotNull(coa.Subfields);
-            Assert.AreEqual(2, coa.Subfields.Length);
+            CheckFieldDivision(coa, ppType, 2);
 
             Filling f1 = coa.Subfields[0].Background;
             Filling f2 = coa.Subfields[1].Background;
@@ -465,14 +577,9 @@ namespace HeraldryTest
             BlazonInstance blazon = sa.ParseTokens(tokens);
 
             // check the result
-            Assert.IsNotNull(blazon);
-            Assert.IsNotNull(blazon.CoatOfArms);
-            Assert.IsNotNull(blazon.CoatOfArms.Content);
-            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
+            CheckBlazonInstanceContent(blazon);
             Field coa = blazon.CoatOfArms.Content;
-            Assert.AreEqual(ppType, coa.Division);
-            Assert.IsNotNull(coa.Subfields);
-            Assert.AreEqual(2, coa.Subfields.Length);
+            CheckFieldDivision(coa, ppType, 2);
 
             // variated field
             Field f1 = coa.Subfields[0];
@@ -497,6 +604,67 @@ namespace HeraldryTest
             CheckFillingColour(TinctureType.Colour, tincture3.Text, t4);
         }
 
+        /// <summary>
+        /// Checks if the field's charge isn't null, if it's expected type, has expected size and color.
+        /// 
+        /// </summary>
+        /// <param name="field">Field to be checked.</param>
+        /// <param name="expectedOrdinary">Definition containing expected type and size.</param>
+        /// <param name="expectedFilling">Expected filling.</param>
+        private void CheckOrdinaryCharge(Field field, OrdinaryDefinition expectedOrdinary, Filling expectedFilling)
+        {
+            Assert.IsNotNull(field.Charge);
+            Assert.IsTrue(field.Charge.GetType() == typeof(OrdinaryCharge));
+            OrdinaryCharge ordinaryCharge = (OrdinaryCharge)field.Charge;
+            Assert.AreEqual(expectedOrdinary.Type, ordinaryCharge.OrdinaryType);
+            Assert.AreEqual(expectedOrdinary.Size, ordinaryCharge.OrdinarySize);
+            Assert.IsNotNull(ordinaryCharge.Filling);
+            CheckFilling(ordinaryCharge.Filling, expectedFilling);
+        }
+
+        /// <summary>
+        /// Checks the filling.
+        /// </summary>
+        /// <param name="filling">Filling to be checked.</param>
+        /// <param name="expectedVariation">Filling which contains expected variation details.</param>
+        private void CheckFilling(Filling filling, Filling expectedFilling)
+        {
+            Assert.AreEqual(expectedFilling.Layout, filling.Layout);
+            Assert.IsNotNull(filling.Tinctures);
+            TinctureDefinition[] expectedTinctures = expectedFilling.Tinctures;
+            TinctureDefinition[] tinctures = filling.Tinctures;
+            Assert.AreEqual(expectedTinctures.Length, tinctures.Length);
+            for (int i = 0; i < expectedFilling.Tinctures.Length; i++)
+            {
+                Assert.AreEqual(expectedTinctures[i], tinctures[i]);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the division of the field isn't null, if it's the right type and has expected number of subfields.
+        /// 
+        /// </summary>
+        /// <param name="field">Field to be checked.</param>
+        /// <param name="expectedDivisionType">Expected type of division.</param>
+        /// <param name="expectedSubfieldCount">Expected number of subfields.</param>
+        private void CheckFieldDivision(Field field, FieldDivisionType expectedDivisionType, int expectedSubfieldCount)
+        {
+            Assert.IsNotNull(field.Division);
+            Assert.AreEqual(expectedDivisionType, field.Division);
+            Assert.IsNotNull(field.Subfields);
+            Assert.AreEqual(expectedSubfieldCount, field.Subfields.Length);
+        }
+
+        /// <summary>
+        /// Checks if blazon instance, its coat of arms and its content aren't null.
+        /// </summary>
+        /// <param name="blazon">Blazon object to be checked.</param>
+        private void CheckBlazonInstanceContent(BlazonInstance blazon)
+        {
+            Assert.IsNotNull(blazon);
+            Assert.IsNotNull(blazon.CoatOfArms);
+            Assert.IsNotNull(blazon.CoatOfArms.Content);
+        }
 
         /// <summary>
         /// Creates a new semicolon token and returns it.
@@ -521,6 +689,61 @@ namespace HeraldryTest
             TinctureDefinition tDef = filling.Tinctures[0];
             Assert.AreEqual(expectedType, tDef.TinctureType);
             Assert.AreEqual(expectedText, tDef.Text);
+        }
+    }
+
+    /// <summary>
+    /// Helper class to build lists of tokens.
+    /// </summary>
+    class TokenListBuilder
+    {
+        /// <summary>
+        /// List of tokens which will builded by this class.
+        /// </summary>
+        private List<Token> tokens;
+
+        /// <summary>
+        /// Position of the token which was added last.
+        /// 
+        /// </summary>
+        private int lastPos;
+
+        public TokenListBuilder()
+        {
+            this.tokens = new List<Token>();
+            lastPos = -1;
+        }
+
+        /// <summary>
+        /// Add token to  the result list.
+        /// </summary>
+        /// <param name="token">Token to be added.</param>
+        /// <returns>Instance of this builder.</returns>
+        public TokenListBuilder Add(Token token)
+        {
+            tokens.Add(token);
+            lastPos = token.Position;
+            return this;
+        }
+
+        /// <summary>
+        /// Creates a new token with provided definition. Position of the last inserted token incremented by 1 (or zero if this is
+        /// the first token) is used as a position for this new token.
+        /// </summary>
+        /// <param name="definition">Definition to be added.</param>
+        /// <returns>Instance of this builder.</returns>
+        public TokenListBuilder Add(Definition definition)
+        {
+            return Add(new Token(++lastPos, definition));
+        }
+
+        /// <summary>
+        /// Returns the list of added tokens.
+        /// </summary>
+        /// <returns>List of tokens.</returns>
+        public List<Token> Build()
+        {
+            return tokens;
         }
     }
 }

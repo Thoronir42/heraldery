@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Charges
 {
-    enum CrossType
+    public enum CrossType
     {
         GreekCross,
         CrossMoline,

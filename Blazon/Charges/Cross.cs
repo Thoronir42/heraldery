@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Charges
 {
-    class Cross : Charge
+    public class Cross : Charge
     {
         public CrossType Type { get; set; }
     }

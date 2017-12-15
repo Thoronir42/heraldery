@@ -38,6 +38,15 @@ namespace Heraldry.Blazon.Elements
             return new FillingLayout { FillingLayoutType = FillingLayoutType.Solid, Number = NO_NUMBER, Charge = null };
         }
 
+        public override bool Equals(object obj)
+        {
+            var layout = obj as FillingLayout;
+            return layout != null &&
+                   FillingLayoutType == layout.FillingLayoutType &&
+                   Number == layout.Number &&
+                   EqualityComparer<Charge>.Default.Equals(Charge, layout.Charge);
+        }
+
         /// <summary>
         /// Sets FillingLayoutType accordingly to fieldVariationType.
         /// </summary>
@@ -70,5 +79,7 @@ namespace Heraldry.Blazon.Elements
                     break;
             }
         }
+
+
     }
 }

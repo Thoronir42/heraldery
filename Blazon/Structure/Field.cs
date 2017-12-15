@@ -1,5 +1,5 @@
-﻿using Heraldry.Blazon.Charges;
-using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon.Elements;
+using Heraldry.Blazon.Charges;
 using Heraldry.Blazon.Vocabulary.Entries;
 using System;
 using System.Collections.Generic;

@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Heraldry</RootNamespace>
     <AssemblyName>Heraldery</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Blazon\Charges\Cross.cs" />
     <Compile Include="Blazon\Charges\CrossType.cs" />
+    <Compile Include="Blazon\Charges\OrdinaryCharge.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionLine.cs" />
     <Compile Include="Blazon\Elements\FieldVariationType.cs" />
     <Compile Include="Blazon\Elements\Ordinary.cs" />
