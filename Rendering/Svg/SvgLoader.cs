@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Svg;
 
-namespace Heraldry.Rendering {
+namespace Heraldry.Rendering.Svg {
 
 
     class SvgLoader {
