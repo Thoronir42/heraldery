@@ -68,7 +68,8 @@ namespace HeraldryTest.LexicalAnalysis
             {
                 var a = tokens[i];
                 var b = expectedTokens[i];
-                Assert.AreEqual(a, b);
+                Assert.AreEqual(a.Position, b.Position);
+                Assert.AreEqual(a.Definition, b.Definition);
             }
         }
     }

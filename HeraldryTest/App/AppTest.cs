@@ -48,8 +48,11 @@ namespace HeraldryTest.App
             Assert.IsNotNull(blazon);
             Assert.IsNotNull(blazon.CoatOfArms);
             Assert.IsNotNull(blazon.CoatOfArms.Content);
-            Assert.IsNotNull(blazon.CoatOfArms.Content.Background);
-            Filling bg = blazon.CoatOfArms.Content.Background;
+            Assert.IsInstanceOfType(blazon.CoatOfArms.Content, typeof(ContentField));
+
+            ContentField content = blazon.CoatOfArms.Content as ContentField;
+            Assert.IsNotNull(content.Background);
+            Filling bg = content.Background;
             CheckFillingColour(TinctureType.Colour, "or", bg);
         }
 
@@ -62,8 +65,7 @@ namespace HeraldryTest.App
             LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary(), CreateNumberParser());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
-            string tincture1 = "azure";
-            string tincture2 = "or";
+            string[] expectedTinctures = new String[] { "azure", "or", "or", "azure" };
             string input = "Quarterly azure and or.";
 
             List<Token> parsedText = analyzer.ParseText(input);
@@ -75,21 +77,21 @@ namespace HeraldryTest.App
             Assert.IsNotNull(blazon);
             Assert.IsNotNull(blazon.CoatOfArms);
             Assert.IsNotNull(blazon.CoatOfArms.Content);
-            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
-            Field coa = blazon.CoatOfArms.Content;
+            Assert.IsInstanceOfType(blazon.CoatOfArms.Content, typeof(DividedField));
+            
+            DividedField coa = blazon.CoatOfArms.Content as DividedField;
+
+            Assert.IsNotNull(coa.Division);
             Assert.AreEqual(FieldDivisionType.Quarterly, coa.Division);
             Assert.IsNotNull(coa.Subfields);
             Assert.AreEqual(4, coa.Subfields.Length);
 
-            Filling t1 = coa.Subfields[0].Background;
-            Filling t2 = coa.Subfields[1].Background;
-            Filling t3 = coa.Subfields[2].Background;
-            Filling t4 = coa.Subfields[3].Background;
-            
-            CheckFillingColour(TinctureType.Colour, tincture1, t1);
-            CheckFillingColour(TinctureType.Colour, tincture2, t2);
-            CheckFillingColour(TinctureType.Colour, tincture2, t3);
-            CheckFillingColour(TinctureType.Colour, tincture1, t4);
+            for(int i = 0; i < 4; i++)
+            {
+                Assert.IsInstanceOfType(coa.Subfields[i], typeof(ContentField));
+                ContentField subfield = coa.Subfields[i] as ContentField;
+                CheckFillingColour(TinctureType.Colour, expectedTinctures[i], subfield.Background);
+            }
         }
 
         /// <summary>
@@ -101,10 +103,7 @@ namespace HeraldryTest.App
             LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary(), CreateNumberParser());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
-            string tincture1 = "azure";
-            string tincture2 = "gules";
-            string tincture3 = "or";
-            string tincture4 = "sable";
+            string[] expectedTinctures = { "azure", "gules", "or", "sable" };
             string input = "Quarterly 1st azure; 3rd or; 2nd gules; 4th sable.";
 
             List<Token> parsedText = analyzer.ParseText(input);
@@ -116,21 +115,19 @@ namespace HeraldryTest.App
             Assert.IsNotNull(blazon);
             Assert.IsNotNull(blazon.CoatOfArms);
             Assert.IsNotNull(blazon.CoatOfArms.Content);
-            Assert.IsNotNull(blazon.CoatOfArms.Content.Division);
-            Field coa = blazon.CoatOfArms.Content;
+            Assert.IsInstanceOfType(blazon.CoatOfArms.Content, typeof(DividedField));
+
+            DividedField coa = blazon.CoatOfArms.Content as DividedField;
             Assert.AreEqual(FieldDivisionType.Quarterly, coa.Division);
             Assert.IsNotNull(coa.Subfields);
             Assert.AreEqual(4, coa.Subfields.Length);
 
-            Filling t1 = coa.Subfields[0].Background;
-            Filling t2 = coa.Subfields[1].Background;
-            Filling t3 = coa.Subfields[2].Background;
-            Filling t4 = coa.Subfields[3].Background;
-
-            CheckFillingColour(TinctureType.Colour, tincture1, t1);
-            CheckFillingColour(TinctureType.Colour, tincture2, t2);
-            CheckFillingColour(TinctureType.Colour, tincture3, t3);
-            CheckFillingColour(TinctureType.Colour, tincture4, t4);
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.IsInstanceOfType(coa.Subfields[i], typeof(ContentField));
+                ContentField subfield = coa.Subfields[i] as ContentField;
+                CheckFillingColour(TinctureType.Colour, expectedTinctures[i], subfield.Background);
+            }
         }
 
         /// <summary>

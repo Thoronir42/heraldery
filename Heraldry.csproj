@@ -58,7 +58,7 @@
     <Compile Include="Blazon\Elements\FillingLayout.cs" />
     <Compile Include="Blazon\Elements\FillingLayoutType.cs" />
     <Compile Include="Blazon\Elements\Subordinary.cs" />
-    <Compile Include="Blazon\Structure\ChargeField.cs" />
+    <Compile Include="Blazon\Structure\ContentField.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
     <Compile Include="Blazon\Charges\Charge.cs" />
@@ -84,7 +84,7 @@
     <Compile Include="Rendering\RenderType.cs" />
     <Compile Include="Rendering\Svg\SvgRenderer.cs" />
     <Compile Include="Rendering\Text\TextRenderer.cs" />
-    <Compile Include="SyntacticAnalysis\Formulas\DividedField.cs" />
+    <Compile Include="Blazon\Structure\DividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\PartyPerDividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />

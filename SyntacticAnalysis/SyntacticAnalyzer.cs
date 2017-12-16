@@ -66,14 +66,33 @@ namespace Heraldry.SyntacticAnalysis
         /// <returns>One field.</returns>
         protected Field Field(List<Token> tokens)
         {
-            Field field = Background(tokens);
-            Token nextToken = SeekCurrentToken(tokens);
-            if(nextToken != null && IsTokenCharge(nextToken))
+            Token currentToken = SeekCurrentToken(tokens);
+            if(currentToken.Type == DefinitionType.FieldDivision)
             {
-                // charge definition follows
-                Charge charge = PrincipalCharge(tokens);
-                field.Charge = charge;
+                return Division(tokens);
             }
+
+            ContentField field;
+            // todo: support for variation
+            switch (currentToken.Type)
+            {
+                case DefinitionType.Tincture:
+                    Filling fil = Tincture(tokens);
+                    field = new ContentField { Background = fil };
+                    break;
+                case DefinitionType.Variation:
+                    field = Variation(tokens);
+                    break;
+                default:
+                    return null;
+            }
+
+            Token nextToken = SeekCurrentToken(tokens);
+            if (IsTokenCharge(nextToken))
+            {
+                field.Charge = PrincipalCharge(tokens);
+            }
+
             return field;
         }
 
@@ -103,39 +122,10 @@ namespace Heraldry.SyntacticAnalysis
             Ordinary ordinaryType = ((OrdinaryDefinition)currentToken.Definition).Type;
             OrdinarySize ordinarySize = ((OrdinaryDefinition)currentToken.Definition).Size;
 
-            OrdinaryCharge charge = new OrdinaryCharge { OrdinaryType = ordinaryType, Filling = ordinaryFilling};
+            OrdinaryCharge charge = new OrdinaryCharge { OrdinaryType = ordinaryType, Filling = ordinaryFilling };
             return charge;
         }
 
-        /// <summary>
-        /// Background of the shield of arms. Can be color, tincture, variation, ...
-        /// 
-        /// </summary>
-        /// <param name="tokens">List of tokens to be parsed.</param>
-        /// <returns>Parsed field.</returns>
-        protected Field Background(List<Token> tokens)
-        {
-            Token currentToken = SeekCurrentToken(tokens);
-            Field f;
-            // todo: support for variation
-            switch (currentToken.Type)
-            {
-                case DefinitionType.Tincture:
-                    Filling fil = Tincture(tokens);
-                    f = new Field { Background = fil };
-                    break;
-                case DefinitionType.FieldDivision:
-                    f = Division(tokens);
-                    break;
-                case DefinitionType.Variation:
-                    f = Variation(tokens);
-                    break;
-                default:
-                    f = null;
-                    break;
-            }
-            return f;
-        }
 
         /// <summary>
         /// Division of the field.
@@ -143,7 +133,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Divided field.</returns>
-        protected Field Division(List<Token> tokens)
+        protected DividedField Division(List<Token> tokens)
         {
             Token currentToken = PopCurrentToken(tokens);
 
@@ -154,12 +144,14 @@ namespace Heraldry.SyntacticAnalysis
                 if (divisionType == FieldDivisionType.Quarterly)
                 {
                     return QDivision(tokens);
-                } else if(divisionType.IsPartyPerDivision())
+                }
+                else if (divisionType.IsPartyPerDivision())
                 {
-                    Field f = PpDivision(tokens);
+                    DividedField f = PpDivision(tokens);
                     f.Division = divisionType;
                     return f;
-                } else
+                }
+                else
                 {
                     // todo: throw exception when undefined division type is found
                     return null;
@@ -178,7 +170,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Field with defined variation.</returns>
-        protected Field Variation(List<Token> tokens)
+        protected ContentField Variation(List<Token> tokens)
         {
             Token currentToken = PopCurrentToken(tokens);
 
@@ -190,28 +182,30 @@ namespace Heraldry.SyntacticAnalysis
             // negative value cannot be used in blazon so it may be used here in code to determine whether or not 
             // was number defined
             currentToken = SeekCurrentToken(tokens);
-            int number = Int32.MinValue; 
-            if(ValidateTokenType(currentToken, DefinitionType.Number))
+            int number = Int32.MinValue;
+            if (ValidateTokenType(currentToken, DefinitionType.Number))
             {
                 PopCurrentToken(tokens);
                 number = ((NumberDefinition)currentToken.Definition).Value;
-            } 
+            }
 
             // tinctures of a variation
             List<Filling> variationFillings = VariationFillings(tokens);
-            
+
             FillingLayout fillingLayout = new FillingLayout();
             fillingLayout.SetVariationLayoutType(variationType);
-            if(number != Int32.MinValue)
+            if (number != Int32.MinValue)
             {
                 fillingLayout.Number = number;
             }
-            Filling variatedFilling = new Filling();
-            variatedFilling.Layout = fillingLayout;
+            Filling variatedFilling = new Filling
+            {
+                Layout = fillingLayout
+            };
             variatedFilling.AddTinctureDefinitions(variationFillings);
 
 
-            return new Field { Background = variatedFilling };
+            return new ContentField { Background = variatedFilling };
         }
 
         /// <summary>
@@ -224,7 +218,7 @@ namespace Heraldry.SyntacticAnalysis
         protected List<Filling> VariationFillings(List<Token> tokens)
         {
             List<Filling> fillings = new List<Filling>();
-            
+
             // first filling
             fillings.Add(Tincture(tokens));
 
@@ -243,7 +237,7 @@ namespace Heraldry.SyntacticAnalysis
         /// 
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
-        protected Field QDivision(List<Token> tokens)
+        protected DividedField QDivision(List<Token> tokens)
         {
             Token currentToken = SeekCurrentToken(tokens);
             switch (currentToken.Type)
@@ -313,14 +307,14 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Field defined by party per * division.</returns>
-        protected Field PpDivision(List<Token> tokens)
+        protected DividedField PpDivision(List<Token> tokens)
         {
             Field field1 = Field(tokens);
             Token currentToken = PopCurrentToken(tokens);
             CheckAndToken(currentToken);
             Field field2 = Field(tokens);
 
-            Field ppDividedField = new PartyPerDividedField(field1, field2);
+            DividedField ppDividedField = new PartyPerDividedField(field1, field2);
             return ppDividedField;
         }
 
@@ -539,7 +533,7 @@ namespace Heraldry.SyntacticAnalysis
         /// </summary>
         /// <param name="token">Token to be checked.</param>
         /// <returns>True if the token is semicolon.</returns>
-        private bool ValidateSemicolonToken(Token token) 
+        private bool ValidateSemicolonToken(Token token)
         {
             return ValidateTokenType(token, DefinitionType.Separator, Separator.Semicolon);
         }
@@ -559,7 +553,8 @@ namespace Heraldry.SyntacticAnalysis
         /// <returns>True if the token contains charge definition.</returns>
         private bool IsTokenCharge(Token token)
         {
-            return token.Definition != null && (
+            return token != null &&
+                token.Definition != null && (
                     token.Definition.GetType() == typeof(ChargeDefinition) ||
                     token.Definition.GetType() == typeof(OrdinaryDefinition)
                 );

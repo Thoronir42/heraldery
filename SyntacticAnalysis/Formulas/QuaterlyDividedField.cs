@@ -61,7 +61,7 @@ namespace Heraldry.SyntacticAnalysis.Formulas.FieldDivisions
             {
                 List<Field> Fields = new List<Field>();
                 foreach(Filling tDef in tinctures) {
-                    Field f = new Field { Background = tDef};
+                    Field f = new ContentField { Background = tDef};
                     Fields.Add(f);
                 }
 

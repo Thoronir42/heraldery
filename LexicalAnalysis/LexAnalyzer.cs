@@ -54,6 +54,12 @@ namespace Heraldry.LexicalAnalysis
             Console.WriteLine("".PadRight(12, '-'));
             Console.WriteLine("Token text:\n" + tokenText);
 
+            // tokens are found on space-padded input - align back to original text
+            foreach (var token in tokens)
+            {
+                token.Position--;
+            }
+
             return tokens;
         }
 
