@@ -53,7 +53,7 @@ namespace HeraldryTest.App
             ContentField content = blazon.CoatOfArms.Content as ContentField;
             Assert.IsNotNull(content.Background);
             Filling bg = content.Background;
-            CheckFillingColour(TinctureType.Colour, "or", bg);
+            CheckFillingColour(TinctureType.Metal, "or", bg);
         }
 
         /// <summary>
@@ -66,6 +66,7 @@ namespace HeraldryTest.App
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string[] expectedTinctures = new String[] { "azure", "or", "or", "azure" };
+            TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Metal, TinctureType.Metal, TinctureType.Colour };
             string input = "Quarterly azure and or.";
 
             List<Token> parsedText = analyzer.ParseText(input);
@@ -90,7 +91,7 @@ namespace HeraldryTest.App
             {
                 Assert.IsInstanceOfType(coa.Subfields[i], typeof(ContentField));
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, expectedTinctures[i], subfield.Background);
+                CheckFillingColour(expectedTypes[i], expectedTinctures[i], subfield.Background);
             }
         }
 
@@ -104,6 +105,7 @@ namespace HeraldryTest.App
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string[] expectedTinctures = { "azure", "gules", "or", "sable" };
+            TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Colour, TinctureType.Metal, TinctureType.Colour };
             string input = "Quarterly 1st azure; 3rd or; 2nd gules; 4th sable.";
 
             List<Token> parsedText = analyzer.ParseText(input);
@@ -126,7 +128,7 @@ namespace HeraldryTest.App
             {
                 Assert.IsInstanceOfType(coa.Subfields[i], typeof(ContentField));
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, expectedTinctures[i], subfield.Background);
+                CheckFillingColour(expectedTypes[i], expectedTinctures[i], subfield.Background);
             }
         }
 

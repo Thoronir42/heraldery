@@ -28,6 +28,11 @@ namespace Heraldry.SyntacticAnalysis
             this.token = token;
         }
 
+        public UnexpectedTokenException(Token token, string message) : base(message)
+        {
+            this.token = token;
+        }
+
         private static String FormatMessage(Token token, int iThToken = -1, DefinitionType? expectedType = null, object subtype = null)
         {
             String iStr = iThToken != -1 ? iThToken + ": " : "";

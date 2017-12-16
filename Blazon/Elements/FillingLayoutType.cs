@@ -28,6 +28,6 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Diagonal bars </summary>
         BendyOf,
         /// <summary> Cloth-like intertwined diagonal bars </summary>
-        Fretty
+        Fretty,
     }
 }

@@ -516,7 +516,7 @@ namespace HeraldryTest
             CheckFillingColour(TinctureType.Colour, tincture2.Text, t3);
             CheckFillingColour(TinctureType.Colour, tincture1.Text, t4);*/
 
-            Assert.Fail("Todo: field is expected to be both divided and contentful");
+            Assert.Inconclusive("Todo: field is expected to be both divided and contentful");
             //CheckOrdinaryCharge(coa, ordinaryDefinition, new Filling { Layout = FillingLayout.Solid(), Tinctures = new TinctureDefinition[] { tincture3 } });
         }
 

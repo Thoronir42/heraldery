@@ -85,6 +85,11 @@
     <Compile Include="Rendering\Svg\SvgRenderer.cs" />
     <Compile Include="Rendering\Text\TextRenderer.cs" />
     <Compile Include="Blazon\Structure\DividedField.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\BaseCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\ChargeCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\FieldCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\RootCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\TinctureCompiler.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\PartyPerDividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
