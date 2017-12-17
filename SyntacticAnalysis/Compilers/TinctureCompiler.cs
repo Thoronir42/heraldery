@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis.Compilers
 {
-    class TinctureCompiler : BaseCompiler
+    public class TinctureCompiler : BaseCompiler
     {
-        internal TinctureCompiler(RootCompiler root) : base(root)
+        public TinctureCompiler(RootCompiler root) : base(root)
         {
 
         }
@@ -26,52 +26,64 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns>Parsed filling - tincture or fur.</returns>
         public Filling Tincture()
         {
-            Token currentToken = PeekToken();
+            TinctureDefinition tinctureDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
 
-            // check that current token is really a tincture
-            EnsureTokenIs(currentToken, DefinitionType.Tincture);
-
-            // 
-            if (currentToken.Definition.GetType() != typeof(TinctureDefinition))
-            {
-                throw new Exception(String.Format("Unexpected type of definition '{0}' of token at position {1}. Expected {2}.",
-                    currentToken.Definition.GetType(), Compilers.Position, typeof(TinctureDefinition)
-                    ));
-            }
-            TinctureDefinition tinctureDef = (TinctureDefinition)currentToken.Definition;
             if (tinctureDef.TinctureType == TinctureType.Colour || tinctureDef.TinctureType == TinctureType.Metal)
             {
-                PopToken();
-
-                // process tincture
-                TinctureDefinition def = new TinctureDefinition { Text = currentToken.Definition.Text };
-
                 Filling filling = new Filling
                 {
                     Layout = FillingLayout.Solid(),
-                    Tinctures = new TinctureDefinition[] { def }
+                    Tinctures = new TinctureDefinition[] { tinctureDef },
                 };
 
                 return filling;
             }
-            else
+            if(tinctureDef.TinctureType == TinctureType.Fur)
             {
                 // call fur rule
-                return Furs();
+                return Fur(tinctureDef);
             }
+
+            throw new ArgumentException("TinctureType " + tinctureDef.TinctureType + " not recognized");
         }
 
         /// <summary>
         /// Furs definition - fur definition is expected to start at the current token.
         /// 
         /// </summary>
-        /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Parsed fur.</returns>
-        protected Filling Furs()
+        protected FurFilling Fur(TinctureDefinition definition)
         {
-            Token currentToken = PopToken();
-            // todo: implement this
-            return null;
+            FurFilling filling = new FurFilling(definition);
+
+            /* custom color furs are not supported yet
+            Token nextToken = PeekToken();
+            if(!TokenIs(nextToken, DefinitionType.Tincture))
+            {
+                return filling;
+            }
+
+
+            filling.PrimaryColor = NonFurTincture();
+            PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+            filling.SecondaryColor = NonFurTincture();
+            */
+                
+
+            return filling;
+        }
+
+        protected TinctureDefinition NonFurTincture()
+        {
+            Token token= PopTokenAs(DefinitionType.Tincture);
+            TinctureDefinition tDef = token.Definition as TinctureDefinition;
+
+            if(tDef.TinctureType == TinctureType.Fur)
+            {
+                throw new UnexpectedTokenException(token, "Non-fur tincture definition is expected.");
+            }
+
+            return tDef;
         }
     }
 }

@@ -124,19 +124,19 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         protected ContentField Variation()
         {
             // first, the type of variation follows, then variation tinctures should be defined
-            Token currentToken = PopTokenAs(DefinitionType.Variation);
+            FieldVariationDefinition definition = PopDefinition<FieldVariationDefinition>(DefinitionType.Variation);
             
-            FieldVariationType variationType = ((FieldVariationDefinition)currentToken.Definition).VariationType;
+            FieldVariationType variationType = definition.VariationType;
 
             // for some types of variation, number (one number: number of stripes, waves, ...) definition may be expected
             // negative value cannot be used in blazon so it may be used here in code to determine whether or not 
             // was number defined
-            currentToken = PeekToken();
+            Token nextToken = PeekToken();
             int number = Int32.MinValue;
-            if (ValidateTokenType(currentToken, DefinitionType.Number))
+            if (TokenIs(nextToken, DefinitionType.Number))
             {
                 PopToken();
-                number = ((NumberDefinition)currentToken.Definition).Value;
+                number = ((NumberDefinition)nextToken.Definition).Value;
             }
 
             // tinctures of a variation
@@ -298,7 +298,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             // if semicolon follows, more definitions are expected.
             // however, blazon may end here and in that case, next token will be null
             Token currentToken = PeekToken();
-            if (currentToken != null && ValidateSemicolonToken(currentToken))
+            if (TokenIs(currentToken, DefinitionType.Separator, Separator.Semicolon))
             {
                 // this one contains semicolon
                 PopToken();

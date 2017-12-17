@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis.Compilers
 {
-    class BaseCompiler
+    public abstract class BaseCompiler
     {
         private RootCompiler root;
 
@@ -31,6 +31,14 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             EnsureTokenIs(token, type, subtype);
 
             return token;
+        }
+
+        protected TDefinition PopDefinition<TDefinition>(DefinitionType type, object subtype = null) where TDefinition : Definition
+        {
+            Token token = PopTokenAs(type, subtype);
+            TDefinition definition = token.Definition as TDefinition;
+            
+            return definition;
         }
 
         protected Token PeekToken()

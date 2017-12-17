@@ -13,6 +13,8 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Metallic colour </summary>
         Metal,
         /// <summary> Fur or pattern </summary>
-        Fur
+        Fur,
+        /// <summary> String representation of HTML color </summary>
+        Html,
     }
 }

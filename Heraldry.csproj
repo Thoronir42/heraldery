@@ -67,6 +67,7 @@
     <Compile Include="Blazon\Elements\FieldDivisionType.cs" />
     <Compile Include="Blazon\Elements\TinctureType.cs" />
     <Compile Include="Blazon\Structure\Field.cs" />
+    <Compile Include="Blazon\Structure\FurFilling.cs" />
     <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\ChargeDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />

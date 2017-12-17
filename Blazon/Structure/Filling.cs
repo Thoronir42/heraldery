@@ -17,7 +17,7 @@ namespace Heraldry.Blazon.Structure
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Filling() { }
+        public Filling() {  }
 
         /// <summary>
         /// Construct filling with solid tincture.

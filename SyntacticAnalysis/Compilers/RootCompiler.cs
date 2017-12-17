@@ -17,9 +17,13 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         internal TinctureCompiler Tincture { get; }
         internal ChargeCompiler Charge { get; }
 
+        /// <summary>
+        /// Current position in tokens list.
+        /// Initialized everytime new recursive descent is started.
+        /// </summary>
         public int Position { get { return position; } }
 
-        internal RootCompiler (List<Token> tokens)
+        public RootCompiler (List<Token> tokens)
         {
             this.tokens = tokens;
 
