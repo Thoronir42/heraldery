@@ -7,23 +7,35 @@ using Heraldry.Rendering;
 
 namespace Heraldry.CLI
 {
-    class CliSettings
+    public class CliSettings
     {
         private string outputFile = null;
 
-        public string Language { get; set; } = "en_olde";
-        public string InputFile { get; set; } = "Arms of Churchil.txt";
-        public RenderType RenderType { get; set; } = RenderType.Svg;
+        public string Language { get; set; }
+        public string InputFile { get; set; }
+        public RenderType RenderType { get; set; } = RenderType.Text;
 
         public string OutputFile
         {
             get
             {
-                if(outputFile == null)
+                if (outputFile != null)
                 {
-                    // return input file with appropriate file extension
+                    return outputFile;
                 }
-                return outputFile;
+
+                // return input file with appropriate file extension
+                int idx = InputFile.LastIndexOf('.');
+                String filename = InputFile.Substring(0, idx);
+                String ext = Extension(RenderType);
+                
+                if(filename + '.' + ext != InputFile)
+                {
+                    return filename + '.' + ext;
+                } else
+                {
+                    return filename + "-out." + ext;
+                }
             }
             set
             {
@@ -37,14 +49,61 @@ namespace Heraldry.CLI
 
         }
 
-        public CliSettings(string[] args)
+        public CliSettings(params string[] args)
         {
             this.ProcessArguments(args);
         }
 
         public void ProcessArguments(string[] args)
         {
-            // todo: Todd, process arguments please!
+            int i = 0;
+            int n = 0;
+            while (i < args.Length)
+            {
+                switch (args[i])
+                {
+                    case "-o":
+                        this.OutputFile = GetString(args, ++i);
+                        break;
+                    case "-l":
+                        this.Language = GetString(args, ++i);
+                        break;
+                    case "-r":
+                        this.RenderType = (RenderType)Enum.Parse(typeof(RenderType), GetString(args, ++i));
+                        break;
+                    default:
+                        if (n == 0)
+                        {
+                            this.InputFile = args[i];
+                        }
+                        n++;
+                        break;
+                }
+
+                i++;
+            }
+        }
+
+        private String GetString(string[] args, int i)
+        {
+            if (i < 0 || i >= args.Length)
+            {
+                return null;
+            }
+            return args[i];
+        }
+
+        private String Extension(RenderType type)
+        {
+            switch (type)
+            {
+                case RenderType.Svg:
+                    return "svg";
+                default:
+                case RenderType.Text:
+                    return "txt";
+            }
+
         }
     }
 }

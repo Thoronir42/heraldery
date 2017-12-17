@@ -21,13 +21,21 @@ namespace Heraldry
         {
             CliSettings settings = new CliSettings(args);
 
+            // todo: remove debug settings initialization
+            settings = new CliSettings("-l", "en_olde", "-r", "Text", ".\\resources\\input\\Arms of Churchil.txt");
+
+            Console.WriteLine("=== Initializing blazon convertor with: ");
+            Console.WriteLine(" Language   : " + settings.Language);
+            Console.WriteLine(" InputFile  : " + settings.InputFile);
+            Console.WriteLine(" OutputFile : " + settings.OutputFile);
+            Console.WriteLine(" RenderType : " + settings.RenderType);
+
             // Todo: fix resource loading
-            Console.WriteLine("=== Loading blazon vocabulary from " + settings.Language);
+            Console.WriteLine("\n=== Loading blazon vocabulary from " + settings.Language);
             BlazonVocabulary vocabulary = VocabularyLoader.LoadFromDirectory(Environment.CurrentDirectory + "\\resources\\" + settings.Language + "\\");
 
 
-            // todo: editable input source
-            String input = File.ReadAllText(Environment.CurrentDirectory + "\\resources\\input\\" + settings.InputFile);
+            String input = File.ReadAllText(settings.InputFile);
 
             //NOW I WILL TRY TO FORESEE THE FUTURE OF OUR APPLICATION
             //BEHOLD
@@ -42,7 +50,9 @@ namespace Heraldry
 
             Console.WriteLine("\n=== Rendering");
             CrestRenderer gen = CrestRenderer.GetByType(settings.RenderType);
-            if(gen.Render(crest, settings.OutputFile))
+
+            FileStream output = File.Open(settings.OutputFile, FileMode.Create);
+            if(gen.Render(crest, output))
             {
                 Console.WriteLine("Rendition finished successfully.");
             } else

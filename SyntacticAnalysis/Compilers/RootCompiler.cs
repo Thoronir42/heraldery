@@ -32,7 +32,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             this.Charge = new ChargeCompiler(this);
         }
 
-        public BlazonInstance compile()
+        public BlazonInstance Compile()
         {
             BlazonInstance bi = new BlazonInstance();
 

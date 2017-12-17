@@ -12,7 +12,7 @@ namespace Heraldry.Rendering
 {
     abstract class CrestRenderer
     {
-        public abstract Boolean Render(BlazonInstance instance, String outputPath);
+        public abstract Boolean Render(BlazonInstance instance, Stream writer);
 
         public static CrestRenderer GetByType(RenderType type)
         {

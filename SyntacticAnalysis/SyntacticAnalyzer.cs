@@ -24,7 +24,7 @@ namespace Heraldry.SyntacticAnalysis
             //return null;
 
             RootCompiler root = new RootCompiler(tokens);
-            return root.compile();
+            return root.Compile();
         }
         
     }

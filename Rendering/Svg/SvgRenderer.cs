@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Threading.Tasks;
 using Svg;
 using Heraldry.Blazon.Structure;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace Heraldry.Rendering.Svg
 {
@@ -20,12 +22,14 @@ namespace Heraldry.Rendering.Svg
             this.Loader = loader;
         }
 
-        public override Boolean Render(BlazonInstance blazon, String outputPath)
+        public override Boolean Render(BlazonInstance blazon, Stream stream)
         {
             SvgDocument tmp = Loader.GetSvgFromFile("iconmonstr-shield-1.svg");
             tmp.Children[0].Fill = new SvgColourServer(Color.Red);
 
             var bmp = GetBitmapFromSvg(tmp);
+
+            bmp.Save(stream, ImageFormat.Png);
 
             return false; // todo: dump this to file
         }
