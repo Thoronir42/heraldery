@@ -26,7 +26,7 @@ namespace Heraldry.LexicalAnalysis
             List<Token> tokens = new List<Token>();
 
             input = NormalizeInput(input);
-            Console.WriteLine("Input text to be scanned:\n" + input);
+            DebugPrinter.Print("Input text to be scanned:", input);
 
             var separatos = SepareSeparators(input, out input);
             tokens.AddRange(separatos);
@@ -41,19 +41,13 @@ namespace Heraldry.LexicalAnalysis
             tokens.AddRange(charges);
 
 
-            Console.WriteLine("".PadRight(12, '-'));
-            Console.WriteLine("Unprocessed text:\n" + input);
+            DebugPrinter.PrintSeparator();
+            DebugPrinter.Print("Unprocessed text:\n", input);
 
             tokens = tokens.OrderBy(t => t.Position).ToList();
 
-            String tokenText = "".PadRight(input.Length + 1, ' ');
-            foreach (var t in tokens)
-            {
-                tokenText = tokenText.Remove(t.Position, t.Definition.Text.Length).Insert(t.Position, t.Definition.Text);
-            }
-            Console.WriteLine("".PadRight(12, '-'));
-            Console.WriteLine("Token text:\n" + tokenText);
-
+            DebugPrinter.PrintTokens("Token text:", tokens);
+            
             // tokens are found on space-padded input - align back to original text
             foreach (var token in tokens)
             {
@@ -72,7 +66,7 @@ namespace Heraldry.LexicalAnalysis
         /// <returns></returns>
         private string NormalizeInput(string input)
         {
-            input = input.ToLower();
+            //input = input.ToLower();
             return " " + input + " ";
         }
 
@@ -153,7 +147,7 @@ namespace Heraldry.LexicalAnalysis
             {
                 var search = " " + def.Text + " ";
                 int i = 0;
-                while ((i = input.IndexOf(search)) != -1)
+                while ((i = input.IndexOf(search, StringComparison.CurrentCultureIgnoreCase)) != -1)
                 {
                     input = input.Remove(i + 1, def.Text.Length).Insert(i + 1, "".PadRight(def.Text.Length, ' '));
                     tokens.Add(CreateToken(def, i + 1));

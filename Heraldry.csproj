@@ -82,6 +82,7 @@
     <Compile Include="Blazon\Vocabulary\Entries\SubordinaryDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Separator.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
+    <Compile Include="LexicalAnalysis\DebugPrinter.cs" />
     <Compile Include="Rendering\RenderType.cs" />
     <Compile Include="Rendering\Svg\SvgRenderer.cs" />
     <Compile Include="Rendering\Text\TextRenderer.cs" />
