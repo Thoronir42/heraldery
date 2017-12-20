@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon;
+﻿using Heraldry.App;
+using Heraldry.Blazon;
 using Heraldry.Blazon.Structure;
 using Heraldry.Rendering.Svg;
 using Heraldry.Rendering.Text;
@@ -10,8 +11,15 @@ using System.Text;
 
 namespace Heraldry.Rendering
 {
-    abstract class CrestRenderer
+    abstract class CrestRenderer : ParseStep<BlazonInstance, Boolean>
     {
+        public Stream PrintStream { get; set; }
+
+        public override bool Execute(BlazonInstance input)
+        {
+            return this.Render(input, PrintStream);
+        }
+
         public abstract Boolean Render(BlazonInstance instance, Stream writer);
 
         public static CrestRenderer GetByType(RenderType type)

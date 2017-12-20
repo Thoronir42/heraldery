@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon.Charges;
+﻿using Heraldry.App;
+using Heraldry.Blazon.Charges;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary;
@@ -13,17 +14,12 @@ using System.Linq;
 
 namespace Heraldry.SyntacticAnalysis
 {
-    public class SyntacticAnalyzer
+    public class SyntacticAnalyzer : ParseStep<List<Token>, BlazonInstance>
     {
-        public BlazonInstance ParseTokens(List<Token> tokens)
-        {
-            //foreach (var t in tokens)
-            //{
-            //    Console.WriteLine(String.Format("{0} - {1}", t.Position, t.Type.ToString()));
-            //}
-            //return null;
-
+        public override BlazonInstance Execute(List<Token> tokens)
+        {   
             RootCompiler root = new RootCompiler(tokens);
+
             return root.Compile();
         }
         

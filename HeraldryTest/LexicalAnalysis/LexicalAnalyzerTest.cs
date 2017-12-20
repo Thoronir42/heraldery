@@ -31,7 +31,7 @@ namespace HeraldryTest.LexicalAnalysis
 
             string input = "Quarterly 1st and 4th Sable";
 
-            var tokens = analyzer.ParseText(input);
+            var tokens = analyzer.Execute(input);
 
             var expectedTokens = new List<Token>
             {

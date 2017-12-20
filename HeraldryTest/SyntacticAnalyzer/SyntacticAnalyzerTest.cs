@@ -32,7 +32,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -71,7 +71,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -126,7 +126,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -182,7 +182,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -237,7 +237,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -298,7 +298,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             CheckBlazonInstanceContent(blazon);
@@ -350,7 +350,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -417,7 +417,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             CheckBlazonInstanceContent(blazon);
@@ -456,7 +456,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
             Filling expectedFilling = new Filling
             {
                 Layout = new FillingLayout { FillingLayoutType = FillingLayoutType.BarryOf, Number = variationNumber, Charge = null },
@@ -474,7 +474,7 @@ namespace HeraldryTest
         /// <summary>
         /// Create divided field with ordinary charge, feed it to parser and check the results.
         /// </summary>
-        [TestMethod]
+        [TestMethod][Ignore]
         public void TestDividedFieldWithOrdinaryCharge()
         {
             List<Token> tokens = new List<Token>();
@@ -499,7 +499,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the results
             CheckBlazonInstanceContent(blazon);
@@ -544,7 +544,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             CheckBlazonInstanceContent(blazon);
@@ -594,7 +594,7 @@ namespace HeraldryTest
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
-            BlazonInstance blazon = sa.ParseTokens(tokens);
+            BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
             CheckBlazonInstanceContent(blazon);

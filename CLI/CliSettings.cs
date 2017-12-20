@@ -14,6 +14,7 @@ namespace Heraldry.CLI
         public string Language { get; set; }
         public string InputFile { get; set; }
         public RenderType RenderType { get; set; } = RenderType.Text;
+        public Boolean Verbose { get; set; } = false;
 
         public string OutputFile
         {
@@ -70,6 +71,9 @@ namespace Heraldry.CLI
                         break;
                     case "-r":
                         this.RenderType = (RenderType)Enum.Parse(typeof(RenderType), GetString(args, ++i));
+                        break;
+                    case "-v":
+                        this.Verbose = true;
                         break;
                     default:
                         if (n == 0)

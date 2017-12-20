@@ -39,10 +39,10 @@ namespace HeraldryTest.App
 
             string input = "Or";
 
-            List<Token> parsedText = analyzer.ParseText(input);
+            List<Token> parsedText = analyzer.Execute(input);
             Assert.AreEqual(1, parsedText.Count);
 
-            BlazonInstance blazon = syntacticAnalyzer.ParseTokens(parsedText);
+            BlazonInstance blazon = syntacticAnalyzer.Execute(parsedText);
 
             // check the result
             Assert.IsNotNull(blazon);
@@ -69,10 +69,10 @@ namespace HeraldryTest.App
             TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Metal, TinctureType.Metal, TinctureType.Colour };
             string input = "Quarterly azure and or.";
 
-            List<Token> parsedText = analyzer.ParseText(input);
+            List<Token> parsedText = analyzer.Execute(input);
             Assert.AreEqual(5, parsedText.Count);
 
-            BlazonInstance blazon = syntacticAnalyzer.ParseTokens(parsedText);
+            BlazonInstance blazon = syntacticAnalyzer.Execute(parsedText);
 
             // check results
             Assert.IsNotNull(blazon);
@@ -108,10 +108,10 @@ namespace HeraldryTest.App
             TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Colour, TinctureType.Metal, TinctureType.Colour };
             string input = "Quarterly 1st azure; 3rd or; 2nd gules; 4th sable.";
 
-            List<Token> parsedText = analyzer.ParseText(input);
+            List<Token> parsedText = analyzer.Execute(input);
             Assert.AreEqual(13, parsedText.Count);
 
-            BlazonInstance blazon = syntacticAnalyzer.ParseTokens(parsedText);
+            BlazonInstance blazon = syntacticAnalyzer.Execute(parsedText);
 
             // check results
             Assert.IsNotNull(blazon);

@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon;
+﻿using Heraldry.App;
+using Heraldry.Blazon;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.LexicalAnalysis.Numbers;
@@ -10,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace Heraldry.LexicalAnalysis
 {
-    public class LexAnalyzer
+    public class LexAnalyzer : ParseStep<string, List<Token>>
     {
         private BlazonVocabulary BlazonVocabulary { get; }
         private NumberParser NumberParser { get; }
@@ -21,7 +22,7 @@ namespace Heraldry.LexicalAnalysis
             this.NumberParser = numberParser;
         }
 
-        public List<Token> ParseText(string input)
+        public override List<Token> Execute(string input)
         {
             List<Token> tokens = new List<Token>();
 
