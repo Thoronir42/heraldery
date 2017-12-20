@@ -13,7 +13,7 @@ namespace Heraldry.Blazon.Structure
     public abstract class DividedField : Field
     {
         // field is virtual so that setters can be overrided in child classes
-        public virtual FieldDivisionType? Division { get; set; } = null;
+        public virtual FieldDivisionType Division { get; set; }
         public FieldDivisionLine Line { get; set; } = FieldDivisionLine.Straight;
 
         public Field[] Subfields { get; set; } = null;

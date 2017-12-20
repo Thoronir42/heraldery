@@ -21,16 +21,5 @@ namespace Heraldry.Rendering
         }
 
         public abstract Boolean Render(BlazonInstance instance, Stream writer);
-
-        public static CrestRenderer GetByType(RenderType type)
-        {
-            switch(type)
-            {
-                case RenderType.Svg: return new SvgRenderer();
-                case RenderType.Text: return new TextRenderer();
-            }
-
-            throw new ArgumentException("Render type " + type.ToString() + " is not supported yet");
-        }
     }
 }

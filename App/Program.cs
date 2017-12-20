@@ -12,19 +12,21 @@ namespace Heraldry.App
     using Heraldry.LexicalAnalysis;
     using Heraldry.LexicalAnalysis.Numbers;
     using Heraldry.Rendering;
+    using Heraldry.Rendering.Svg;
+    using Heraldry.Rendering.Text;
     using Heraldry.SyntacticAnalysis;
     using System.IO;
 
     class Program
     {
-        private static CliSettings ProcesArgs(params string[]  args)
+        private static CliSettings ProcesArgs(params string[] args)
         {
             CliSettings settings = new CliSettings(args);
 
             // todo: remove debug settings initialization
             settings = new CliSettings("-v", "-l", "en_olde", "-r", "Text", ".\\resources\\input\\Arms of Churchil.txt");
 
-            if(settings.Verbose)
+            if (settings.Verbose)
             {
                 Console.WriteLine("=== Initializing blazon convertor with: ");
                 Console.WriteLine(" Language   : " + settings.Language);
@@ -47,7 +49,7 @@ namespace Heraldry.App
             string input = File.ReadAllText(settings.InputFile);
 
 
-            var renderer = CrestRenderer.GetByType(settings.RenderType);
+            var renderer = RendererByType(settings.RenderType, vocabulary);
             renderer.PrintStream = File.Open(settings.OutputFile, FileMode.Create);
             try
             {
@@ -65,14 +67,26 @@ namespace Heraldry.App
                 {
                     Console.WriteLine("Error occurred during rendition");
                 }
-            } catch (UnexpectedTokenException ex)
+            }
+            catch (UnexpectedTokenException ex)
             {
                 Console.Error.WriteLine("Unexpected token: " + ex.TokenText + " at position " + ex.TokenPosition);
             }
-            
+
 
             Console.WriteLine("Done. Press Enter to exit.");
             Console.ReadLine();
+        }
+
+        static CrestRenderer RendererByType(RenderType type, BlazonVocabulary vocabulary)
+        {
+            switch (type)
+            {
+                case RenderType.Svg: return new SvgRenderer();
+                case RenderType.Text: return new TextRenderer(vocabulary.GetDefiner());
+            }
+
+            throw new ArgumentException("Render type " + type.ToString() + " is not supported yet");
         }
     }
 }

@@ -83,10 +83,15 @@
     <Compile Include="Blazon\Vocabulary\Entries\FieldVariationDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\SubordinaryDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Separator.cs" />
+    <Compile Include="Blazon\Vocabulary\VocabularyDefiner.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
     <Compile Include="LexicalAnalysis\DebugPrinter.cs" />
     <Compile Include="Rendering\RenderType.cs" />
     <Compile Include="Rendering\Svg\SvgRenderer.cs" />
+    <Compile Include="Rendering\Text\Printers\BasePrinter.cs" />
+    <Compile Include="Rendering\Text\Printers\FieldPrinter.cs" />
+    <Compile Include="Rendering\Text\Printers\FillingPrinter.cs" />
+    <Compile Include="Rendering\Text\Printers\RootPrinter.cs" />
     <Compile Include="Rendering\Text\TextRenderer.cs" />
     <Compile Include="Blazon\Structure\DividedField.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\BaseCompiler.cs" />

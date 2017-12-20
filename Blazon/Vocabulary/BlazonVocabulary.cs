@@ -21,8 +21,8 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<SubordinaryDefinition> Subordinaries { get; set; }
 
         internal BlazonVocabulary()
-        {   
-
+        {
+            
         }
 
         public List<Definition> GetAllDefinitions(Boolean sortByLength = false)
@@ -44,6 +44,11 @@ namespace Heraldry.Blazon.Vocabulary
             }
 
             return list;
+        }
+
+        public VocabularyDefiner GetDefiner()
+        {
+            return new VocabularyDefiner(this);
         }
     }
 }

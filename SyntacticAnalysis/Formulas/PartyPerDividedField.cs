@@ -19,9 +19,9 @@ namespace Heraldry.SyntacticAnalysis.Formulas
         /// Division type may only be set to PartyPer* division types. Everything other will cause 
         /// exception to be thrown.
         /// </summary>
-        public override FieldDivisionType? Division { get => base.Division;
+        public override FieldDivisionType Division { get => base.Division;
             set {
-                if (value.Value.IsPartyPerDivision())
+                if (value.IsPartyPerDivision())
                 {
                     base.Division = value;
                 } else
