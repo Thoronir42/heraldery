@@ -10,7 +10,6 @@ namespace Heraldry.App
     using Heraldry.Blazon.Vocabulary;
     using Heraldry.CLI;
     using Heraldry.LexicalAnalysis;
-    using Heraldry.LexicalAnalysis.Numbers;
     using Heraldry.Rendering;
     using Heraldry.Rendering.Svg;
     using Heraldry.Rendering.Text;
@@ -54,7 +53,7 @@ namespace Heraldry.App
             try
             {
                 var result = new ParseProcess<string>(input)
-                .Then(new LexAnalyzer(vocabulary, new NumberParser_en_olde()), "Lexical analysis")
+                .Then(new LexAnalyzer(vocabulary), "Lexical analysis")
                 .Pause()
                 .Then(new SyntacticAnalyzer(), "Syntactic analysis")
                 .Then(renderer, "Rendering").Value;

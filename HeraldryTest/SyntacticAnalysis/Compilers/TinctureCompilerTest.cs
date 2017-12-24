@@ -1,14 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
-using Heraldry.LexicalAnalysis;
 using Heraldry.SyntacticAnalysis.Compilers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Vocabulary.Numbers;
 
 namespace HeraldryTest.SyntacticAnalysis.Compilers
 {

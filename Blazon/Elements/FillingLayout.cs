@@ -47,6 +47,15 @@ namespace Heraldry.Blazon.Elements
                    EqualityComparer<Charge>.Default.Equals(Charge, layout.Charge);
         }
 
+        public override int GetHashCode()
+        {
+            var hashCode = 1834094023;
+            hashCode = hashCode * -1521134295 + FillingLayoutType.GetHashCode();
+            hashCode = hashCode * -1521134295 + Number.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Charge>.Default.GetHashCode(Charge);
+            return hashCode;
+        }
+
         /// <summary>
         /// Sets FillingLayoutType accordingly to fieldVariationType.
         /// </summary>

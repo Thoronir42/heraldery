@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Heraldry.Blazon.Vocabulary.Numbers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,36 +9,37 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class NumberDefinition : Definition
     {
-        public NumberType Type { get; set; }
-        public int Value { get; set; }
+        public Number Number { get; set; }
+        public int Value {
+            get { return Number.Value; }
+            set { Number.Value = value; }
+        }
+
+        public NumberDefinition()
+        {
+            this.Number = new Number();
+        }
+
+        public NumberDefinition(int value, NumberType type = NumberType.Cardinal)
+        {
+            this.Number = new Number { Value = value, Type = type };
+        }
 
         public override bool Equals(object obj)
         {
             var definition = obj as NumberDefinition;
             return definition != null &&
-                   Type == definition.Type &&
-                   Value == definition.Value;
+                Number.Equals(definition.Number);
         }
 
         public override int GetHashCode()
         {
-            var hashCode = 1265339359;
-            hashCode = hashCode * -1521134295 + Type.GetHashCode();
-            hashCode = hashCode * -1521134295 + Value.GetHashCode();
-            return hashCode;
+            return Number.GetHashCode();
         }
 
         public override DefinitionType GetTokenType()
         {
             return DefinitionType.Number;
         }
-    }
-
-    public enum NumberType
-    {
-        /// <summary> One, two, 3, 4, ... </summary>
-        Cardinal,
-        /// <summary>First, 2nd, 3rd, ...</summary>
-        Ordinal,
     }
 }

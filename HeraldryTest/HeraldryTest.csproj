@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="App\AppTest.cs" />
     <Compile Include="App\CliSettingsTest.cs" />
+    <Compile Include="Blazon\Numbers\EnglistNumberVocabularyTest.cs" />
     <Compile Include="Blazon\VocabularyDefinitionsTest.cs" />
     <Compile Include="LexicalAnalysis\LexicalAnalyzerTest.cs" />
     <Compile Include="LexicalAnalysis\TokenTest.cs" />

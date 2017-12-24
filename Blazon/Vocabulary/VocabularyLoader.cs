@@ -1,18 +1,17 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Numbers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary
 {
     public class VocabularyLoader
     {
 
-        public static BlazonVocabulary LoadFromDirectory(string blazonDirectory)
+        public static BlazonVocabulary LoadFromDirectory(string blazonDirectory, string numbers = "english")
         {
 
             return new BlazonVocabulary
@@ -25,10 +24,22 @@ namespace Heraldry.Blazon.Vocabulary
                 Numbers = LoadList(blazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
                 Ordinaries = LoadList(blazonDirectory + "ordinaries.csv", "Ordinaries", LoadOrdinaries),
                 Subordinaries = LoadList(blazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
+                NumberVocabulary = CreateNumberVocabulary(numbers),
             };
         }
 
+        private static NumberVocabulary CreateNumberVocabulary(string id)
+        {
+            switch(id.ToLower())
+            {
+                case "english":
+                    return new EnglishNumberVocabulary();
+                case "czech":
+                    return new CzechNumberVocabulary();
+            }
 
+            throw new NotSupportedException("Number vocabulary " + id + " is not supported");
+        }
 
         private static List<T> LoadList<T>(string file, string itemsLabel, Func<string, List<T>> loadFunc)
         {
@@ -113,7 +124,11 @@ namespace Heraldry.Blazon.Vocabulary
             {
                 NumberType type = ParseEnumValue<NumberType>(parts[1]);
                 int value = int.Parse(parts[2]);
-                return new NumberDefinition() { Text = parts[0], Type = type, Value = value };
+
+                return new NumberDefinition {
+                    Text = parts[0],
+                    Number = new Number { Type = type, Value = value }
+                };
             });
 
             return ParseCsvFile(filename, f);

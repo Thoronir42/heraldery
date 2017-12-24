@@ -2,7 +2,7 @@
 using Heraldry.Blazon;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
-using Heraldry.LexicalAnalysis.Numbers;
+using Heraldry.Blazon.Vocabulary.Numbers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +14,10 @@ namespace Heraldry.LexicalAnalysis
     public class LexAnalyzer : ParseStep<string, List<Token>>
     {
         private BlazonVocabulary BlazonVocabulary { get; }
-        private NumberParser NumberParser { get; }
 
-        public LexAnalyzer(BlazonVocabulary blazonVocabulary, NumberParser numberParser)
+        public LexAnalyzer(BlazonVocabulary blazonVocabulary)
         {
             this.BlazonVocabulary = blazonVocabulary;
-            this.NumberParser = numberParser;
         }
 
         public override List<Token> Execute(string input)
@@ -126,12 +124,16 @@ namespace Heraldry.LexicalAnalysis
             List<Token> tokens = new List<Token>();
             String text = input;
 
-            Token numTok;
-            while ((numTok = NumberParser.FindNumber(text)) != null)
+            Number number;
+            while ((number = BlazonVocabulary.NumberVocabulary.FindInText(text, out int position, out int length)) != null)
             {
-                text = text.Remove(numTok.Position, numTok.Definition.Text.Length)
-                           .Insert(numTok.Position, "".PadLeft(numTok.Definition.Text.Length));
+                text = text.Remove(position, length)
+                           .Insert(position, "".PadLeft(length));
+
+                var definition = new NumberDefinition { Number = number, Text = text.Substring(position, length) };
+                var numTok = new Token { Position = position, Definition = definition };
                 tokens.Add(numTok);
+                
             }
 
             output = text;

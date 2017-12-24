@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Numbers;
 
 namespace Heraldry.Blazon.Vocabulary
 {
@@ -19,6 +20,8 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<NumberDefinition> Numbers { get; set; }
         internal List<OrdinaryDefinition> Ordinaries { get; set; }
         internal List<SubordinaryDefinition> Subordinaries { get; set; }
+
+        internal NumberVocabulary NumberVocabulary { get; set; }
 
         internal BlazonVocabulary()
         {

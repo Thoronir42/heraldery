@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Numbers;
 
 namespace HeraldryTest.Blazon
 {
@@ -19,12 +20,11 @@ namespace HeraldryTest.Blazon
         [TestMethod]
         public void NumberDefinitionEquals()
         {
-            var a = new NumberDefinition { Type = NumberType.Cardinal, Value = 37 };
-            var b = new NumberDefinition { Type = NumberType.Cardinal, Value = 37 };
+            var a = new NumberDefinition(37, NumberType.Cardinal);
+            var b = new NumberDefinition(37, NumberType.Cardinal);
 
             Assert.AreEqual<Definition>(a, b);
         }
-
 
     }
 }

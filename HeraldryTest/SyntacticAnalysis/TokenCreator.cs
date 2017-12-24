@@ -1,6 +1,7 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Numbers;
 using Heraldry.LexicalAnalysis;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token Number(NumberType type, int value)
         {
-            return new Token { Definition = new NumberDefinition { Type = type, Value = value } };
+            return new Token { Definition = new NumberDefinition(value, type) };
         }
 
     }

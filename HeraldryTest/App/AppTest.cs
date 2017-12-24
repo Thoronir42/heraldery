@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.Blazon.Vocabulary;
-using Heraldry.LexicalAnalysis.Numbers;
 using Heraldry.LexicalAnalysis;
 using Heraldry.SyntacticAnalysis;
 using System.Collections.Generic;
@@ -23,18 +22,13 @@ namespace HeraldryTest.App
             return VocabularyLoader.LoadFromDirectory(sourcesDirectory + "\\resources\\en_olde\\");
         }
 
-        private NumberParser CreateNumberParser()
-        {
-            return new NumberParser_en_olde();
-        }
-
         /// <summary>
         /// Just single color background.
         /// </summary>
         [TestMethod]
         public void TestSimpleBlazon1 ()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary(), CreateNumberParser());
+            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string input = "Or";
@@ -62,7 +56,7 @@ namespace HeraldryTest.App
         [TestMethod]
         public void TestQuaterlyDividedBlazon1()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary(), CreateNumberParser());
+            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string[] expectedTinctures = new String[] { "azure", "or", "or", "azure" };
@@ -101,7 +95,7 @@ namespace HeraldryTest.App
         [TestMethod]
         public void TestQuaterlyDividedBlazon2()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary(), CreateNumberParser());
+            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string[] expectedTinctures = { "azure", "gules", "or", "sable" };

@@ -82,6 +82,10 @@
     <Compile Include="Blazon\Vocabulary\Entries\SeparatorDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldVariationDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\SubordinaryDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Numbers\CzechNumberVocabulary.cs" />
+    <Compile Include="Blazon\Vocabulary\Numbers\EnglishNumberVocabulary.cs" />
+    <Compile Include="Blazon\Vocabulary\Numbers\Number.cs" />
+    <Compile Include="Blazon\Vocabulary\Numbers\NumberVocabulary.cs" />
     <Compile Include="Blazon\Vocabulary\Separator.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyDefiner.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
@@ -103,8 +107,6 @@
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
-    <Compile Include="LexicalAnalysis\Numbers\NumberParser.cs" />
-    <Compile Include="LexicalAnalysis\Numbers\NumberParser_en_olde.cs" />
     <Compile Include="CLI\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />
