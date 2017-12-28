@@ -11,12 +11,7 @@ namespace Heraldry.Blazon.Vocabulary.Numbers
     {
         private String nThPattern = "(\\d+)(st|nd|rd|th)?";
 
-        public override string FormatDigital(Number number)
-        {
-            return FormatDigital(number.Value, number.Type);
-        }
-
-        public string FormatDigital(int value, NumberType type)
+        public override string FormatDigital(int value, NumberType type)
         {
             if (type == NumberType.Cardinal)
             {

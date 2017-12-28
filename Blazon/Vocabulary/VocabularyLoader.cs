@@ -11,26 +11,49 @@ namespace Heraldry.Blazon.Vocabulary
     public class VocabularyLoader
     {
 
-        public static BlazonVocabulary LoadFromDirectory(string blazonDirectory, string numbers = "english")
+        public static BlazonVocabulary LoadFromDirectory(string blazonDirectory, string numbers = null, bool verbose = true)
         {
+            var loader = new VocabularyLoader(blazonDirectory)
+            {
+                Verbose = verbose
+            };
 
+            if (numbers != null)
+            {
+                loader.Numbers = numbers;
+            }
+
+            return loader.Load();
+        }
+
+        public string BlazonDirectory { get; set; }
+        public string Numbers { get; set; } = "english";
+        public bool Verbose { get; set; } = true;
+
+        private VocabularyLoader(string blazonDirectory) 
+        {
+            this.BlazonDirectory = blazonDirectory;
+        }
+
+        public BlazonVocabulary Load()
+        {
             return new BlazonVocabulary
             {
-                Tinctures = LoadList(blazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures),
-                FieldDivisions = LoadList(blazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions),
-                FieldDivisionLines = LoadList(blazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines),
-                Positions = LoadList(blazonDirectory + "positions.csv", "Positions", LoadPositions),
-                KeyWords = LoadList(blazonDirectory + "keywords.csv", "KeyWords", LoadKeyWords),
-                Numbers = LoadList(blazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
-                Ordinaries = LoadList(blazonDirectory + "ordinaries.csv", "Ordinaries", LoadOrdinaries),
-                Subordinaries = LoadList(blazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
-                NumberVocabulary = CreateNumberVocabulary(numbers),
+                Tinctures = LoadList(BlazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures),
+                FieldDivisions = LoadList(BlazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions),
+                FieldDivisionLines = LoadList(BlazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines),
+                Positions = LoadList(BlazonDirectory + "positions.csv", "Positions", LoadPositions),
+                KeyWords = LoadList(BlazonDirectory + "keywords.csv", "KeyWords", LoadKeyWords),
+                Numbers = LoadList(BlazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
+                Ordinaries = LoadList(BlazonDirectory + "ordinaries.csv", "Ordinaries", LoadOrdinaries),
+                Subordinaries = LoadList(BlazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
+                NumberVocabulary = CreateNumberVocabulary(Numbers),
             };
         }
 
         private static NumberVocabulary CreateNumberVocabulary(string id)
         {
-            switch(id.ToLower())
+            switch (id.ToLower())
             {
                 case "english":
                     return new EnglishNumberVocabulary();
@@ -125,7 +148,8 @@ namespace Heraldry.Blazon.Vocabulary
                 NumberType type = ParseEnumValue<NumberType>(parts[1]);
                 int value = int.Parse(parts[2]);
 
-                return new NumberDefinition {
+                return new NumberDefinition
+                {
                     Text = parts[0],
                     Number = new Number { Type = type, Value = value }
                 };

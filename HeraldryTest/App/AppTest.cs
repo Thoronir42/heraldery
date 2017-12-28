@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
+using HeraldryTest.Blazon;
 
 namespace HeraldryTest.App
 {
@@ -18,8 +19,7 @@ namespace HeraldryTest.App
     {
         private BlazonVocabulary CreateVocabulary()
         {
-            var sourcesDirectory = Environment.CurrentDirectory + "\\..\\..\\..";
-            return VocabularyLoader.LoadFromDirectory(sourcesDirectory + "\\resources\\en_olde\\");
+            return MockVocabulary.Get();
         }
 
         /// <summary>

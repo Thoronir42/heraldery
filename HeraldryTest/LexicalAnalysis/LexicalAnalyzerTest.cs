@@ -7,6 +7,7 @@ using Heraldry.Blazon.Vocabulary.Entries;
 using System.Collections.Generic;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using HeraldryTest.SyntacticAnalysis;
+using HeraldryTest.Blazon;
 
 namespace HeraldryTest.LexicalAnalysis
 {
@@ -16,16 +17,10 @@ namespace HeraldryTest.LexicalAnalysis
 
         private TokenCreator Token = new TokenCreator();
 
-        private BlazonVocabulary CreateVocabulary()
-        {
-            var sourcesDirectory = Environment.CurrentDirectory + "\\..\\..\\..";
-            return VocabularyLoader.LoadFromDirectory(sourcesDirectory + "\\resources\\en_olde\\");
-        }
-
         [TestMethod]
         public void TestParseText()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
+            LexAnalyzer analyzer = new LexAnalyzer(MockVocabulary.Get());
 
             string input = "Quarterly 1st and 4th Sable";
 
@@ -75,7 +70,7 @@ namespace HeraldryTest.LexicalAnalysis
         [TestMethod]
         public void TestParseNumbers()
         {
-            var analyzer = new LexAnalyzer(CreateVocabulary());
+            var analyzer = new LexAnalyzer(MockVocabulary.Get());
 
             var tokens = analyzer.Execute("one 1 first 1st");
 

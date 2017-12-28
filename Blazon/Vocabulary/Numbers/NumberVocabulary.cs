@@ -10,7 +10,12 @@ namespace Heraldry.Blazon.Vocabulary.Numbers
     public abstract class NumberVocabulary
     {
 
-        public abstract string FormatDigital(Number number);
+        public string FormatDigital(Number number)
+        {
+            return FormatDigital(number.Value, number.Type);
+        }
+
+        public abstract string FormatDigital(int value, NumberType type);
 
         public Number FindInText(string text, out int index, out int length)
         {

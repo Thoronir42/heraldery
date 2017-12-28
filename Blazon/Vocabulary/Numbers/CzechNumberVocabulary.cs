@@ -11,14 +11,14 @@ namespace Heraldry.Blazon.Vocabulary.Numbers
     {
         private String nThPattern = "(\\d+)(.?)";
 
-        public override string FormatDigital(Number number)
+        public override string FormatDigital(int value, NumberType type)
         {
-            if(number.Type == NumberType.Cardinal)
+            if(type == NumberType.Cardinal)
             {
-                return number.Value.ToString();
+                return value.ToString();
             }
 
-            return number.Value + ".";
+            return value + ".";
         }
 
         protected override Number FindIntegers(string text, out int index, out int length)
