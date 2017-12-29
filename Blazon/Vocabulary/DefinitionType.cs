@@ -8,13 +8,15 @@ namespace Heraldry.Blazon.Vocabulary
 {
     public enum DefinitionType
     {
+        // unused
         Escutcheon,
+
         Tincture,
         FieldDivision,
         FieldDivisionLine,
         Variation,
         Charge,
-        Motto,
+        ShapeType,
 
         Separator,
         KeyWord,
@@ -22,6 +24,8 @@ namespace Heraldry.Blazon.Vocabulary
         Number,
         Ordinary,
         Subordinary,
+
         // todo: TODD! The token types.
+        Motto,
     }
 }

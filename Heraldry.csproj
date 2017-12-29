@@ -51,14 +51,15 @@
     <Compile Include="App\ParseProcess.cs" />
     <Compile Include="App\ParseStep.cs" />
     <Compile Include="Blazon\Charges\Cross.cs" />
-    <Compile Include="Blazon\Charges\CrossType.cs" />
     <Compile Include="Blazon\Charges\OrdinaryCharge.cs" />
+    <Compile Include="Blazon\Charges\ShapeCharge.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionLine.cs" />
     <Compile Include="Blazon\Elements\FieldVariationType.cs" />
     <Compile Include="Blazon\Elements\Ordinary.cs" />
     <Compile Include="Blazon\Elements\Position.cs" />
     <Compile Include="Blazon\Elements\FillingLayout.cs" />
     <Compile Include="Blazon\Elements\FillingLayoutType.cs" />
+    <Compile Include="Blazon\Elements\Shape.cs" />
     <Compile Include="Blazon\Elements\Subordinary.cs" />
     <Compile Include="Blazon\Structure\ContentField.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Blazon\Structure\FurFilling.cs" />
     <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\ChargeDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\ShapeTypeDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionLineDefinition.cs" />

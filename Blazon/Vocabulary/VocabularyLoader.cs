@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon.Charges;
+using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using System;
@@ -30,7 +31,7 @@ namespace Heraldry.Blazon.Vocabulary
         public string Numbers { get; set; } = "english";
         public bool Verbose { get; set; } = true;
 
-        private VocabularyLoader(string blazonDirectory) 
+        private VocabularyLoader(string blazonDirectory)
         {
             this.BlazonDirectory = blazonDirectory;
         }
@@ -47,6 +48,9 @@ namespace Heraldry.Blazon.Vocabulary
                 Numbers = LoadList(BlazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
                 Ordinaries = LoadList(BlazonDirectory + "ordinaries.csv", "Ordinaries", LoadOrdinaries),
                 Subordinaries = LoadList(BlazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
+                ShapeCharges = LoadList(BlazonDirectory + "shapes.csv", "Shape charges", LoadShapeCharges),
+                ShapeTypes = LoadList(BlazonDirectory + "shape_types.csv", "Shape types", LoadShapeTypes),
+
                 NumberVocabulary = CreateNumberVocabulary(Numbers),
             };
         }
@@ -182,6 +186,45 @@ namespace Heraldry.Blazon.Vocabulary
 
             return ParseCsvFile(filename, f);
         }
+
+        private static List<ChargeDefinition> LoadShapeCharges(string filename)
+        {
+            Func<string[], ChargeDefinition> f = new Func<string[], ChargeDefinition>(parts =>
+            {
+                ShapeCharge charge = new ShapeCharge();
+
+                // Shape-Hole [shape minus hole]
+                string[] shape = parts[1].Split('-');
+                charge.Shape = ParseEnumValue<Shape>(shape[0]);
+
+                if(shape.Length > 1)
+                {
+                    charge.Hole = ParseEnumValue<Shape>(shape[1]);
+                }
+
+                if(parts.Length > 2)
+                {
+                    charge.ImplicitFilling = parts[2];
+                }
+
+                return new ChargeDefinition() { Text = parts[0], Charge = charge };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
+
+        private static List<ShapeTypeDefinition> LoadShapeTypes(string filename)
+        {
+            Func<string[], ShapeTypeDefinition> f = new Func<string[], ShapeTypeDefinition>(parts =>
+            {
+                ShapeType type = ParseEnumValue<ShapeType>(parts[1]);
+
+                return new ShapeTypeDefinition() { Text = parts[0], ShapeType = type };
+            });
+
+            return ParseCsvFile(filename, f);
+        }
+
 
         private static List<T> ParseCsvFile<T>(string filename, Func<string[], T> parseLineFunction)
         {

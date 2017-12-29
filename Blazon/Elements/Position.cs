@@ -11,10 +11,27 @@ namespace Heraldry.Blazon.Elements
         public HorizontalPosition Horizontal { get; set; } = HorizontalPosition.Middle;
         public VerticalPosition? Vertical { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            var position = obj as Position;
+            return position != null &&
+                   Horizontal == position.Horizontal &&
+                   EqualityComparer<VerticalPosition?>.Default.Equals(Vertical, position.Vertical);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1238135884;
+            hashCode = hashCode * -1521134295 + Horizontal.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<VerticalPosition?>.Default.GetHashCode(Vertical);
+            return hashCode;
+        }
+
         public override String ToString()
         {
             return this.Horizontal.ToString() + (this.Vertical != null ? "-" +  this.Vertical.ToString() : "");
         }
+
     }
 
     public enum PositionType

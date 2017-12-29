@@ -12,7 +12,7 @@ namespace Heraldry.Blazon.Vocabulary
 {
     public class BlazonVocabulary
     {
-        internal List<TinctureDefinition> Tinctures { get; set; } // todo: Todd, hide the setter, god dammit
+        internal List<TinctureDefinition> Tinctures { get; set; }
         internal List<FieldDivisionDefinition> FieldDivisions { get; set; }
         internal List<FieldDivisionLineDefinition> FieldDivisionLines { get; set; }
         internal List<PositionDefinition> Positions { get; set; }
@@ -20,12 +20,14 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<NumberDefinition> Numbers { get; set; }
         internal List<OrdinaryDefinition> Ordinaries { get; set; }
         internal List<SubordinaryDefinition> Subordinaries { get; set; }
+        internal List<ChargeDefinition> ShapeCharges { get; set; }
+        internal List<ShapeTypeDefinition> ShapeTypes { get; set; }
 
         internal NumberVocabulary NumberVocabulary { get; set; }
 
         internal BlazonVocabulary()
         {
-            
+
         }
 
         public List<Definition> GetAllDefinitions(Boolean sortByLength = false)
@@ -40,6 +42,8 @@ namespace Heraldry.Blazon.Vocabulary
             list.AddRange(this.Numbers);
             list.AddRange(this.Ordinaries);
             list.AddRange(this.Subordinaries);
+            list.AddRange(this.ShapeCharges);
+            list.AddRange(this.ShapeTypes);
 
             if (sortByLength)
             {

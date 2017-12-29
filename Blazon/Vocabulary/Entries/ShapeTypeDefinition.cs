@@ -1,4 +1,4 @@
-﻿using Heraldry.Blazon.Charges;
+﻿using Heraldry.Blazon.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +7,18 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class ChargeDefinition : Definition
+    public class ShapeTypeDefinition : Definition
     {
-        public Charge Charge { get; set; }
+        public ShapeType ShapeType { get; set; } = ShapeType.Solid;
 
         public override DefinitionType GetTokenType()
         {
-            return DefinitionType.Charge;
+            return DefinitionType.ShapeType;
         }
 
         public override object GetSubtype()
         {
-            if(Charge == null)
-            {
-                return ChargeType.Generic;
-            }
-
-            return Charge.Type;
+            return ShapeType;
         }
     }
 }
