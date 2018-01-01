@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Heraldry.CLI;
 using Heraldry.Rendering;
+using Heraldry;
 
 namespace HeraldryTest.App
 {

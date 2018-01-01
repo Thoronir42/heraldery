@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Heraldry.Rendering;
 
-namespace Heraldry.CLI
+namespace Heraldry
 {
     public class CliSettings
     {

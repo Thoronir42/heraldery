@@ -109,7 +109,7 @@
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
-    <Compile Include="CLI\CliSettings.cs" />
+    <Compile Include="App\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />
     <Compile Include="Blazon\Vocabulary\DefinitionType.cs" />

@@ -8,7 +8,6 @@ namespace Heraldry.App
 {
     using Heraldry.Blazon;
     using Heraldry.Blazon.Vocabulary;
-    using Heraldry.CLI;
     using Heraldry.LexicalAnalysis;
     using Heraldry.Rendering;
     using Heraldry.Rendering.Svg;

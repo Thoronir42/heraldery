@@ -81,7 +81,8 @@ namespace Heraldry.Blazon.Vocabulary
         {
             Func<string[], TinctureDefinition> f = new Func<string[], TinctureDefinition>(parts =>
             {
-                TinctureType type = (TinctureType)Enum.Parse(typeof(TinctureType), parts[1]);
+                TinctureType type = ParseEnumValue<TinctureType>(parts[1]);
+
                 return new TinctureDefinition() { Text = parts[0], TinctureType = type, Value = parts[2] };
             });
 
