@@ -11,7 +11,10 @@ namespace Heraldry.Rendering.Text.Printers
 {
     class RootPrinter
     {
-        public StreamWriter Writer { get; }
+        private int symbolsWritten = 0;
+
+        private StreamWriter Writer { get; }
+
         public VocabularyDefiner Define { get; }
 
         public FieldPrinter Field { get; }
@@ -29,6 +32,23 @@ namespace Heraldry.Rendering.Text.Printers
         public void Print(BlazonInstance blazon)
         {
             Field.P(blazon.CoatOfArms.Content);
+        }
+
+        internal void Print(KeyWord keyword) => this.Write(Define.Keyword(keyword));
+
+        internal void Write(object o)
+        {
+            Write(o.ToString());
+        }
+
+        internal void Write(String s)
+        {
+            if (symbolsWritten > 0)
+            {
+                this.Writer.Write(" ");
+            }
+            this.Writer.Write(s);
+            symbolsWritten++;
         }
     }
 }

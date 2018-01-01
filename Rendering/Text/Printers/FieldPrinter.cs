@@ -1,4 +1,5 @@
 ﻿using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Vocabulary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +29,22 @@ namespace Heraldry.Rendering.Text.Printers
         }
 
         private void PrintContentField(ContentField field)
-        {
-            Print.Writer.Write(field.Background);
+        {   
+            Print.Filling.P(field.Background);
+            // todo: print charge and other stuff
         }
 
         private void PrintDividedField(DividedField field)
         {
-            Print.Writer.Write(Print.Define.FieldDivision(field.Division));
-            
-            foreach(Field subfield in field.Subfields)
+            Print.Write(Print.Define.FieldDivision(field.Division));
+
+            for (int i = 0; i < field.Subfields.Length; i++)
             {
+                if(i != 0)
+                {
+                    Print.Print(KeyWord.And);
+                }
+                var subfield = field.Subfields[i];
                 Print.Field.P(subfield);
             }
 

@@ -59,6 +59,7 @@
     <Compile Include="Blazon\VocabularyDefinitionsTest.cs" />
     <Compile Include="LexicalAnalysis\LexicalAnalyzerTest.cs" />
     <Compile Include="LexicalAnalysis\TokenTest.cs" />
+    <Compile Include="Rendering\Text\TextRendererTest.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\CompilerTestBase.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\TinctureCompilerTest.cs" />
     <Compile Include="SyntacticAnalysis\TokenCreator.cs" />

@@ -10,7 +10,7 @@ using Heraldry.Blazon.Vocabulary;
 
 namespace Heraldry.Rendering.Text
 {
-    class TextRenderer : CrestRenderer
+    public class TextRenderer : CrestRenderer
     {
         private readonly VocabularyDefiner definer;
 
@@ -21,11 +21,12 @@ namespace Heraldry.Rendering.Text
 
         public override bool Render(BlazonInstance instance, Stream stream)
         {
-            using (StreamWriter writer = new StreamWriter(stream))
-            {
-                RootPrinter printer = new RootPrinter(writer, definer);
-                printer.Print(instance);
-            }
+            StreamWriter writer = new StreamWriter(stream);
+
+            RootPrinter printer = new RootPrinter(writer, definer);
+            printer.Print(instance);
+
+            writer.Flush();
 
             return true;
         }

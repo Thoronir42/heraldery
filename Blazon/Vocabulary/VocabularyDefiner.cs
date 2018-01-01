@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon.Elements;
+﻿using Heraldry.Blazon.Charges;
+using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using System;
@@ -16,13 +17,6 @@ namespace Heraldry.Blazon.Vocabulary
         internal VocabularyDefiner(BlazonVocabulary vocabulary)
         {
             this.vocabulary = vocabulary;
-        }
-
-        public String Charge(string text)
-        {
-            // todo: lookup simple charges
-
-            return String.Format("[charge {0}]", text);
         }
 
         public String Tincture(string value, TinctureType type)
@@ -43,10 +37,31 @@ namespace Heraldry.Blazon.Vocabulary
             return FormatDefinition(definition);
         }
 
+        public String Position(Position position)
+        {
+            var definition = FindDefinition(vocabulary.Positions, (d) => position.Equals(d.Position));
+            return FormatDefinition(definition);
+        }
+
+        public String Keyword(KeyWord keyword)
+        {
+            var def = FindDefinition(vocabulary.KeyWords, d => d.KeyWord == keyword);
+            return FormatDefinition(def);
+        }
+
+        public String Charge(Charge charge)
+        {
+            
+
+            return String.Format("[charge {0}]", charge.Value);
+        }
+
         public String Number(int value, NumberType type)
         {
             return vocabulary.NumberVocabulary.FormatDigital(value, type);
         }
+
+
 
 
         private DefinitionT FindDefinition<DefinitionT>(List<DefinitionT> list, Func<DefinitionT, bool> equalityCheck) where DefinitionT : Definition

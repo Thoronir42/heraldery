@@ -10,7 +10,7 @@ namespace Heraldry.Blazon.Structure
     /// <summary>
     /// Base class for divided fields.
     /// </summary>
-    public abstract class DividedField : Field
+    public class DividedField : Field
     {
         // field is virtual so that setters can be overrided in child classes
         public virtual FieldDivisionType Division { get; set; }

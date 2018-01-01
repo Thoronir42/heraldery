@@ -18,7 +18,8 @@ namespace Heraldry.Rendering.Text.Printers
         {
             if(item.Layout.FillingLayoutType == Blazon.Elements.FillingLayoutType.Solid)
             {
-                Print.Writer.Write(item.Tinctures[0].Text);
+                var t = item.Tinctures[0];
+                Print.Write(this.Define.Tincture(t.Value, t.TinctureType));
             }
         }
     }

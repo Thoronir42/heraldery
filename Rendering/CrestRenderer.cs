@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Heraldry.Rendering
 {
-    abstract class CrestRenderer : ParseStep<BlazonInstance, Boolean>
+    public abstract class CrestRenderer : ParseStep<BlazonInstance, Boolean>
     {
         public Stream PrintStream { get; set; }
 
