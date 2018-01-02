@@ -29,7 +29,7 @@ namespace Heraldry.Rendering.Text.Printers
         }
 
         private void PrintContentField(ContentField field)
-        {   
+        {
             Print.Filling.P(field.Background);
             // todo: print charge and other stuff
         }

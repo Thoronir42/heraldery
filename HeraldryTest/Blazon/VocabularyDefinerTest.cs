@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Elements;
+using HeraldryTest.Helpers;
 
 namespace HeraldryTest.Blazon
 {

@@ -61,6 +61,7 @@
     <Compile Include="Blazon\Elements\FillingLayoutType.cs" />
     <Compile Include="Blazon\Elements\Shape.cs" />
     <Compile Include="Blazon\Elements\Subordinary.cs" />
+    <Compile Include="Blazon\Elements\Tincture.cs" />
     <Compile Include="Blazon\Structure\ContentField.cs" />
     <Compile Include="Blazon\Structure\Filling.cs" />
     <Compile Include="Blazon\Structure\BlazonInstance.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="Blazon\Structure\CoatOfArms.cs" />
     <Compile Include="Blazon\Elements\EscutcheonShape.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionType.cs" />
-    <Compile Include="Blazon\Elements\TinctureType.cs" />
     <Compile Include="Blazon\Structure\Field.cs" />
     <Compile Include="Blazon\Structure\FurFilling.cs" />
     <Compile Include="Blazon\Vocabulary\BlazonVocabulary.cs" />

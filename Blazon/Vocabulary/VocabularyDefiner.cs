@@ -21,7 +21,7 @@ namespace Heraldry.Blazon.Vocabulary
 
         public String Tincture(string value, TinctureType type)
         {
-            var definition = FindDefinition(vocabulary.Tinctures, (d) => d.Value == value && d.TinctureType == type);
+            var definition = FindDefinition(vocabulary.Tinctures, (d) => d.Tincture.Value == value && d.Tincture.TinctureType == type);
             return FormatDefinition(definition);
         }
 

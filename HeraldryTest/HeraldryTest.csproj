@@ -53,12 +53,13 @@
   <ItemGroup>
     <Compile Include="App\AppTest.cs" />
     <Compile Include="App\CliSettingsTest.cs" />
-    <Compile Include="Blazon\MockVocabulary.cs" />
+    <Compile Include="Helpers\MockVocabulary.cs" />
     <Compile Include="Blazon\Numbers\EnglistNumberVocabularyTest.cs" />
     <Compile Include="Blazon\VocabularyDefinerTest.cs" />
     <Compile Include="Blazon\VocabularyDefinitionsTest.cs" />
     <Compile Include="LexicalAnalysis\LexicalAnalyzerTest.cs" />
     <Compile Include="LexicalAnalysis\TokenTest.cs" />
+    <Compile Include="Helpers\BlazonMock.cs" />
     <Compile Include="Rendering\Text\TextRendererTest.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\CompilerTestBase.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\TinctureCompilerTest.cs" />

@@ -1,5 +1,4 @@
 ﻿using Heraldry.Blazon.Elements;
-using Heraldry.Blazon.Vocabulary.Entries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace Heraldry.Blazon.Structure
     {
         public FillingLayout Layout { get; set; }
 
-        public TinctureDefinition[] Tinctures { get; set; }
+        public Tincture[] Tinctures { get; set; } = new Tincture[0];
 
         /// <summary>
         /// Default constructor.
@@ -23,11 +22,11 @@ namespace Heraldry.Blazon.Structure
         /// Construct filling with solid tincture.
         /// 
         /// </summary>
-        /// <param name="tinctureDefinition">Definition of the tincture.</param>
-        public Filling(TinctureDefinition tinctureDefinition)
+        /// <param name="tincture">Definition of the tincture.</param>
+        public Filling(Tincture tincture)
         {
             Layout = FillingLayout.Solid();
-            Tinctures = new TinctureDefinition[] { tinctureDefinition };
+            Tinctures = new Tincture[] { tincture };
         }
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace Heraldry.Blazon.Structure
         /// <param name="fillings">List of fillings.</param>
         public void AddTinctureDefinitions(List<Filling> fillings)
         {
-            List<TinctureDefinition> tmpDefs = new List<TinctureDefinition>();
+            List<Tincture> tmpDefs = new List<Tincture>();
             foreach(Filling f in fillings)
             {
                 if(f.Layout.FillingLayoutType == FillingLayoutType.Solid)

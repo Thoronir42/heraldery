@@ -83,7 +83,11 @@ namespace Heraldry.Blazon.Vocabulary
             {
                 TinctureType type = ParseEnumValue<TinctureType>(parts[1]);
 
-                return new TinctureDefinition() { Text = parts[0], TinctureType = type, Value = parts[2] };
+                return new TinctureDefinition()
+                {
+                    Text = parts[0],
+                    Tincture = new Tincture { TinctureType = type, Value = parts[2] },
+                };
             });
 
             return ParseCsvFile(filename, f);
@@ -198,12 +202,12 @@ namespace Heraldry.Blazon.Vocabulary
                 string[] shape = parts[1].Split('-');
                 charge.Shape = ParseEnumValue<Shape>(shape[0]);
 
-                if(shape.Length > 1)
+                if (shape.Length > 1)
                 {
                     charge.Hole = ParseEnumValue<Shape>(shape[1]);
                 }
 
-                if(parts.Length > 2)
+                if (parts.Length > 2)
                 {
                     charge.ImplicitFilling = parts[2];
                 }

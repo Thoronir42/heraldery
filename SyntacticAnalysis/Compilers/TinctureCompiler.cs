@@ -33,7 +33,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 Filling filling = new Filling
                 {
                     Layout = FillingLayout.Solid(),
-                    Tinctures = new TinctureDefinition[] { tinctureDef },
+                    Tinctures = new Tincture[] { tinctureDef.Tincture },
                 };
 
                 return filling;
@@ -54,7 +54,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns>Parsed fur.</returns>
         protected FurFilling Fur(TinctureDefinition definition)
         {
-            FurFilling filling = new FurFilling(definition);
+            FurFilling filling = new FurFilling(definition.Value);
 
             /* custom color furs are not supported yet
             Token nextToken = PeekToken();

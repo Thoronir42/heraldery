@@ -19,13 +19,25 @@ namespace HeraldryTest.SyntacticAnalysis
     {
         public Token Tincture(TinctureType type, string text)
         {
-            return new Token { Definition = new TinctureDefinition { TinctureType = type, Text = text } };
+            return new Token
+            {
+                Definition = new TinctureDefinition
+                {
+                    Tincture = new Tincture { TinctureType = type, Value = text },
+                },
+            };
         }
 
         public Token TinctureFur(string pattern, string primaryColor, string secondaryColor)
         {
             string text = pattern + FurFilling.PATTERN_SEPARATOR + primaryColor + FurFilling.COLOR_SEPARATOR + secondaryColor;
-            return new Token { Definition = new TinctureDefinition { TinctureType = TinctureType.Fur, Text = text } };
+            return new Token
+            {
+                Definition = new TinctureDefinition
+                {
+                    Tincture = new Tincture { TinctureType = TinctureType.Fur, Value = text },
+                },
+            };
         }
 
         public Token Number(NumberType type, int value)

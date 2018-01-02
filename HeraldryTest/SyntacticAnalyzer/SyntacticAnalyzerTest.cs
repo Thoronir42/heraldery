@@ -9,6 +9,7 @@ using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Charges;
 using HeraldryTest.SyntacticAnalysis;
+using HeraldryTest.Helpers;
 
 namespace HeraldryTest
 {
@@ -18,7 +19,13 @@ namespace HeraldryTest
     [TestClass]
     public class SyntacticAnalyzerTest
     {
-        TokenCreator Token = new TokenCreator();
+        TokenCreator Token;
+
+        [TestInitialize]
+        public void InitTest()
+        {
+            Token = new TokenCreator();
+        }
 
         /// <summary>
         /// Feed the analyzer with definition on tincture only coat of arms and see what happens.
@@ -58,8 +65,8 @@ namespace HeraldryTest
 
             // quaterly division qhich consists of two colours
             TinctureDefinition[] tinctures = {
-                new TinctureDefinition { Text = "AZURE", TinctureType = TinctureType.Colour },
-                new TinctureDefinition { Text = "OR", TinctureType = TinctureType.Colour },
+                new TinctureDefinition(TinctureType.Colour, "AZURE"),
+                new TinctureDefinition(TinctureType.Colour, "OR"),
                 null, null
             };
             tinctures[2] = tinctures[1];
@@ -88,7 +95,7 @@ namespace HeraldryTest
             for (int i = 0; i < 4; i++)
             {
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tinctures[i].Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tinctures[i].Value, subfield.Background);
             }
         }
 
@@ -99,10 +106,6 @@ namespace HeraldryTest
         [TestMethod]
         public void TestQuaterlyDivision2()
         {
-            // prepare data
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-
             // quaterly division qhich consists of four colours
             TinctureDefinition[] tinctures = {
                 new TinctureDefinition(TinctureType.Colour, "AZURE"),
@@ -111,20 +114,26 @@ namespace HeraldryTest
                 new TinctureDefinition(TinctureType.Colour, "SABLE"),
             };
 
-            tokens.Add(Token.Number(1));
-            tokens.Add(new Token(2, tinctures[0]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+            // prepare data
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldDivision(FieldDivisionType.Quarterly),
 
-            tokens.Add(Token.Number(2));
-            tokens.Add(new Token(5, tinctures[1]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+                Token.Number(1),
+                new Token(2, tinctures[0]),
+                Token.Separator(Separator.Semicolon),
 
-            tokens.Add(Token.Number(3));
-            tokens.Add(new Token(8, tinctures[2]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+                Token.Number(2),
+                new Token(5, tinctures[1]),
+                Token.Separator(Separator.Semicolon),
 
-            tokens.Add(Token.Number(4));
-            tokens.Add(new Token(11, tinctures[3]));
+                Token.Number(3),
+                new Token(8, tinctures[2]),
+                Token.Separator(Separator.Semicolon),
+
+                Token.Number(4),
+                new Token(11, tinctures[3])
+            };
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -145,7 +154,7 @@ namespace HeraldryTest
             for (int i = 0; i < 4; i++)
             {
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tinctures[i].Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tinctures[i].Value, subfield.Background);
             }
         }
 
@@ -204,7 +213,7 @@ namespace HeraldryTest
             for (int i = 0; i < 4; i++)
             {
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tinctures[ttn[i]].Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tinctures[ttn[i]].Value, subfield.Background);
             }
         }
 
@@ -259,7 +268,7 @@ namespace HeraldryTest
             for (int i = 0; i < 4; i++)
             {
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tinctures[ttn[i]].Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tinctures[ttn[i]].Value, subfield.Background);
             }
         }
 
@@ -316,7 +325,7 @@ namespace HeraldryTest
             for (int i = 1; i < 4; i++)
             {
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tincture1.Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tincture1.Value, subfield.Background);
             }
 
             // check nested quaterly division
@@ -324,11 +333,11 @@ namespace HeraldryTest
             Assert.IsNotNull(f1.Subfields);
             Assert.AreEqual(4, f1.Subfields.Length);
 
-            CheckFillingColour(TinctureType.Colour, tincture2.Text, (f1.Subfields[0] as ContentField).Background);
+            CheckFillingColour(TinctureType.Colour, tincture2.Value, (f1.Subfields[0] as ContentField).Background);
             for (int i = 1; i < 4; i++)
             {
                 ContentField subfield = f1.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tincture1.Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tincture1.Value, subfield.Background);
             }
 
         }
@@ -366,8 +375,8 @@ namespace HeraldryTest
             Assert.AreEqual(FillingLayoutType.PalyOf, variatedBackground.Layout.FillingLayoutType);
             Assert.AreEqual(3, variatedBackground.Layout.Number);
             Assert.AreEqual(2, variatedBackground.Tinctures.Length);
-            Assert.AreEqual(tincture1, variatedBackground.Tinctures[0]);
-            Assert.AreEqual(tincture2, variatedBackground.Tinctures[1]);
+            Assert.AreEqual(tincture1.Tincture, variatedBackground.Tinctures[0]);
+            Assert.AreEqual(tincture2.Tincture, variatedBackground.Tinctures[1]);
         }
 
 
@@ -423,8 +432,8 @@ namespace HeraldryTest
             // check the result
             CheckBlazonInstanceContent(blazon);
             ContentField content = blazon.CoatOfArms.Content as ContentField;
-            CheckFillingColour(tincture1.TinctureType, tincture1.Text, content.Background);
-            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, new Filling { Layout = FillingLayout.Solid(), Tinctures = new TinctureDefinition[] { tincture2 } });
+            CheckFillingColour(tincture1.TinctureType, tincture1.Value, content.Background);
+            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, BlazonMock.SolidFilling(tincture2.Tincture));
         }
 
         /// <summary>
@@ -460,7 +469,7 @@ namespace HeraldryTest
             Filling expectedFilling = new Filling
             {
                 Layout = new FillingLayout { FillingLayoutType = FillingLayoutType.BarryOf, Number = variationNumber, Charge = null },
-                Tinctures = new TinctureDefinition[] { tincture1, tincture2 }
+                Tinctures = new Tincture[] { tincture1.Tincture, tincture2.Tincture }
             };
 
             // check the result
@@ -468,7 +477,7 @@ namespace HeraldryTest
             ContentField content = blazon.CoatOfArms.Content as ContentField;
             Assert.IsNotNull(content.Background);
             CheckFilling(content.Background, expectedFilling);
-            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, new Filling { Layout = FillingLayout.Solid(), Tinctures = new TinctureDefinition[] { tincture3 } });
+            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, new Filling { Layout = FillingLayout.Solid(), Tinctures = new Tincture[] { tincture3.Tincture } });
         }
 
         /// <summary>
@@ -554,7 +563,7 @@ namespace HeraldryTest
             for (int i = 0; i < 2; i++)
             {
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(TinctureType.Colour, tinctures[i].Text, subfield.Background);
+                CheckFillingColour(TinctureType.Colour, tinctures[i].Value, subfield.Background);
             }
         }
 
@@ -606,8 +615,8 @@ namespace HeraldryTest
             Assert.AreEqual(FillingLayoutType.PalyOf, variatedBackground.Layout.FillingLayoutType);
             Assert.AreEqual(3, variatedBackground.Layout.Number);
             Assert.AreEqual(2, variatedBackground.Tinctures.Length);
-            Assert.AreEqual(tincture1, variatedBackground.Tinctures[0]);
-            Assert.AreEqual(tincture2, variatedBackground.Tinctures[1]);
+            Assert.AreEqual(tincture1.Tincture, variatedBackground.Tinctures[0]);
+            Assert.AreEqual(tincture2.Tincture, variatedBackground.Tinctures[1]);
 
             // quarterly divided field
             DividedField f2 = coa.Subfields[1] as DividedField;
@@ -654,8 +663,8 @@ namespace HeraldryTest
             Assert.AreEqual(expectedFilling.Layout, filling.Layout);
 
             Assert.IsNotNull(filling.Tinctures);
-            TinctureDefinition[] expectedTinctures = expectedFilling.Tinctures;
-            TinctureDefinition[] tinctures = filling.Tinctures;
+            Tincture[] expectedTinctures = expectedFilling.Tinctures;
+            Tincture[] tinctures = filling.Tinctures;
             Assert.AreEqual(expectedTinctures.Length, tinctures.Length);
             for (int i = 0; i < expectedFilling.Tinctures.Length; i++)
             {
@@ -699,9 +708,9 @@ namespace HeraldryTest
         {
             Assert.IsNotNull(filling.Tinctures);
             Assert.AreEqual(1, filling.Tinctures.Length);
-            TinctureDefinition tDef = filling.Tinctures[0];
+            Tincture tDef = filling.Tinctures[0];
             Assert.AreEqual(expectedType, tDef.TinctureType);
-            Assert.AreEqual(expectedText, tDef.Text);
+            Assert.AreEqual(expectedText, tDef.Value);
         }
     }
 

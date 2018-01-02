@@ -8,6 +8,7 @@ using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
 using HeraldryTest.Blazon;
+using HeraldryTest.Helpers;
 
 namespace HeraldryTest.App
 {
@@ -47,7 +48,7 @@ namespace HeraldryTest.App
             ContentField content = blazon.CoatOfArms.Content as ContentField;
             Assert.IsNotNull(content.Background);
             Filling bg = content.Background;
-            CheckFillingColour(TinctureType.Metal, "or", bg);
+            CheckFillingColour(TinctureType.Metal, "gold", bg);
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace HeraldryTest.App
             LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
-            string[] expectedTinctures = new String[] { "azure", "or", "or", "azure" };
+            string[] expectedTinctures = new String[] { "blue", "gold", "gold", "blue" };
             TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Metal, TinctureType.Metal, TinctureType.Colour };
             string input = "Quarterly azure and or.";
 
@@ -98,7 +99,7 @@ namespace HeraldryTest.App
             LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
-            string[] expectedTinctures = { "azure", "gules", "or", "sable" };
+            string[] expectedTinctures = { "blue", "red", "gold", "black" };
             TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Colour, TinctureType.Metal, TinctureType.Colour };
             string input = "Quarterly 1st azure; 3rd or; 2nd gules; 4th sable.";
 
@@ -136,9 +137,9 @@ namespace HeraldryTest.App
         {
             Assert.IsNotNull(filling.Tinctures);
             Assert.AreEqual(1, filling.Tinctures.Length);
-            TinctureDefinition tDef = filling.Tinctures[0];
+            Tincture tDef = filling.Tinctures[0];
             Assert.AreEqual(expectedType, tDef.TinctureType);
-            Assert.AreEqual(expectedText, tDef.Text);
+            Assert.AreEqual(expectedText, tDef.Value);
         }
     }
 }

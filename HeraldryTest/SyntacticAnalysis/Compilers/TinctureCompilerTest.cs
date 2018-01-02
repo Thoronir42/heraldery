@@ -14,7 +14,7 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
         public void SimpleTincture()
         {
             RootCompiler root = CreateRoot(
-                Token.Tincture(TinctureType.Colour, "or"),
+                Token.Tincture(TinctureType.Colour, "brick-red"),
                 // anything else
                 Token.Number(NumberType.Cardinal, 6)
                 );
@@ -25,7 +25,7 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
 
             Assert.AreEqual(FillingLayoutType.Solid, t.Layout.FillingLayoutType);
             Assert.AreEqual(1, t.Tinctures.Length);
-            Assert.AreEqual(new TinctureDefinition { TinctureType = TinctureType.Colour, Text = "or" }, t.Tinctures[0]);
+            Assert.AreEqual(new Tincture { TinctureType = TinctureType.Colour, Value = "brick-red" }, t.Tinctures[0]);
         }
 
         [TestMethod]

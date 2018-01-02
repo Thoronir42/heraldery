@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.LexicalAnalysis;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Elements;
 
 namespace HeraldryTest.LexicalAnalysis
 {
@@ -15,17 +16,24 @@ namespace HeraldryTest.LexicalAnalysis
             {
                 Definition = new TinctureDefinition()
                 {
-                    TinctureType = Heraldry.Blazon.Elements.TinctureType.Colour,
-                    Value = "periwinkle",
+                    Tincture = new Tincture
+                    {
+                        TinctureType = TinctureType.Colour,
+                        Value = "periwinkle",
+                    },
                 },
                 Position = 0,
             };
+
             var b = new Token()
             {
                 Definition = new TinctureDefinition()
                 {
-                    TinctureType = Heraldry.Blazon.Elements.TinctureType.Colour,
-                    Value = "periwinkle",
+                    Tincture = new Tincture
+                    {
+                        TinctureType = TinctureType.Colour,
+                        Value = "periwinkle",
+                    },
                 },
                 Position = 0,
             };

@@ -7,7 +7,8 @@ using Heraldry.Blazon.Vocabulary.Entries;
 using System.Collections.Generic;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using HeraldryTest.SyntacticAnalysis;
-using HeraldryTest.Blazon;
+using HeraldryTest.Helpers;
+using Heraldry.Blazon.Elements;
 
 namespace HeraldryTest.LexicalAnalysis
 {
@@ -31,7 +32,7 @@ namespace HeraldryTest.LexicalAnalysis
                 new Token
                 {
                     Position = 0,
-                    Definition = new FieldDivisionDefinition { Type = Heraldry.Blazon.Elements.FieldDivisionType.Quarterly }
+                    Definition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly }
                 },
                 new Token
                 {
@@ -51,7 +52,7 @@ namespace HeraldryTest.LexicalAnalysis
                 new Token
                 {
                     Position = 22,
-                    Definition = new TinctureDefinition { TinctureType = Heraldry.Blazon.Elements.TinctureType.Colour, Value = "black" }
+                    Definition = new TinctureDefinition { Tincture = new Tincture { TinctureType = TinctureType.Colour, Value = "black" } }
                 }
             };
 

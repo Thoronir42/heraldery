@@ -4,6 +4,7 @@ using System.IO;
 using Heraldry.Rendering.Text;
 using HeraldryTest.Blazon;
 using Heraldry.Blazon.Structure;
+using HeraldryTest.Helpers;
 
 namespace HeraldryTest.Rendering.Text
 {
@@ -27,18 +28,8 @@ namespace HeraldryTest.Rendering.Text
                 Division = Heraldry.Blazon.Elements.FieldDivisionType.PartyPerFess,
                 Subfields =
                 new Field[] {
-                    new ContentField() {
-                        Background = new Filling (new Heraldry.Blazon.Vocabulary.Entries.TinctureDefinition {
-                            TinctureType = Heraldry.Blazon.Elements.TinctureType.Colour,
-                            Value = "blue"
-                        })
-                    },
-                    new ContentField() {
-                        Background = new Filling(new Heraldry.Blazon.Vocabulary.Entries.TinctureDefinition {
-                            TinctureType = Heraldry.Blazon.Elements.TinctureType.Metal,
-                            Value = "gold"
-                            })
-                    }
+                    BlazonMock.SolidColorField("blue", Heraldry.Blazon.Elements.TinctureType.Colour),
+                    BlazonMock.SolidColorField("gold", Heraldry.Blazon.Elements.TinctureType.Metal),
                 }
             };
 

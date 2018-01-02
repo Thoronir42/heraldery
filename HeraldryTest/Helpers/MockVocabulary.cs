@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HeraldryTest.Blazon
+namespace HeraldryTest.Helpers
 {
     /// <summary>
     /// Not an actual Mock, God please forgive me. T__T
