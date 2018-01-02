@@ -10,6 +10,7 @@ using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Charges;
 using HeraldryTest.SyntacticAnalysis;
 using HeraldryTest.Helpers;
+using Heraldry.Blazon.Structure.Fillings;
 
 namespace HeraldryTest
 {
@@ -354,7 +355,7 @@ namespace HeraldryTest
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
             tokens.Add(Token.FieldVariation(FieldVariationType.PalyOf));
-            tokens.Add(Token.Number(3));
+            tokens.Add(Token.Number(4));
             tokens.Add(new Token(2, tincture1));
             tokens.Add(Token.Keyword(KeyWord.And));
             tokens.Add(new Token(4, tincture2));
@@ -369,11 +370,11 @@ namespace HeraldryTest
             Assert.IsNotNull(blazon.CoatOfArms.Content);
 
             ContentField field = blazon.CoatOfArms.Content as ContentField;
-            Assert.IsNotNull(field.Background);
-            Filling variatedBackground = field.Background;
+            Assert.IsInstanceOfType(field.Background, typeof(PatternFilling));
+            PatternFilling variatedBackground = field.Background as PatternFilling;
 
-            Assert.AreEqual(FillingLayoutType.PalyOf, variatedBackground.Layout.FillingLayoutType);
-            Assert.AreEqual(3, variatedBackground.Layout.Number);
+            Assert.AreEqual(FieldVariationType.PalyOf, variatedBackground.Type);
+            Assert.AreEqual(4, variatedBackground.Number);
             Assert.AreEqual(2, variatedBackground.Tinctures.Length);
             Assert.AreEqual(tincture1.Tincture, variatedBackground.Tinctures[0]);
             Assert.AreEqual(tincture2.Tincture, variatedBackground.Tinctures[1]);
@@ -466,18 +467,14 @@ namespace HeraldryTest
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
             BlazonInstance blazon = sa.Execute(tokens);
-            Filling expectedFilling = new Filling
-            {
-                Layout = new FillingLayout { FillingLayoutType = FillingLayoutType.BarryOf, Number = variationNumber, Charge = null },
-                Tinctures = new Tincture[] { tincture1.Tincture, tincture2.Tincture }
-            };
+            var expectedFilling = new PatternFilling(FieldVariationType.BarryOf, variationNumber, tincture1.Tincture, tincture2.Tincture);
 
             // check the result
             CheckBlazonInstanceContent(blazon);
             ContentField content = blazon.CoatOfArms.Content as ContentField;
             Assert.IsNotNull(content.Background);
-            CheckFilling(content.Background, expectedFilling);
-            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, new Filling { Layout = FillingLayout.Solid(), Tinctures = new Tincture[] { tincture3.Tincture } });
+            Assert.AreEqual(expectedFilling, content.Background);
+            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, new SolidFilling(tincture3.Tincture));
         }
 
         /// <summary>
@@ -539,16 +536,16 @@ namespace HeraldryTest
             Assert.IsTrue(ppType.IsPartyPerDivision());
             List<Token> tokens = new List<Token>();
 
-            TinctureDefinition[] tinctures ={
-                new TinctureDefinition(TinctureType.Colour, "AZURE"),
-                new TinctureDefinition(TinctureType.Colour, "OR"),
+            Tincture[] tinctures ={
+                new Tincture {TinctureType = TinctureType.Colour, Value = "AZURE" },
+                new Tincture {TinctureType =  TinctureType.Colour, Value = "OR" },
             };
 
             // create token list
             tokens.Add(Token.FieldDivision(ppType));
-            tokens.Add(new Token(10, tinctures[0]));
+            tokens.Add(Token.Tincture(tinctures[0]));
             tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(new Token(30, tinctures[1]));
+            tokens.Add(Token.Tincture(tinctures[1]));
 
 
             // feed the parser
@@ -610,10 +607,11 @@ namespace HeraldryTest
 
             // variated field
             ContentField f1 = coa.Subfields[0] as ContentField;
-            Filling variatedBackground = f1.Background;
+            Assert.IsInstanceOfType(f1.Background, typeof(PatternFilling));
+            var variatedBackground = f1.Background as PatternFilling;
 
-            Assert.AreEqual(FillingLayoutType.PalyOf, variatedBackground.Layout.FillingLayoutType);
-            Assert.AreEqual(3, variatedBackground.Layout.Number);
+            Assert.AreEqual(FieldVariationType.PalyOf, variatedBackground.Type);
+            Assert.AreEqual(3, variatedBackground.Number);
             Assert.AreEqual(2, variatedBackground.Tinctures.Length);
             Assert.AreEqual(tincture1.Tincture, variatedBackground.Tinctures[0]);
             Assert.AreEqual(tincture2.Tincture, variatedBackground.Tinctures[1]);
@@ -649,27 +647,7 @@ namespace HeraldryTest
             Assert.AreEqual(type, ordinaryCharge.OrdinaryType);
             Assert.AreEqual(size, ordinaryCharge.OrdinarySize);
 
-            CheckFilling(ordinaryCharge.Filling, expectedFilling);
-        }
-
-        /// <summary>
-        /// Checks the filling.
-        /// </summary>
-        /// <param name="filling">Filling to be checked.</param>
-        /// <param name="expectedVariation">Filling which contains expected variation details.</param>
-        private void CheckFilling(Filling filling, Filling expectedFilling)
-        {
-            Assert.IsNotNull(filling);
-            Assert.AreEqual(expectedFilling.Layout, filling.Layout);
-
-            Assert.IsNotNull(filling.Tinctures);
-            Tincture[] expectedTinctures = expectedFilling.Tinctures;
-            Tincture[] tinctures = filling.Tinctures;
-            Assert.AreEqual(expectedTinctures.Length, tinctures.Length);
-            for (int i = 0; i < expectedFilling.Tinctures.Length; i++)
-            {
-                Assert.AreEqual(expectedTinctures[i], tinctures[i]);
-            }
+            Assert.AreEqual(expectedFilling, ordinaryCharge.Filling);
         }
 
         /// <summary>
@@ -706,9 +684,9 @@ namespace HeraldryTest
         /// <param name="filling">Filling to be checked.</param>
         private void CheckFillingColour(TinctureType expectedType, String expectedText, Filling filling)
         {
-            Assert.IsNotNull(filling.Tinctures);
-            Assert.AreEqual(1, filling.Tinctures.Length);
-            Tincture tDef = filling.Tinctures[0];
+            Assert.IsInstanceOfType(filling, typeof(SolidFilling));
+
+            Tincture tDef = (filling as SolidFilling).Tincture;
             Assert.AreEqual(expectedType, tDef.TinctureType);
             Assert.AreEqual(expectedText, tDef.Value);
         }

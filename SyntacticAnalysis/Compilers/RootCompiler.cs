@@ -83,13 +83,19 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// </summary>
         /// <param name="tokens">List of tokens from which the current one will be returned.</param>
         /// <returns>Current token.</returns>
-        internal Token PeekToken()
+        internal Token PeekToken(int lookahead = 0)
         {
-            if (position == tokens.Count)
+            if(lookahead < 0)
+            {
+                throw new ArgumentException("Lookahead must be a positive number or zero");
+            }
+
+            if (position + lookahead >= tokens.Count)
             {
                 return null;
             }
-            Token currentToken = tokens.ElementAt(position);
+            
+            Token currentToken = tokens.ElementAt(position + lookahead);
             return currentToken;
         }
     }

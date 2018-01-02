@@ -15,6 +15,7 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<TinctureDefinition> Tinctures { get; set; }
         internal List<FieldDivisionDefinition> FieldDivisions { get; set; }
         internal List<FieldDivisionLineDefinition> FieldDivisionLines { get; set; }
+        internal List<FieldVariationDefinition> FieldVariations { get; set; }
         internal List<PositionDefinition> Positions { get; set; }
         internal List<KeyWordDefinition> KeyWords { get; set; }
         internal List<NumberDefinition> Numbers { get; set; }
@@ -37,6 +38,7 @@ namespace Heraldry.Blazon.Vocabulary
             list.AddRange(this.Tinctures);
             list.AddRange(this.FieldDivisions);
             list.AddRange(this.FieldDivisionLines);
+            list.AddRange(this.FieldVariations);
             list.AddRange(this.Positions);
             list.AddRange(this.KeyWords);
             list.AddRange(this.Numbers);

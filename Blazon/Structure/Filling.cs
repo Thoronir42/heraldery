@@ -7,44 +7,38 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Structure
 {
-    public class Filling
+    public abstract class Filling
     {
-        public FillingLayout Layout { get; set; }
-
-        public Tincture[] Tinctures { get; set; } = new Tincture[0];
-
         /// <summary>
         /// Default constructor.
         /// </summary>
         public Filling() {  }
 
-        /// <summary>
-        /// Construct filling with solid tincture.
-        /// 
-        /// </summary>
-        /// <param name="tincture">Definition of the tincture.</param>
-        public Filling(Tincture tincture)
+        public static FillingType TypeByVariation(FieldVariationType variationType)
         {
-            Layout = FillingLayout.Solid();
-            Tinctures = new Tincture[] { tincture };
-        }
-
-        /// <summary>
-        /// Fills tincture definition array from the list of fillings. Only fillings with solid tinctures are accepted.
-        /// </summary>
-        /// <param name="fillings">List of fillings.</param>
-        public void AddTinctureDefinitions(List<Filling> fillings)
-        {
-            List<Tincture> tmpDefs = new List<Tincture>();
-            foreach(Filling f in fillings)
+            switch(variationType)
             {
-                if(f.Layout.FillingLayoutType == FillingLayoutType.Solid)
-                {
-                    tmpDefs.Add(f.Tinctures[0]);
-                }
+                case FieldVariationType.Fretty:
+                case FieldVariationType.Fusilly:
+                case FieldVariationType.Lozengy:
+                    return FillingType.Pattern;
+
+                case FieldVariationType.BarryOf:
+                case FieldVariationType.BendyOf:
+                case FieldVariationType.PalyOf:
+                    return FillingType.NPattern;
+
             }
 
-            Tinctures = tmpDefs.ToArray();
+            throw new NotImplementedException("Field variation type " + variationType.ToString() + " not implemented");
         }
+    }
+
+    public enum FillingType
+    {
+        Solid,
+        Pattern,
+        NPattern,
+        Seme
     }
 }

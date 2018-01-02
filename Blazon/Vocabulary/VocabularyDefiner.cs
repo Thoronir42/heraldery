@@ -19,6 +19,11 @@ namespace Heraldry.Blazon.Vocabulary
             this.vocabulary = vocabulary;
         }
 
+        public String Tincture(Tincture tincture)
+        {
+            return Tincture(tincture.Value, tincture.TinctureType);
+        }
+
         public String Tincture(string value, TinctureType type)
         {
             var definition = FindDefinition(vocabulary.Tinctures, (d) => d.Tincture.Value == value && d.Tincture.TinctureType == type);
@@ -34,6 +39,12 @@ namespace Heraldry.Blazon.Vocabulary
         public String FieldDivisionLine(FieldDivisionLine type)
         {
             var definition = FindDefinition(vocabulary.FieldDivisionLines, (d) => d.Line == type);
+            return FormatDefinition(definition);
+        }
+
+        public String FieldVariation(FieldVariationType type)
+        {
+            var definition = FindDefinition(vocabulary.FieldVariations, d => d.VariationType == type);
             return FormatDefinition(definition);
         }
 

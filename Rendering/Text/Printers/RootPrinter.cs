@@ -19,6 +19,7 @@ namespace Heraldry.Rendering.Text.Printers
 
         public FieldPrinter Field { get; }
         public FillingPrinter Filling { get; }
+        public ChargePrinter Charge { get; }
 
         public RootPrinter(StreamWriter writer, VocabularyDefiner definer)
         {
@@ -27,6 +28,7 @@ namespace Heraldry.Rendering.Text.Printers
 
             Field = new FieldPrinter(this);
             Filling = new FillingPrinter(this);
+            Charge = new ChargePrinter(this);
         }
 
         public void Print(BlazonInstance blazon)

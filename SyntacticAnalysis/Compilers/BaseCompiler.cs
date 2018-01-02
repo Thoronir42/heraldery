@@ -41,9 +41,9 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return definition;
         }
 
-        protected Token PeekToken()
+        protected Token PeekToken(int offset = 0)
         {
-            return root.PeekToken();
+            return root.PeekToken(offset);
         }
 
 

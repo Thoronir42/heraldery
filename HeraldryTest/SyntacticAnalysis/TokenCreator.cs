@@ -1,5 +1,6 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
@@ -19,11 +20,16 @@ namespace HeraldryTest.SyntacticAnalysis
     {
         public Token Tincture(TinctureType type, string text)
         {
+            return Tincture(new Tincture { TinctureType = type, Value = text });
+        }
+
+        public Token Tincture(Tincture tincture)
+        {
             return new Token
             {
                 Definition = new TinctureDefinition
                 {
-                    Tincture = new Tincture { TinctureType = type, Value = text },
+                    Tincture = tincture,
                 },
             };
         }

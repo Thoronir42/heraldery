@@ -1,4 +1,6 @@
-﻿using Heraldry.Blazon.Structure;
+﻿using Heraldry.Blazon.Elements;
+using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Fillings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +18,33 @@ namespace Heraldry.Rendering.Text.Printers
 
         public override void P(Filling item)
         {
-            if(item.Layout.FillingLayoutType == Blazon.Elements.FillingLayoutType.Solid)
+            if(item is SolidFilling)
             {
-                var t = item.Tinctures[0];
-                Print.Write(this.Define.Tincture(t.Value, t.TinctureType));
+                SolidFilling solidFilling = item as SolidFilling;
+                Print.Write(Define.Tincture(solidFilling.Tincture));
+                return;
             }
+
+            if(item is FurFilling)
+            {
+                // todo: print furs
+            }
+
+            if(item is SemeFilling)
+            {
+                SemeFilling semeFilling = item as SemeFilling;
+                Print.Write(Define.FieldVariation(FieldVariationType.SemeOf));
+                Print.Charge.P(semeFilling.Charge);
+                return;
+            }
+
+            if(item is PatternFilling)
+            {
+                // todo: print patterns
+            }
+
         }
+
+
     }
 }

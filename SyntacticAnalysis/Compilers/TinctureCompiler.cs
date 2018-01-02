@@ -1,5 +1,6 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.LexicalAnalysis;
@@ -24,21 +25,15 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// 
         /// </summary>
         /// <returns>Parsed filling - tincture or fur.</returns>
-        public Filling Tincture()
+        public Tincture Tincture()
         {
             TinctureDefinition tinctureDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
 
             if (tinctureDef.TinctureType == TinctureType.Colour || tinctureDef.TinctureType == TinctureType.Metal)
             {
-                Filling filling = new Filling
-                {
-                    Layout = FillingLayout.Solid(),
-                    Tinctures = new Tincture[] { tinctureDef.Tincture },
-                };
-
-                return filling;
+                return tinctureDef.Tincture;
             }
-            if(tinctureDef.TinctureType == TinctureType.Fur)
+            if (tinctureDef.TinctureType == TinctureType.Fur)
             {
                 // call fur rule
                 return Fur(tinctureDef);
@@ -52,9 +47,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// 
         /// </summary>
         /// <returns>Parsed fur.</returns>
-        protected FurFilling Fur(TinctureDefinition definition)
+        protected Tincture Fur(TinctureDefinition definition)
         {
-            FurFilling filling = new FurFilling(definition.Value);
+            return definition.Tincture;
+            
+            // FurFilling filling = new FurFilling(definition.Value);
 
             /* custom color furs are not supported yet
             Token nextToken = PeekToken();
@@ -68,17 +65,14 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
             filling.SecondaryColor = NonFurTincture();
             */
-                
-
-            return filling;
         }
 
         protected TinctureDefinition NonFurTincture()
         {
-            Token token= PopTokenAs(DefinitionType.Tincture);
+            Token token = PopTokenAs(DefinitionType.Tincture);
             TinctureDefinition tDef = token.Definition as TinctureDefinition;
 
-            if(tDef.TinctureType == TinctureType.Fur)
+            if (tDef.TinctureType == TinctureType.Fur)
             {
                 throw new UnexpectedTokenException(token, "Non-fur tincture definition is expected.");
             }

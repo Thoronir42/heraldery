@@ -11,7 +11,6 @@ namespace Heraldry.Blazon.Vocabulary
 {
     public class VocabularyLoader
     {
-
         public static BlazonVocabulary LoadFromDirectory(string blazonDirectory, string numbers = null, bool verbose = true)
         {
             var loader = new VocabularyLoader(blazonDirectory)
@@ -43,6 +42,7 @@ namespace Heraldry.Blazon.Vocabulary
                 Tinctures = LoadList(BlazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures),
                 FieldDivisions = LoadList(BlazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions),
                 FieldDivisionLines = LoadList(BlazonDirectory + "field_division_lines.csv", "Field division lines", LoadFieldDivisionLines),
+                FieldVariations = LoadList(BlazonDirectory + "field_variations.csv", "Field variations", LoadFieldVariations),
                 Positions = LoadList(BlazonDirectory + "positions.csv", "Positions", LoadPositions),
                 KeyWords = LoadList(BlazonDirectory + "keywords.csv", "KeyWords", LoadKeyWords),
                 Numbers = LoadList(BlazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
@@ -68,11 +68,17 @@ namespace Heraldry.Blazon.Vocabulary
             throw new NotSupportedException("Number vocabulary " + id + " is not supported");
         }
 
-        private static List<T> LoadList<T>(string file, string itemsLabel, Func<string, List<T>> loadFunc)
+        private List<T> LoadList<T>(string file, string itemsLabel, Func<string, List<T>> loadFunc)
         {
-            Console.Write("Loading " + itemsLabel + "...");
+            if (this.Verbose)
+            {
+                Console.Write("Loading " + itemsLabel + "...");
+            }
             List<T> list = loadFunc(file);
-            Console.WriteLine(" " + list.Count() + " loaded");
+            if(this.Verbose)
+            {
+                Console.WriteLine(" " + list.Count() + " loaded");
+            }
 
             return list;
         }
@@ -97,8 +103,11 @@ namespace Heraldry.Blazon.Vocabulary
         {
             Func<string[], FieldDivisionDefinition> f = new Func<string[], FieldDivisionDefinition>(parts =>
             {
-                FieldDivisionType type = (FieldDivisionType)Enum.Parse(typeof(FieldDivisionType), parts[1]);
-                return new FieldDivisionDefinition() { Text = parts[0], Type = type };
+                return new FieldDivisionDefinition()
+                {
+                    Text = parts[0],
+                    Type = ParseEnumValue<FieldDivisionType>(parts[1])
+                };
             });
 
             return ParseCsvFile(filename, f);
@@ -108,12 +117,29 @@ namespace Heraldry.Blazon.Vocabulary
         {
             Func<string[], FieldDivisionLineDefinition> f = new Func<string[], FieldDivisionLineDefinition>(parts =>
             {
-                FieldDivisionLine type = (FieldDivisionLine)Enum.Parse(typeof(FieldDivisionLine), parts[1]);
-                return new FieldDivisionLineDefinition() { Text = parts[0], Line = type };
+                return new FieldDivisionLineDefinition()
+                {
+                    Text = parts[0],
+                    Line = ParseEnumValue<FieldDivisionLine>(parts[1])
+                };
             });
 
             return ParseCsvFile(filename, f);
 
+        }
+
+        private static List<FieldVariationDefinition> LoadFieldVariations(string filename)
+        {
+            Func<string[], FieldVariationDefinition> f = new Func<string[], FieldVariationDefinition>(parts =>
+            {
+                return new FieldVariationDefinition()
+                {
+                    Text = parts[0],
+                    VariationType = ParseEnumValue<FieldVariationType>(parts[1]),
+                };
+            });
+
+            return ParseCsvFile(filename, f);
         }
 
         private static List<PositionDefinition> LoadPositions(string filename)

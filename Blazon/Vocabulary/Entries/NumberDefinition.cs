@@ -41,5 +41,10 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         {
             return DefinitionType.Number;
         }
+
+        public override object GetSubtype()
+        {
+            return Number.Type;
+        }
     }
 }

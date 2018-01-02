@@ -1,5 +1,6 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Fillings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace HeraldryTest.Helpers
         }
         public static Filling SolidFilling(Tincture tincture)
         {
-            return new Filling(tincture);
+            return new SolidFilling(tincture);
         }
 
     }

@@ -9,6 +9,7 @@ using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
 using HeraldryTest.Blazon;
 using HeraldryTest.Helpers;
+using Heraldry.Blazon.Structure.Fillings;
 
 namespace HeraldryTest.App
 {
@@ -135,9 +136,9 @@ namespace HeraldryTest.App
         /// <param name="filling">Filling to be checked.</param>
         private void CheckFillingColour(TinctureType expectedType, String expectedText, Filling filling)
         {
-            Assert.IsNotNull(filling.Tinctures);
-            Assert.AreEqual(1, filling.Tinctures.Length);
-            Tincture tDef = filling.Tinctures[0];
+            Assert.IsInstanceOfType(filling, typeof(SolidFilling));
+
+            Tincture tDef = (filling as SolidFilling).Tincture;
             Assert.AreEqual(expectedType, tDef.TinctureType);
             Assert.AreEqual(expectedText, tDef.Value);
         }

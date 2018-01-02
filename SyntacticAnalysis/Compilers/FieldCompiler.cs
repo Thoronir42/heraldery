@@ -1,7 +1,9 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Numbers;
 using Heraldry.LexicalAnalysis;
 using Heraldry.SyntacticAnalysis.Formulas;
 using Heraldry.SyntacticAnalysis.Formulas.FieldDivisions;
@@ -96,8 +98,18 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             switch (currentToken.Type)
             {
                 case DefinitionType.Tincture:
-                    Filling fil = Compilers.Tincture.Tincture();
-                    field = new ContentField { Background = fil };
+                    var tincture = Compilers.Tincture.Tincture();
+
+                    if (TokenIs(PeekToken(1), DefinitionType.Variation, FieldVariationType.SemeOf))
+                    {
+                        throw new NotImplementedException("Seme variation not implemented");
+                    }
+                    else
+                    {
+                        Filling fil = new SolidFilling(tincture);
+                        field = new ContentField { Background = fil };
+                    }
+
                     break;
                 case DefinitionType.Variation:
                     field = Variation();
@@ -125,37 +137,32 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             // first, the type of variation follows, then variation tinctures should be defined
             FieldVariationDefinition definition = PopDefinition<FieldVariationDefinition>(DefinitionType.Variation);
-            
             FieldVariationType variationType = definition.VariationType;
 
-            // for some types of variation, number (one number: number of stripes, waves, ...) definition may be expected
-            // negative value cannot be used in blazon so it may be used here in code to determine whether or not 
-            // was number defined
-            Token nextToken = PeekToken();
-            int number = Int32.MinValue;
-            if (TokenIs(nextToken, DefinitionType.Number))
+            Filling filling;
+            switch (Filling.TypeByVariation(variationType))
             {
-                PopToken();
-                number = ((NumberDefinition)nextToken.Definition).Value;
+                // todo: implement various field variation
+                case FillingType.NPattern:
+                    NumberDefinition numDef = PopDefinition<NumberDefinition>(DefinitionType.Number, NumberType.Cardinal);
+                    filling = new PatternFilling(variationType, VariationFillings())
+                    {
+                        Number = numDef.Number
+                    };
+                    break;
+                case FillingType.Pattern:
+                    filling = new PatternFilling(variationType, VariationFillings());
+                    break;
+                case FillingType.Seme:
+                    // 
+                    filling = new SemeFilling(null, Compilers.Charge.PrincipalCharge());
+                    break;
+                default:
+                    throw new NotImplementedException("Filling type of " + variationType + " is not implemented");
             }
 
-            // tinctures of a variation
-            List<Filling> variationFillings = VariationFillings();
 
-            FillingLayout fillingLayout = new FillingLayout();
-            fillingLayout.SetVariationLayoutType(variationType);
-            if (number != Int32.MinValue)
-            {
-                fillingLayout.Number = number;
-            }
-            Filling variatedFilling = new Filling
-            {
-                Layout = fillingLayout
-            };
-            variatedFilling.AddTinctureDefinitions(variationFillings);
-
-
-            return new ContentField { Background = variatedFilling };
+            return new ContentField { Background = filling };
         }
 
         /// <summary>
@@ -165,18 +172,18 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// </summary>
         /// <param name="tokens">Tokens to be parsed.</param>
         /// <returns>List of defined tinctures.</returns>
-        protected List<Filling> VariationFillings()
+        protected Tincture[] VariationFillings()
         {
-            List<Filling> fillings = new List<Filling>();
+            Tincture[] fillings = new Tincture[2];
 
             // first filling
-            fillings.Add(Compilers.Tincture.Tincture());
+            fillings[0] = Compilers.Tincture.Tincture();
 
             // and
             Token currentToken = PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
 
             // second filling
-            fillings.Add(Compilers.Tincture.Tincture());
+            fillings[1] = Compilers.Tincture.Tincture();
 
             return fillings;
         }
@@ -194,10 +201,10 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 case DefinitionType.Tincture:
                     // quaterly division is defined by tinctures
                     // load them and create field from them
-                    Filling tincture1 = Compilers.Tincture.Tincture();
+                    Filling tincture1 = new SolidFilling(Compilers.Tincture.Tincture());
                     currentToken = PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
 
-                    Filling tincture2 = Compilers.Tincture.Tincture();
+                    Filling tincture2 = new SolidFilling(Compilers.Tincture.Tincture());
                     return new QuaterlyDividedField(tincture1, tincture2);
 
                 case DefinitionType.Number:

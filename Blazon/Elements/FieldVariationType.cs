@@ -11,34 +11,23 @@ namespace Heraldry.Blazon.Elements
     /// </summary>
     public enum FieldVariationType
     {
-        /// <summary>
-        /// Vertical lines.
-        /// </summary>
+        /// <summary> Vertical lines. </summary>
         PalyOf,
-
-        /// <summary>
-        /// Horizontal lines.
-        /// </summary>
+        /// <summary> Horizontal lines. </summary>
         BarryOf,
-
-        /// <summary>
-        /// Rotated checky.
-        /// </summary>
-        Lozengy,
-
-        /// <summary>
-        /// Something similar to checky.
-        /// </summary>
-        Fusilly,
-
-        /// <summary>
-        /// Diagonal lines.
-        /// </summary>
+        /// <summary> Diagonal lines. </summary>
         BendyOf,
 
-        /// <summary>
-        /// Crossed lines.
-        /// </summary>
-        Fretty
+        /// <summary> Checboard </summary>
+        Chequy,
+        /// <summary> Rotated checky. </summary>
+        Lozengy,
+        /// <summary> Horizontally stretched Lozengy. </summary>
+        Fusilly,
+        /// <summary> Crossed lines. </summary>
+        Fretty,
+
+        /// <summary> Charge spread over the field </summary>
+        SemeOf,
     }
 }

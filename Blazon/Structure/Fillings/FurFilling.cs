@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.Blazon.Structure
+namespace Heraldry.Blazon.Structure.Fillings
 {
+
+    // todo: replace FurFilling by FurTincture
     public class FurFilling : Filling
     {
         public static char PATTERN_SEPARATOR = ':',

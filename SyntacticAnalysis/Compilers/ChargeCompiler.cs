@@ -1,6 +1,7 @@
 ﻿using Heraldry.Blazon.Charges;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.LexicalAnalysis;
@@ -39,7 +40,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             Token currentToken = PopTokenAs(DefinitionType.Ordinary);
 
-            Filling ordinaryFilling = Compilers.Tincture.Tincture();
+            var ordinaryFilling = new SolidFilling(Compilers.Tincture.Tincture());
 
             OrdinaryDefinition def = currentToken.Definition as OrdinaryDefinition;
 
