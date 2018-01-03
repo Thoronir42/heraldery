@@ -28,18 +28,19 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         public Tincture Tincture()
         {
             TinctureDefinition tinctureDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
+            var tincture = tinctureDef.Tincture;
 
-            if (tinctureDef.TinctureType == TinctureType.Colour || tinctureDef.TinctureType == TinctureType.Metal)
+            if (tincture.TinctureType == TinctureType.Colour || tincture.TinctureType == TinctureType.Metal)
             {
-                return tinctureDef.Tincture;
+                return tincture;
             }
-            if (tinctureDef.TinctureType == TinctureType.Fur)
+            if (tincture.TinctureType == TinctureType.Fur)
             {
                 // call fur rule
                 return Fur(tinctureDef);
             }
 
-            throw new ArgumentException("TinctureType " + tinctureDef.TinctureType + " not recognized");
+            throw new ArgumentException("TinctureType " + tincture.TinctureType + " not recognized");
         }
 
         /// <summary>
@@ -69,12 +70,12 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
         protected TinctureDefinition NonFurTincture()
         {
-            Token token = PopTokenAs(DefinitionType.Tincture);
-            TinctureDefinition tDef = token.Definition as TinctureDefinition;
+            var tDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
+            var tincture = tDef.Tincture;
 
-            if (tDef.TinctureType == TinctureType.Fur)
+            if (tincture.TinctureType == TinctureType.Fur)
             {
-                throw new UnexpectedTokenException(token, "Non-fur tincture definition is expected.");
+                throw new UnexpectedTokenException("Non-fur tincture definition is expected.");
             }
 
             return tDef;

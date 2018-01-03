@@ -107,6 +107,7 @@
     <Compile Include="SyntacticAnalysis\Compilers\FieldCompiler.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\RootCompiler.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\TinctureCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\ExpectedTokenNotFoundException.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\PartyPerDividedField.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Rendering\CrestRenderer.cs" />
     <Compile Include="Rendering\Svg\SvgLoader.cs" />
     <Compile Include="SyntacticAnalysis\SyntacticAnalyzer.cs" />
+    <Compile Include="SyntacticAnalysis\TokenType.cs" />
     <Compile Include="SyntacticAnalysis\UnexpectedTokenException.cs" />
   </ItemGroup>
   <ItemGroup>

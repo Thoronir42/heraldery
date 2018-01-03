@@ -95,16 +95,17 @@ namespace Heraldry.Blazon.Vocabulary
                 if (type == TinctureType.Fur)
                 {
                     String[] valueParts = parts[2].Split(FUR_PATTERN_SEPARATOR);
-                    tincture = new FurTincture(valueParts[0], valueParts[1].Split(FUR_COLOR_SEPARATOR));
+                    tincture = new FurTincture(valueParts[0], valueParts[1].Split(FUR_COLOR_SEPARATOR))
+                    {
+                        Value = parts[2]
+                    };
                 }
                 else
                 {
-                    tincture = new Tincture { TinctureType = type };
+                    tincture = new Tincture(type, parts[2]);
                 }
 
-                tincture.Value = parts[2];
-
-                return new TinctureDefinition()
+                return new TinctureDefinition(tincture)
                 {
                     Text = parts[0],
                     Tincture = tincture,

@@ -14,27 +14,13 @@ namespace HeraldryTest.LexicalAnalysis
         {
             var a = new Token()
             {
-                Definition = new TinctureDefinition()
-                {
-                    Tincture = new Tincture
-                    {
-                        TinctureType = TinctureType.Colour,
-                        Value = "periwinkle",
-                    },
-                },
+                Definition = new TinctureDefinition(new Tincture(TinctureType.Colour, "periwinkle")),
                 Position = 0,
             };
 
             var b = new Token()
             {
-                Definition = new TinctureDefinition()
-                {
-                    Tincture = new Tincture
-                    {
-                        TinctureType = TinctureType.Colour,
-                        Value = "periwinkle",
-                    },
-                },
+                Definition = new TinctureDefinition(new Tincture(TinctureType.Colour, "periwinkle")),
                 Position = 0,
             };
 

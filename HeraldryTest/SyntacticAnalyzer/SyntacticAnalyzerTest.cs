@@ -65,17 +65,17 @@ namespace HeraldryTest
             tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
 
             // quaterly division qhich consists of two colours
-            TinctureDefinition[] tinctures = {
-                new TinctureDefinition(TinctureType.Colour, "AZURE"),
-                new TinctureDefinition(TinctureType.Colour, "OR"),
+            Tincture[] tinctures = {
+                new Tincture(TinctureType.Colour, "AZURE"),
+                new Tincture(TinctureType.Colour, "OR"),
                 null, null
             };
             tinctures[2] = tinctures[1];
             tinctures[3] = tinctures[0];
 
-            tokens.Add(new Token(10, tinctures[0]));
+            tokens.Add(Token.Tincture(tinctures[0]));
             tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(new Token(30, tinctures[1]));
+            tokens.Add(Token.Tincture(tinctures[1]));
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -108,11 +108,11 @@ namespace HeraldryTest
         public void TestQuaterlyDivision2()
         {
             // quaterly division qhich consists of four colours
-            TinctureDefinition[] tinctures = {
-                new TinctureDefinition(TinctureType.Colour, "AZURE"),
-                new TinctureDefinition(TinctureType.Colour, "OR"),
-                new TinctureDefinition(TinctureType.Colour, "GULES"),
-                new TinctureDefinition(TinctureType.Colour, "SABLE"),
+            Tincture[] tinctures = {
+                new Tincture(TinctureType.Colour, "AZURE"),
+                new Tincture(TinctureType.Colour, "OR"),
+                new Tincture(TinctureType.Colour, "GULES"),
+                new Tincture(TinctureType.Colour, "SABLE"),
             };
 
             // prepare data
@@ -121,19 +121,19 @@ namespace HeraldryTest
                 Token.FieldDivision(FieldDivisionType.Quarterly),
 
                 Token.Number(1),
-                new Token(2, tinctures[0]),
+                Token.Tincture(tinctures[0]),
                 Token.Separator(Separator.Semicolon),
 
                 Token.Number(2),
-                new Token(5, tinctures[1]),
+                Token.Tincture(tinctures[1]),
                 Token.Separator(Separator.Semicolon),
 
                 Token.Number(3),
-                new Token(8, tinctures[2]),
+                Token.Tincture(tinctures[2]),
                 Token.Separator(Separator.Semicolon),
 
                 Token.Number(4),
-                new Token(11, tinctures[3])
+                Token.Tincture(tinctures[3])
             };
 
             // feed the parser
@@ -171,27 +171,27 @@ namespace HeraldryTest
             tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
 
             // quaterly division qhich consists of four colours
-            TinctureDefinition[] tinctures = {
-                new TinctureDefinition(TinctureType.Colour, "AZURE"),
-                new TinctureDefinition(TinctureType.Colour, "OR"),
-                new TinctureDefinition(TinctureType.Colour, "GULES"),
-                new TinctureDefinition(TinctureType.Colour, "SABLE"),
+            Tincture[] tinctures = {
+                new Tincture(TinctureType.Colour, "AZURE"),
+                new Tincture(TinctureType.Colour, "OR"),
+                new Tincture(TinctureType.Colour, "GULES"),
+                new Tincture(TinctureType.Colour, "SABLE"),
             };
 
             tokens.Add(Token.Number(4));
-            tokens.Add(new Token(2, tinctures[0]));
+            tokens.Add(Token.Tincture(tinctures[0]));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             tokens.Add(Token.Number(2));
-            tokens.Add(new Token(5, tinctures[1]));
+            tokens.Add(Token.Tincture(tinctures[1]));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             tokens.Add(Token.Number(1));
-            tokens.Add(new Token(8, tinctures[2]));
+            tokens.Add(Token.Tincture(tinctures[2]));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             tokens.Add(Token.Number(3));
-            tokens.Add(new Token(11, tinctures[3]));
+            tokens.Add(Token.Tincture(tinctures[3]));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             // feed the parser
@@ -230,9 +230,9 @@ namespace HeraldryTest
 
             // quaterly division qhich consists of two colours:
             // 4 and 3 and 2 colour; 1 colour
-            TinctureDefinition[] tinctures = {
-                new TinctureDefinition(TinctureType.Colour, "AZURE"),
-                new TinctureDefinition(TinctureType.Colour, "OR"),
+            Tincture[] tinctures = {
+                new Tincture(TinctureType.Colour, "AZURE"),
+                new Tincture(TinctureType.Colour, "OR"),
                 null, null
             };
             tinctures[3] = tinctures[2] = tinctures[0];
@@ -242,11 +242,11 @@ namespace HeraldryTest
             tokens.Add(Token.Number(3));
             tokens.Add(Token.Keyword(KeyWord.And));
             tokens.Add(Token.Number(2));
-            tokens.Add(new Token(6, tinctures[0]));
+            tokens.Add(Token.Tincture(tinctures[0]));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             tokens.Add(Token.Number(1));
-            tokens.Add(new Token(9, tinctures[1]));
+            tokens.Add(Token.Tincture(tinctures[1]));
             //tokens.Add(new Token{Position = 10, Definition = KeyWord.Semicolon});
 
             // feed the parser
@@ -286,14 +286,14 @@ namespace HeraldryTest
             // quaterly division qhich consists of two colours:
             // 4 and 3 and 2 colour; 1 quaterly 4 and 3 and 2 colour; 1 colour
             // note that the nested division is in the 1st field
-            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
-            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
+            Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
             tokens.Add(Token.Number(4));
             tokens.Add(Token.Keyword(KeyWord.And));
             tokens.Add(Token.Number(3));
             tokens.Add(Token.Keyword(KeyWord.And));
             tokens.Add(Token.Number(2));
-            tokens.Add(new Token(6, tincture1));
+            tokens.Add(Token.Tincture(tincture1));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             tokens.Add(Token.Number(1));
@@ -303,11 +303,11 @@ namespace HeraldryTest
             tokens.Add(Token.Number(3));
             tokens.Add(Token.Keyword(KeyWord.And));
             tokens.Add(Token.Number(2));
-            tokens.Add(new Token(15, tincture1));
+            tokens.Add(Token.Tincture(tincture1));
             tokens.Add(Token.Separator(Separator.Semicolon));
 
             tokens.Add(Token.Number(1));
-            tokens.Add(new Token(18, tincture2));
+            tokens.Add(Token.Tincture(tincture2));
             //tokens.Add(new Token{Position = 19, Definition = KeyWord.Semicolon});
             //tokens.Add(new Token{Position = 20, Definition = KeyWord.Semicolon});
 
@@ -352,13 +352,13 @@ namespace HeraldryTest
             List<Token> tokens = new List<Token>();
 
             // paly of three azure and or
-            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
-            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
+            Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
             tokens.Add(Token.FieldVariation(FieldVariationType.PalyOf));
             tokens.Add(Token.Number(4));
-            tokens.Add(new Token(2, tincture1));
+            tokens.Add(Token.Tincture(tincture1));
             tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(new Token(4, tincture2));
+            tokens.Add(Token.Tincture(tincture2));
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -376,8 +376,8 @@ namespace HeraldryTest
             Assert.AreEqual(FieldVariationType.PalyOf, variatedBackground.Type);
             Assert.AreEqual(4, variatedBackground.Number);
             Assert.AreEqual(2, variatedBackground.Tinctures.Length);
-            Assert.AreEqual(tincture1.Tincture, variatedBackground.Tinctures[0]);
-            Assert.AreEqual(tincture2.Tincture, variatedBackground.Tinctures[1]);
+            Assert.AreEqual(tincture1, variatedBackground.Tinctures[0]);
+            Assert.AreEqual(tincture2, variatedBackground.Tinctures[1]);
         }
 
 
@@ -417,14 +417,14 @@ namespace HeraldryTest
         {
             List<Token> tokens = new List<Token>();
 
-            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
-            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
+            Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
 
             // create token list
             // blazon: azure honourable bend or
-            tokens.Add(new Token(0, tincture1));
+            tokens.Add(Token.Tincture(tincture1));
             tokens.Add(Token.Ordinary(Ordinary.Bend, OrdinarySize.Honourable));
-            tokens.Add(new Token(30, tincture2));
+            tokens.Add(Token.Tincture(tincture2));
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -434,7 +434,7 @@ namespace HeraldryTest
             CheckBlazonInstanceContent(blazon);
             ContentField content = blazon.CoatOfArms.Content as ContentField;
             CheckFillingColour(tincture1.TinctureType, tincture1.Value, content.Background);
-            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, BlazonMock.SolidFilling(tincture2.Tincture));
+            CheckOrdinaryCharge(content, Ordinary.Bend, OrdinarySize.Honourable, BlazonMock.SolidFilling(tincture2));
         }
 
         /// <summary>
@@ -537,8 +537,8 @@ namespace HeraldryTest
             List<Token> tokens = new List<Token>();
 
             Tincture[] tinctures ={
-                new Tincture {TinctureType = TinctureType.Colour, Value = "AZURE" },
-                new Tincture {TinctureType =  TinctureType.Colour, Value = "OR" },
+                new Tincture(TinctureType.Colour, "AZURE"),
+                new Tincture(TinctureType.Colour, "OR" ),
             };
 
             // create token list
@@ -572,8 +572,8 @@ namespace HeraldryTest
         {
             Assert.IsTrue(ppType.IsPartyPerDivision());
 
-            TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
-            TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "OR");
+            Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
+            Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
 
             // create token list
             List<Token> tokens = new List<Token>();
@@ -582,19 +582,19 @@ namespace HeraldryTest
             // first field will be variated: paly of three azure and or
             tokens.Add(Token.FieldVariation(FieldVariationType.PalyOf));
             tokens.Add(Token.Number(3));
-            tokens.Add(new Token(3, tincture1));
+            tokens.Add(Token.Tincture(tincture1));
             tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(new Token(5, tincture2));
+            tokens.Add(Token.Tincture(tincture2));
 
             tokens.Add(Token.Keyword(KeyWord.And));
 
             // second field will be quarterly divided
-            TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "GULES");
-            TinctureDefinition tincture4 = new TinctureDefinition(TinctureType.Colour, "SABLE");
+            Tincture tincture3 = new Tincture(TinctureType.Colour, "GULES");
+            Tincture tincture4 = new Tincture(TinctureType.Colour, "SABLE");
             tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-            tokens.Add(new Token(8, tincture3));
+            tokens.Add(Token.Tincture(tincture3));
             tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(new Token(10, tincture4));
+            tokens.Add(Token.Tincture(tincture4));
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -613,8 +613,8 @@ namespace HeraldryTest
             Assert.AreEqual(FieldVariationType.PalyOf, variatedBackground.Type);
             Assert.AreEqual(3, variatedBackground.Number);
             Assert.AreEqual(2, variatedBackground.Tinctures.Length);
-            Assert.AreEqual(tincture1.Tincture, variatedBackground.Tinctures[0]);
-            Assert.AreEqual(tincture2.Tincture, variatedBackground.Tinctures[1]);
+            Assert.AreEqual(tincture1, variatedBackground.Tinctures[0]);
+            Assert.AreEqual(tincture2, variatedBackground.Tinctures[1]);
 
             // quarterly divided field
             DividedField f2 = coa.Subfields[1] as DividedField;

@@ -20,17 +20,14 @@ namespace HeraldryTest.SyntacticAnalysis
     {
         public Token Tincture(TinctureType type, string text)
         {
-            return Tincture(new Tincture { TinctureType = type, Value = text });
+            return Tincture(new Tincture(type, text));
         }
 
         public Token Tincture(Tincture tincture)
         {
             return new Token
             {
-                Definition = new TinctureDefinition
-                {
-                    Tincture = tincture,
-                },
+                Definition = new TinctureDefinition(tincture)
             };
         }
 

@@ -22,9 +22,8 @@ namespace Heraldry.Blazon.Elements
             set => customColors[1] = value;
         }
 
-        public FurTincture(string pattern, params string[] implicitColors)
+        public FurTincture(string pattern, params string[] implicitColors) : base(TinctureType.Fur, null)
         {
-            this.TinctureType = TinctureType.Fur;
             if (implicitColors.Length != 2)
             {
                 throw new ArgumentException("Implicit color count != 2");

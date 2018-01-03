@@ -17,11 +17,19 @@ namespace Heraldry.SyntacticAnalysis
     public class SyntacticAnalyzer : ParseStep<List<Token>, BlazonInstance>
     {
         public override BlazonInstance Execute(List<Token> tokens)
-        {   
+        {
             RootCompiler root = new RootCompiler(tokens);
+            try
+            {
+                return root.Compile();
+            }
+            catch (ExpectedTokenNotFoundException ex)
+            {
+                throw new UnexpectedTokenException(ex);
+                throw;
+            }
 
-            return root.Compile();
         }
-        
+
     }
 }

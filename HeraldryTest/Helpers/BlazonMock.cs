@@ -31,7 +31,7 @@ namespace HeraldryTest.Helpers
 
         public static Filling SolidFilling(String color, TinctureType tinctureType)
         {
-            return SolidFilling(new Tincture { TinctureType = tinctureType, Value = color });
+            return SolidFilling(new Tincture(tinctureType, color));
         }
         public static Filling SolidFilling(Tincture tincture)
         {

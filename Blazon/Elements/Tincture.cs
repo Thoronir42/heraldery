@@ -11,6 +11,12 @@ namespace Heraldry.Blazon.Elements
         public string Value { get; set; }
         public TinctureType TinctureType { get; set; }
 
+        public Tincture(TinctureType type, string value)
+        {
+            this.TinctureType = type;
+            this.Value = value;
+        }
+
         public override bool Equals(object obj)
         {
             var tincture = obj as Tincture;

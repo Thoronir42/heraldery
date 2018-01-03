@@ -52,7 +52,7 @@ namespace HeraldryTest.LexicalAnalysis
                 new Token
                 {
                     Position = 22,
-                    Definition = new TinctureDefinition { Tincture = new Tincture { TinctureType = TinctureType.Colour, Value = "black" } }
+                    Definition = new TinctureDefinition(new Tincture (TinctureType.Colour, "black"))
                 }
             };
 

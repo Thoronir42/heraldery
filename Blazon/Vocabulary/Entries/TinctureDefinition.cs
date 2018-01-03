@@ -26,9 +26,9 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// <summary>
         /// Default constructor, does nothing.
         /// </summary>
-        public TinctureDefinition()
+        public TinctureDefinition(Tincture tincture)
         {
-            this.Tincture = new Tincture();
+            this.Tincture = tincture;
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// </summary>
         /// <param name="tinctureType">Type of the tincture</param>
         /// <param name="tinctureValue">Tincture text.</param>
-        public TinctureDefinition(TinctureType tinctureType, String tinctureValue)
+        public TinctureDefinition(TinctureType tinctureType, String tinctureValue) : this(new Tincture(tinctureType, tinctureValue))
         {
-            this.Tincture = new Tincture { TinctureType = tinctureType, Value = tinctureValue };
+            
         }
 
         public override DefinitionType GetTokenType()

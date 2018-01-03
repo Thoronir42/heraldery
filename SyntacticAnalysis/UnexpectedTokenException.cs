@@ -21,7 +21,6 @@ namespace Heraldry.SyntacticAnalysis
             get { return token.Definition.Text; }
         }
 
-
         public UnexpectedTokenException(Token token, int iThToken = -1, DefinitionType? expectedType = null, object subtype = null)
             : base(FormatMessage(token, iThToken, expectedType, subtype))
         {
@@ -31,6 +30,15 @@ namespace Heraldry.SyntacticAnalysis
         public UnexpectedTokenException(Token token, string message) : base(message)
         {
             this.token = token;
+        }
+
+        public UnexpectedTokenException(string message) : base(message)
+        {
+        }
+
+        public UnexpectedTokenException(ExpectedTokenNotFoundException ex) : base("", ex)
+        {
+            
         }
 
         private static String FormatMessage(Token token, int iThToken = -1, DefinitionType? expectedType = null, object subtype = null)
