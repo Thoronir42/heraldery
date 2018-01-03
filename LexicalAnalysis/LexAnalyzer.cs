@@ -123,9 +123,10 @@ namespace Heraldry.LexicalAnalysis
         {
             List<Token> tokens = new List<Token>();
             String text = input;
+            int position, length;
 
             Number number;
-            while ((number = BlazonVocabulary.NumberVocabulary.FindInText(text, out int position, out int length)) != null)
+            while ((number = BlazonVocabulary.NumberVocabulary.FindInText(text, out position, out length)) != null)
             {
                 text = text.Remove(position, length)
                            .Insert(position, "".PadLeft(length));

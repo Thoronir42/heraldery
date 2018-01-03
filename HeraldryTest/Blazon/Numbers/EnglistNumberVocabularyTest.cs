@@ -20,10 +20,11 @@ namespace HeraldryTest.Blazon.Numbers
         public void TestNumbers()
         {
             var numVocabulary = new EnglishNumberVocabulary();
+            int index, length;
 
             foreach(var testCase in GetData() )
             {
-                var number = numVocabulary.FindInText((string) testCase[0], out int index, out int length);
+                var number = numVocabulary.FindInText((string) testCase[0], out index, out length);
 
                 Assert.IsNotNull(number);
                 Assert.AreEqual(testCase[1], number.Value);

@@ -14,12 +14,12 @@ namespace Heraldry.Blazon.Elements
         public string Pattern { get; set; }
         public string PrimaryColor
         {
-            get => customColors[0] ?? implicitColors[0];
-            set => customColors[0] = value;
+            get { return customColors[0] ?? implicitColors[0]; }
+            set { customColors[0] = value; }
         }
         public string SecondaryColor {
-            get => customColors[1] ?? implicitColors[1];
-            set => customColors[1] = value;
+            get { return customColors[1] ?? implicitColors[1]; }
+            set { customColors[1] = value; }
         }
 
         public FurTincture(string pattern, params string[] implicitColors) : base(TinctureType.Fur, null)

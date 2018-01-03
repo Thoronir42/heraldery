@@ -127,20 +127,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="resources\en_olde\tinctures.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\en_olde\field_divisions.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resources\en_olde\field_division_variants.csv" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Resource Include="resources\rendering\iconmonstr-shield-1.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(SolutionDir)resources" "$(TargetDir)\resources\" /S /Y
