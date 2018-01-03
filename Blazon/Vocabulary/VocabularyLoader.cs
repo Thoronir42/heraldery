@@ -11,6 +11,9 @@ namespace Heraldry.Blazon.Vocabulary
 {
     public class VocabularyLoader
     {
+        public static readonly char FUR_PATTERN_SEPARATOR = ':',
+            FUR_COLOR_SEPARATOR = ',';
+
         public static BlazonVocabulary LoadFromDirectory(string blazonDirectory, string numbers = null, bool verbose = true)
         {
             var loader = new VocabularyLoader(blazonDirectory)
@@ -75,7 +78,7 @@ namespace Heraldry.Blazon.Vocabulary
                 Console.Write("Loading " + itemsLabel + "...");
             }
             List<T> list = loadFunc(file);
-            if(this.Verbose)
+            if (this.Verbose)
             {
                 Console.WriteLine(" " + list.Count() + " loaded");
             }
@@ -88,11 +91,23 @@ namespace Heraldry.Blazon.Vocabulary
             Func<string[], TinctureDefinition> f = new Func<string[], TinctureDefinition>(parts =>
             {
                 TinctureType type = ParseEnumValue<TinctureType>(parts[1]);
+                Tincture tincture;
+                if (type == TinctureType.Fur)
+                {
+                    String[] valueParts = parts[2].Split(FUR_PATTERN_SEPARATOR);
+                    tincture = new FurTincture(valueParts[0], valueParts[1].Split(FUR_COLOR_SEPARATOR));
+                }
+                else
+                {
+                    tincture = new Tincture { TinctureType = type };
+                }
+
+                tincture.Value = parts[2];
 
                 return new TinctureDefinition()
                 {
                     Text = parts[0],
-                    Tincture = new Tincture { TinctureType = type, Value = parts[2] },
+                    Tincture = tincture,
                 };
             });
 

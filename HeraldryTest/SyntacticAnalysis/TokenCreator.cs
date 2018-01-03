@@ -36,14 +36,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token TinctureFur(string pattern, string primaryColor, string secondaryColor)
         {
-            string text = pattern + FurFilling.PATTERN_SEPARATOR + primaryColor + FurFilling.COLOR_SEPARATOR + secondaryColor;
-            return new Token
-            {
-                Definition = new TinctureDefinition
-                {
-                    Tincture = new Tincture { TinctureType = TinctureType.Fur, Value = text },
-                },
-            };
+            return Tincture(new FurTincture(pattern, primaryColor, secondaryColor));
         }
 
         public Token Number(NumberType type, int value)

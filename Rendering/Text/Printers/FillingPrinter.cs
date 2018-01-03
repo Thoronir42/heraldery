@@ -25,11 +25,6 @@ namespace Heraldry.Rendering.Text.Printers
                 return;
             }
 
-            if(item is FurFilling)
-            {
-                // todo: print furs
-            }
-
             if(item is SemeFilling)
             {
                 SemeFilling semeFilling = item as SemeFilling;

@@ -40,12 +40,12 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
 
             TinctureCompiler tc = new TinctureCompiler(root);
 
-            var t = new FurFilling(tc.Tincture().Value);
+            var t = tc.Tincture() as FurTincture;
 
             Assert.IsNotNull(t);
             Assert.AreEqual("ermine", t.Pattern);
-            Assert.AreEqual("white", t.PrimaryColor.Value);
-            Assert.AreEqual("black", t.SecondaryColor.Value);
+            Assert.AreEqual("white", t.PrimaryColor);
+            Assert.AreEqual("black", t.SecondaryColor);
         }
     }
 }
