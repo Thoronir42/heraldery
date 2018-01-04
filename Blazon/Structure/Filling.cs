@@ -39,6 +39,7 @@ namespace Heraldry.Blazon.Structure
         Solid,
         Pattern,
         NPattern,
-        Seme
+        Seme,
+        Counterchanged,
     }
 }
