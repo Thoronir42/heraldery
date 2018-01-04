@@ -22,7 +22,7 @@ namespace Heraldry.App
             CliSettings settings = new CliSettings(args);
 
             // todo: remove debug settings initialization
-            settings = new CliSettings("-v", "-l", "en_olde", "-r", "Text", ".\\resources\\input\\Dispenser.txt");
+            settings = new CliSettings("-v", "-l", "en_olde", "-r", "Text", ".\\resources\\input\\Czech.txt");
 
             if (settings.Verbose)
             {
