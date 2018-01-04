@@ -8,7 +8,12 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class KeyWordDefinition : Definition
     {
-        public KeyWord KeyWord { get; set; }
+        public KeyWord KeyWord { get; }
+
+        public KeyWordDefinition(KeyWord keyword)
+        {
+            this.KeyWord = keyword;
+        }
 
         public override DefinitionType GetTokenType()
         {

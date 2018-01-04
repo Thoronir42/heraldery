@@ -29,7 +29,6 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
         }
 
         [TestMethod]
-        [Ignore]
         public void SimpleFur()
         {
             RootCompiler root = CreateRoot(

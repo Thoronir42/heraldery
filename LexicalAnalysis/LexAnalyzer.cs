@@ -13,11 +13,14 @@ namespace Heraldry.LexicalAnalysis
 {
     public class LexAnalyzer : ParseStep<string, List<Token>>
     {
+        private DebugPrinter debug;
+
         private BlazonVocabulary BlazonVocabulary { get; }
 
         public LexAnalyzer(BlazonVocabulary blazonVocabulary)
         {
             this.BlazonVocabulary = blazonVocabulary;
+            this.debug = new DebugPrinter();
         }
 
         public override List<Token> Execute(string input)
@@ -25,10 +28,11 @@ namespace Heraldry.LexicalAnalysis
             List<Token> tokens = new List<Token>();
 
             input = NormalizeInput(input);
-            DebugPrinter.Print("Input text to be scanned:", input);
+            debug.Print("Input text to be scanned:", input);
 
-            var separatos = SepareSeparators(input, out input);
-            tokens.AddRange(separatos);
+
+            var separators = SepareSeparators(input, out input);
+            tokens.AddRange(separators);
 
             var numbers = ParseNumberTokens(input, out input);
             tokens.AddRange(numbers);
@@ -40,12 +44,12 @@ namespace Heraldry.LexicalAnalysis
             tokens.AddRange(charges);
 
 
-            DebugPrinter.PrintSeparator();
-            DebugPrinter.Print("Unprocessed text:\n", input);
+            debug.PrintSeparator();
+            debug.Print("Unprocessed text:\n", input);
 
             tokens = tokens.OrderBy(t => t.Position).ToList();
 
-            DebugPrinter.PrintTokens("Token text:", tokens);
+            debug.PrintTokens("Token text:", tokens);
             
             // tokens are found on space-padded input - align back to original text
             foreach (var token in tokens)
@@ -75,10 +79,10 @@ namespace Heraldry.LexicalAnalysis
             {
                 case DefinitionType.Tincture:
                     TinctureDefinition tdef = (TinctureDefinition)def;
-                    return new Token() { Definition = def, Position = index };
+                    return new Token(index, def);
             }
 
-            return new Token() { Definition = def, Position = index };
+            return new Token(index, def);
         }
 
         private List<Token> SepareSeparators(String input, out String output)
@@ -93,8 +97,8 @@ namespace Heraldry.LexicalAnalysis
             while ((match = Regex.Match(text, separatorRegex)).Success)
             {
 
-                var def = new SeparatorDefinition() { Text = match.Value, Separator = StringToSeparator(match.Captures[0].Value) };
-                separators.Add(new Token() { Definition = def, Position = match.Index });
+                var def = new SeparatorDefinition(StringToSeparator(match.Captures[0].Value)) { Text = match.Value };
+                separators.Add(new Token(match.Index, def));
                 text = text.Remove(match.Index, match.Value.Length)
                            .Insert(match.Index, "".PadRight(match.Value.Length));
                 if (++i > 10)
@@ -130,8 +134,8 @@ namespace Heraldry.LexicalAnalysis
                 text = text.Remove(position, length)
                            .Insert(position, "".PadLeft(length));
 
-                var definition = new NumberDefinition { Number = number, Text = text.Substring(position, length) };
-                var numTok = new Token { Position = position, Definition = definition };
+                var definition = new NumberDefinition(number) { Text = text.Substring(position, length) };
+                var numTok = new Token(position, definition);
                 tokens.Add(numTok);
                 
             }

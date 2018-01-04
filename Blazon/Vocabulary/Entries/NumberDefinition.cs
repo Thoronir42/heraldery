@@ -9,20 +9,15 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class NumberDefinition : Definition
     {
-        public Number Number { get; set; }
-        public int Value {
-            get { return Number.Value; }
-            set { Number.Value = value; }
+        public Number Number { get; }
+
+        public NumberDefinition(Number number)
+        {
+            this.Number = number;
         }
 
-        public NumberDefinition()
+        public NumberDefinition(int value, NumberType type) : this(new Number(value, type))
         {
-            this.Number = new Number();
-        }
-
-        public NumberDefinition(int value, NumberType type = NumberType.Cardinal)
-        {
-            this.Number = new Number { Value = value, Type = type };
         }
 
         public override bool Equals(object obj)

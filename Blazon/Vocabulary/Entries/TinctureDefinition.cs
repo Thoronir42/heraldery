@@ -9,20 +9,8 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class TinctureDefinition : Definition
     {
-        public Tincture Tincture { get; set; }
-
-        [System.Obsolete]
-        public TinctureType TinctureType {
-            get { return Tincture.TinctureType; }
-            set { Tincture.TinctureType = value; }
-        }
-
-        [System.Obsolete]
-        public String Value {
-            get { return Tincture.Value; }
-            set { Tincture.Value = value; }
-        }
-
+        public Tincture Tincture { get; }
+        
         /// <summary>
         /// Default constructor, does nothing.
         /// </summary>

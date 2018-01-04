@@ -147,7 +147,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     NumberDefinition numDef = PopDefinition<NumberDefinition>(DefinitionType.Number, NumberType.Cardinal);
                     filling = new PatternFilling(variationType, VariationFillings())
                     {
-                        Number = numDef.Number
+                        Number = numDef.Number.Value
                     };
                     break;
                 case FillingType.Pattern:
@@ -211,7 +211,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     // quaterly definition can be also defined by sequence of number-coa pairs
                     // or number and number coa
                     currentToken = PopTokenAs(DefinitionType.Number);
-                    int num = ((NumberDefinition)currentToken.Definition).Value;
+                    int num = ((NumberDefinition)currentToken.Definition).Number.Value;
 
                     Dictionary<int, Field> subfields = new Dictionary<int, Field>();
 
@@ -269,7 +269,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             List<int> numbers = new List<int>();
             Token currentToken = PopTokenAs(DefinitionType.Number);
 
-            numbers.Add(((NumberDefinition)currentToken.Definition).Value);
+            numbers.Add(((NumberDefinition)currentToken.Definition).Number.Value);
 
             // after the number token, either AND or something else is expected.
             currentToken = PeekToken();

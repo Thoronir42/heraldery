@@ -108,7 +108,6 @@ namespace Heraldry.Blazon.Vocabulary
                 return new TinctureDefinition(tincture)
                 {
                     Text = parts[0],
-                    Tincture = tincture,
                 };
             });
 
@@ -119,10 +118,9 @@ namespace Heraldry.Blazon.Vocabulary
         {
             Func<string[], FieldDivisionDefinition> f = new Func<string[], FieldDivisionDefinition>(parts =>
             {
-                return new FieldDivisionDefinition()
+                return new FieldDivisionDefinition(ParseEnumValue<FieldDivisionType>(parts[1]))
                 {
                     Text = parts[0],
-                    Type = ParseEnumValue<FieldDivisionType>(parts[1])
                 };
             });
 
@@ -133,10 +131,9 @@ namespace Heraldry.Blazon.Vocabulary
         {
             Func<string[], FieldDivisionLineDefinition> f = new Func<string[], FieldDivisionLineDefinition>(parts =>
             {
-                return new FieldDivisionLineDefinition()
+                return new FieldDivisionLineDefinition(ParseEnumValue<FieldDivisionLine>(parts[1]))
                 {
                     Text = parts[0],
-                    Line = ParseEnumValue<FieldDivisionLine>(parts[1])
                 };
             });
 
@@ -148,10 +145,9 @@ namespace Heraldry.Blazon.Vocabulary
         {
             Func<string[], FieldVariationDefinition> f = new Func<string[], FieldVariationDefinition>(parts =>
             {
-                return new FieldVariationDefinition()
+                return new FieldVariationDefinition(ParseEnumValue<FieldVariationType>(parts[1]))
                 {
                     Text = parts[0],
-                    VariationType = ParseEnumValue<FieldVariationType>(parts[1]),
                 };
             });
 
@@ -175,7 +171,7 @@ namespace Heraldry.Blazon.Vocabulary
                         break;
                 }
 
-                return new PositionDefinition() { Text = parts[0], Type = type, Position = position };
+                return new PositionDefinition(position, type) { Text = parts[0]};
             });
 
             return ParseCsvFile(filename, f);
@@ -186,7 +182,7 @@ namespace Heraldry.Blazon.Vocabulary
             Func<string[], KeyWordDefinition> f = new Func<string[], KeyWordDefinition>(parts =>
             {
                 KeyWord word = ParseEnumValue<KeyWord>(parts[1]);
-                return new KeyWordDefinition() { Text = parts[0], KeyWord = word };
+                return new KeyWordDefinition(word) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);
@@ -199,10 +195,9 @@ namespace Heraldry.Blazon.Vocabulary
                 NumberType type = ParseEnumValue<NumberType>(parts[1]);
                 int value = int.Parse(parts[2]);
 
-                return new NumberDefinition
+                return new NumberDefinition(new Number(value, type))
                 {
                     Text = parts[0],
-                    Number = new Number { Type = type, Value = value }
                 };
             });
 
@@ -216,7 +211,7 @@ namespace Heraldry.Blazon.Vocabulary
                 Ordinary type = ParseEnumValue<Ordinary>(parts[1]);
                 OrdinarySize size = ParseEnumValue<OrdinarySize>(parts[2]);
 
-                return new OrdinaryDefinition() { Text = parts[0], Type = type, Size = size };
+                return new OrdinaryDefinition(type, size) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);
@@ -228,7 +223,7 @@ namespace Heraldry.Blazon.Vocabulary
             {
                 Subordinary type = ParseEnumValue<Subordinary>(parts[1]);
 
-                return new SubordinaryDefinition() { Text = parts[0], Type = type };
+                return new SubordinaryDefinition(type) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);
@@ -266,7 +261,7 @@ namespace Heraldry.Blazon.Vocabulary
             {
                 ShapeType type = ParseEnumValue<ShapeType>(parts[1]);
 
-                return new ShapeTypeDefinition() { Text = parts[0], ShapeType = type };
+                return new ShapeTypeDefinition(type) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);

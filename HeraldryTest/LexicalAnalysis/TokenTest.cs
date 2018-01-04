@@ -12,17 +12,9 @@ namespace HeraldryTest.LexicalAnalysis
         [TestMethod]
         public void TestTokenEquals()
         {
-            var a = new Token()
-            {
-                Definition = new TinctureDefinition(new Tincture(TinctureType.Colour, "periwinkle")),
-                Position = 0,
-            };
+            var a = new Token(0, new TinctureDefinition(new Tincture(TinctureType.Colour, "periwinkle")));
 
-            var b = new Token()
-            {
-                Definition = new TinctureDefinition(new Tincture(TinctureType.Colour, "periwinkle")),
-                Position = 0,
-            };
+            var b = new Token(0, new TinctureDefinition(new Tincture(TinctureType.Colour, "periwinkle")));
 
             Assert.AreEqual(a, b);
         }

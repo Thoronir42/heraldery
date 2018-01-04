@@ -9,8 +9,14 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class OrdinaryDefinition : Definition
     {
-        public Ordinary Type { get; set; }
-        public OrdinarySize Size { get; set; } = OrdinarySize.Honourable;
+        public Ordinary Type { get; }
+        public OrdinarySize Size { get; }
+
+        public OrdinaryDefinition(Ordinary type, OrdinarySize size = OrdinarySize.Honourable)
+        {
+            this.Type = type;
+            this.Size = size;
+        }
 
         public override DefinitionType GetTokenType()
         {

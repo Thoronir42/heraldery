@@ -34,10 +34,8 @@ namespace Heraldry.Blazon.Vocabulary.Numbers
             length = match.Groups[0].Length;
             bool isOrdinal = match.Groups[1].Length != 0;
 
-            return new Number {
-                Value = int.Parse(match.Groups[1].Value),
-                Type = isOrdinal ? NumberType.Ordinal : NumberType.Cardinal,
-            };
+            int value = int.Parse(match.Groups[1].Value);
+            return new Number(value, isOrdinal ? NumberType.Ordinal : NumberType.Cardinal);
         }
     }
 }

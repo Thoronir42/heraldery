@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Heraldry.LexicalAnalysis
 {
-    internal static class DebugPrinter
+    internal class DebugPrinter
     {
-        static internal void Print(string label, string text)
+        internal void Print(string label, string text)
         {
             Console.WriteLine(label + "\n" + text);
         }
-        static internal void PrintSeparator()
+        internal void PrintSeparator()
         {
             Console.WriteLine("".PadRight(12, '-'));
         }
 
-        static internal void PrintTokens(string label, List<Token> tokens)
+        internal void PrintTokens(string label, List<Token> tokens)
         {
             Console.WriteLine(label);
             ConsoleColor originalFront = Console.ForegroundColor;

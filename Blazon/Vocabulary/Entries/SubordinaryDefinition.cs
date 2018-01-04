@@ -9,7 +9,12 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     class SubordinaryDefinition : Definition
     {
-        public Subordinary Type { get; set; }
+        public Subordinary Type { get; }
+
+        public SubordinaryDefinition(Subordinary subordinary)
+        {
+            this.Type = subordinary;
+        }
 
         public override DefinitionType GetTokenType()
         {

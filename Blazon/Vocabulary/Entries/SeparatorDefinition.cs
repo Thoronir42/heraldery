@@ -8,7 +8,12 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class SeparatorDefinition : Definition
     {
-        public Separator Separator { get; set; }
+        public Separator Separator { get; }
+
+        public SeparatorDefinition(Separator separator)
+        {
+            this.Separator = separator;
+        }
 
         public override DefinitionType GetTokenType()
         {

@@ -11,7 +11,7 @@ namespace Heraldry.LexicalAnalysis
 {
     public class Token
     {
-        public Definition Definition { get; set; }
+        public Definition Definition { get; }
         public DefinitionType Type
         {
             get { return Definition.GetTokenType(); }
@@ -21,11 +21,14 @@ namespace Heraldry.LexicalAnalysis
             get { return Definition.GetSubtype(); }
         }
 
-        //public object Value { get; set; } // todo: generify Value type
-
         public int Position { get; set; }
 
-        public Token() { }
+        
+
+        public Token(Definition definition)
+        {
+            Definition = definition;
+        }
 
         /// <summary>
         /// Constructor which takes position and definition as a parameter.
@@ -37,6 +40,11 @@ namespace Heraldry.LexicalAnalysis
         {
             Definition = definition;
             Position = position;
+        }
+
+        public TokenType GetFullType()
+        {
+            return new TokenType(this.Type, this.Subtype);
         }
 
         public override bool Equals(object obj)

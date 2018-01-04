@@ -11,6 +11,7 @@ using Heraldry.Blazon.Charges;
 using HeraldryTest.SyntacticAnalysis;
 using HeraldryTest.Helpers;
 using Heraldry.Blazon.Structure.Fillings;
+using Heraldry.Blazon.Vocabulary.Numbers;
 
 namespace HeraldryTest
 {
@@ -454,12 +455,12 @@ namespace HeraldryTest
             // create token list
             // blazon: azure honourable bend or
             TokenListBuilder tokenBuilder = new TokenListBuilder()
-                .Add(new FieldVariationDefinition { VariationType = FieldVariationType.BarryOf })
-                .Add(new NumberDefinition { Value = variationNumber })
+                .Add(new FieldVariationDefinition(FieldVariationType.BarryOf))
+                .Add(new NumberDefinition(new Number(variationNumber)))
                 .Add(tincture1)
-                .Add(new KeyWordDefinition { KeyWord = KeyWord.And })
+                .Add(new KeyWordDefinition(KeyWord.And))
                 .Add(tincture2)
-                .Add(new OrdinaryDefinition { Type = Ordinary.Bend, Size = OrdinarySize.Honourable })
+                .Add(new OrdinaryDefinition(Ordinary.Bend, OrdinarySize.Honourable))
                 .Add(tincture3);
             tokens = tokenBuilder.Build();
 
@@ -489,15 +490,15 @@ namespace HeraldryTest
             TinctureDefinition tincture1 = new TinctureDefinition(TinctureType.Colour, "AZURE");
             TinctureDefinition tincture2 = new TinctureDefinition(TinctureType.Colour, "GULES");
             TinctureDefinition tincture3 = new TinctureDefinition(TinctureType.Colour, "OR");
-            FieldDivisionDefinition fieldDivisionDefinition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly };
-            OrdinaryDefinition ordinaryDefinition = new OrdinaryDefinition { Type = Ordinary.Bend, Size = OrdinarySize.Honourable };
+            FieldDivisionDefinition fieldDivisionDefinition = new FieldDivisionDefinition(FieldDivisionType.Quarterly);
+            OrdinaryDefinition ordinaryDefinition = new OrdinaryDefinition(Ordinary.Bend, OrdinarySize.Honourable);
 
             // create token list
             // blazon: azure honourable bend or
             TokenListBuilder tokenBuilder = new TokenListBuilder()
                 .Add(fieldDivisionDefinition)
                 .Add(tincture1)
-                .Add(new KeyWordDefinition { KeyWord = KeyWord.And })
+                .Add(new KeyWordDefinition(KeyWord.And))
                 .Add(tincture2)
                 .Add(ordinaryDefinition)
                 .Add(tincture3);

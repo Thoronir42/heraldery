@@ -25,37 +25,16 @@ namespace HeraldryTest.LexicalAnalysis
 
             string input = "Quarterly 1st and 4th Sable";
 
-            var tokens = analyzer.Execute(input);
-
             var expectedTokens = new List<Token>
             {
-                new Token
-                {
-                    Position = 0,
-                    Definition = new FieldDivisionDefinition { Type = FieldDivisionType.Quarterly }
-                },
-                new Token
-                {
-                    Position = 10,
-                    Definition = new NumberDefinition (1, NumberType.Ordinal),
-                },
-                new Token
-                {
-                    Position = 14,
-                    Definition = new KeyWordDefinition { KeyWord = KeyWord.And }
-                },
-                new Token
-                {
-                    Position = 18,
-                    Definition = new NumberDefinition (4, NumberType.Ordinal),
-                },
-                new Token
-                {
-                    Position = 22,
-                    Definition = new TinctureDefinition(new Tincture (TinctureType.Colour, "black"))
-                }
+                new Token(0, new FieldDivisionDefinition(FieldDivisionType.Quarterly)),
+                new Token(10, new NumberDefinition (1, NumberType.Ordinal)),
+                new Token(14, new KeyWordDefinition (KeyWord.And)),
+                new Token(18, new NumberDefinition (4, NumberType.Ordinal)),
+                new Token(22, new TinctureDefinition(new Tincture (TinctureType.Colour, "black"))),
             };
 
+            var tokens = analyzer.Execute(input);
             Assert.AreEqual(tokens.Count, expectedTokens.Count);
 
             for (int i = 0; i < tokens.Count; i++)
@@ -73,8 +52,6 @@ namespace HeraldryTest.LexicalAnalysis
         {
             var analyzer = new LexAnalyzer(MockVocabulary.Get());
 
-            var tokens = analyzer.Execute("one 1 first 1st");
-
             var expectedTokens = new List<Token>
             {
                 Token.Number(NumberType.Cardinal, 1),
@@ -82,6 +59,9 @@ namespace HeraldryTest.LexicalAnalysis
                 Token.Number(NumberType.Ordinal, 1),
                 Token.Number(NumberType.Ordinal, 1),
             };
+
+
+            var tokens = analyzer.Execute("one 1 first 1st");
 
             Assert.AreEqual(tokens.Count, expectedTokens.Count);
 

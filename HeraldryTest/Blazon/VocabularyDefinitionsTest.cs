@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
+using Heraldry.Blazon.Elements;
 
 namespace HeraldryTest.Blazon
 {
@@ -11,8 +12,8 @@ namespace HeraldryTest.Blazon
         [TestMethod]
         public void FieldDivisionDefinitionEquals()
         {
-            var a = new FieldDivisionDefinition { Type = Heraldry.Blazon.Elements.FieldDivisionType.PerSaltire };
-            var b = new FieldDivisionDefinition { Type = Heraldry.Blazon.Elements.FieldDivisionType.PerSaltire };
+            var a = new FieldDivisionDefinition(FieldDivisionType.PerSaltire);
+            var b = new FieldDivisionDefinition(FieldDivisionType.PerSaltire);
 
             Assert.AreEqual<Definition>(a, b);
         }

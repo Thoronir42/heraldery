@@ -9,8 +9,14 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     class PositionDefinition : Definition
     {
-        public PositionType Type { get; set; }
-        public Position Position { get; set; }
+        public PositionType Type { get; }
+        public Position Position { get; }
+
+        public PositionDefinition(Position position, PositionType type)
+        {
+            this.Position = position;
+            this.Type = type;
+        }
 
         public override DefinitionType GetTokenType()
         {

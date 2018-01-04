@@ -9,7 +9,12 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 {
     public class FieldDivisionDefinition : Definition
     {
-        public FieldDivisionType Type { get; set; }
+        public FieldDivisionType Type { get; }
+
+        public FieldDivisionDefinition(FieldDivisionType type)
+        {
+            this.Type = type;
+        }
 
         public override DefinitionType GetTokenType()
         {

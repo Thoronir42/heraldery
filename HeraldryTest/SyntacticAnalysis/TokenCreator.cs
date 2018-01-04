@@ -25,10 +25,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token Tincture(Tincture tincture)
         {
-            return new Token
-            {
-                Definition = new TinctureDefinition(tincture)
-            };
+            return new Token(new TinctureDefinition(tincture));
         }
 
         public Token TinctureFur(string pattern, string primaryColor, string secondaryColor)
@@ -38,7 +35,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token Number(NumberType type, int value)
         {
-            return new Token { Definition = new NumberDefinition(value, type) };
+            return new Token(new NumberDefinition(value, type));
         }
 
         public Token Number(int value)
@@ -48,28 +45,28 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token FieldDivision(FieldDivisionType type)
         {
-            return new Token { Definition = new FieldDivisionDefinition { Type = type } };
+            return new Token(new FieldDivisionDefinition(type));
         }
 
         public Token FieldVariation(FieldVariationType type)
         {
-            return new Token { Definition = new FieldVariationDefinition { VariationType = type } };
+            return new Token(new FieldVariationDefinition(type));
         }
 
         public Token Ordinary(Ordinary type, OrdinarySize size)
         {
-            return new Token { Definition = new OrdinaryDefinition { Type = type, Size = size } };
+            return new Token(new OrdinaryDefinition(type, size));
         }
 
 
         public Token Keyword(KeyWord keyword)
         {
-            return new Token { Definition = new KeyWordDefinition { KeyWord = KeyWord.And } };
+            return new Token(new KeyWordDefinition(KeyWord.And));
         }
 
         public Token Separator(Separator separator)
         {
-            return new Token { Definition = new SeparatorDefinition { Separator = separator } };
+            return new Token(new SeparatorDefinition(separator));
         }
 
     }

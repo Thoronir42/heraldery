@@ -37,10 +37,9 @@ namespace Heraldry.Blazon.Vocabulary.Numbers
 
             // todo: enhance ordinal suffix matching
 
-            return new Number {
-                Value = int.Parse(match.Groups[1].Value),
-                Type = isOrdinal ? NumberType.Ordinal : NumberType.Cardinal,
-            };
+            int value = int.Parse(match.Groups[1].Value);
+
+            return new Number(value, isOrdinal ? NumberType.Ordinal : NumberType.Cardinal);
         }
 
         private string OrdinalSuffix(int n)

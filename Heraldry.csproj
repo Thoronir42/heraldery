@@ -121,7 +121,7 @@
     <Compile Include="Rendering\CrestRenderer.cs" />
     <Compile Include="Rendering\Svg\SvgLoader.cs" />
     <Compile Include="SyntacticAnalysis\SyntacticAnalyzer.cs" />
-    <Compile Include="SyntacticAnalysis\TokenType.cs" />
+    <Compile Include="LexicalAnalysis\TokenType.cs" />
     <Compile Include="SyntacticAnalysis\UnexpectedTokenException.cs" />
   </ItemGroup>
   <ItemGroup>

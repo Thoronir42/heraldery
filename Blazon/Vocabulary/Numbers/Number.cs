@@ -8,17 +8,23 @@ namespace Heraldry.Blazon.Vocabulary.Numbers
 {
     public class Number
     {
-        public static implicit operator Number(int n)
+        public static explicit operator Number(int n)
         {
-            return new Number { Value = n };
+            return new Number(n);
         }
-        public static implicit operator int(Number n)
+        public static explicit operator int(Number n)
         {
             return n.Value;
         }
 
-        public NumberType Type { get; set; } = NumberType.Cardinal;
-        public int Value { get; set; }
+        public NumberType Type { get; }
+        public int Value { get; }
+
+        public Number(int value, NumberType type = NumberType.Cardinal)
+        {
+            this.Value = value;
+            this.Type = type;
+        }
 
         public override bool Equals(object obj)
         {
