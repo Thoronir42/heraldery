@@ -15,9 +15,8 @@ namespace Heraldry.Blazon.Charges
 
         public string ImplicitFilling { get; set; }
 
-        public ShapeCharge()
-        {
-            this.Type = ChargeType.SimpleShape;
+        public ShapeCharge() : base (ChargeType.SimpleShape)
+        {   
         }
 
         public override bool Equals(object obj)

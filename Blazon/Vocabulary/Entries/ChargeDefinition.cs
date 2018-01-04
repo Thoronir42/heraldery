@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class ChargeDefinition : Definition
+    class ChargeDefinition<TCharge> : Definition where TCharge : Charge
     {
-        public Charge Charge { get; set; }
+        public TCharge Charge { get; }
+
+        public ChargeDefinition(TCharge charge)
+        {
+            this.Charge = charge;
+        }
 
         public override DefinitionType GetTokenType()
         {
@@ -18,7 +23,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
 
         public override object GetSubtype()
         {
-            if(Charge == null)
+            if (Charge == null)
             {
                 return ChargeType.Generic;
             }

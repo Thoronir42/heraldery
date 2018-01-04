@@ -50,6 +50,9 @@
   <ItemGroup>
     <Compile Include="App\ParseProcess.cs" />
     <Compile Include="App\ParseStep.cs" />
+    <Compile Include="Blazon\Charges\GenericCharge.cs" />
+    <Compile Include="Blazon\Charges\InnerFieldCharge.cs" />
+    <Compile Include="Blazon\Charges\SubordinaryCharge.cs" />
     <Compile Include="Blazon\Charges\Cross.cs" />
     <Compile Include="Blazon\Charges\OrdinaryCharge.cs" />
     <Compile Include="Blazon\Charges\ShapeCharge.cs" />
@@ -69,6 +72,7 @@
     <Compile Include="Blazon\Elements\EscutcheonShape.cs" />
     <Compile Include="Blazon\Elements\FieldDivisionType.cs" />
     <Compile Include="Blazon\Structure\Field.cs" />
+    <Compile Include="Blazon\Structure\Fillings\CounterchangedFilling.cs" />
     <Compile Include="Blazon\Structure\Fillings\PatternFilling.cs" />
     <Compile Include="Blazon\Structure\Fillings\SemeFilling.cs" />
     <Compile Include="Blazon\Structure\Fillings\SolidFilling.cs" />

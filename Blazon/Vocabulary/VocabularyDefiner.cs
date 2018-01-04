@@ -60,11 +60,21 @@ namespace Heraldry.Blazon.Vocabulary
             return FormatDefinition(def);
         }
 
-        public String Charge(Charge charge)
+        public String Shape(Shape shape)
         {
-            
+            var def = FindDefinition(vocabulary.ShapeCharges, (d) =>
+            {
+                ShapeCharge defCharge = d.Charge as ShapeCharge;
+                return defCharge != null && defCharge.Shape == shape && defCharge.ImplicitFilling == null;
+            });
 
-            return String.Format("[charge {0}]", charge.Value);
+            return FormatDefinition(def, "[shape " + shape.ToString() + " ]");
+        }
+
+        public String ShapeType(ShapeType type)
+        {
+            var def = FindDefinition(vocabulary.ShapeTypes, d => d.ShapeType == type);
+            return FormatDefinition(def, "[shape type " + type.ToString() + "]");
         }
 
         public String Number(int value, NumberType type)
@@ -88,11 +98,11 @@ namespace Heraldry.Blazon.Vocabulary
             return null;
         }
 
-        private string FormatDefinition (Definition definition, string fallback = null)
+        private string FormatDefinition(Definition definition, string fallback = null)
         {
-            if(definition == null)
+            if (definition == null)
             {
-                if(fallback != null)
+                if (fallback != null)
                 {
                     return fallback;
                 }

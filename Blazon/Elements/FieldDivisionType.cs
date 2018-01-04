@@ -37,8 +37,6 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Split into N beams </summary>
         GyronyOfN
 
-        // todo: Todd, add more divisions
-
     }
 
     /// <summary>

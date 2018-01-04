@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Heraldry.Blazon.Charges
 {
-    public class OrdinaryCharge : Charge
+    public class OrdinaryCharge : InnerFieldCharge
     {
         /// <summary>
         /// Particular ordinary type.
@@ -26,23 +26,8 @@ namespace Heraldry.Blazon.Charges
         /// </summary>
         public OrdinarySize OrdinarySize { get; set; }
 
-        /// <summary>
-        /// Filling of the ordinary.
-        /// </summary>
-        public new Filling Filling
-        {
-            get { return Field.Background; }
-            set { Field.Background = value; }
-        }
-
-        /// <summary>
-        /// Ordinary can act as a field, holding more charges in it.
-        /// </summary>
-        public ContentField Field { get; set; } = new ContentField();
-
-        public OrdinaryCharge()
-        {
-            this.Type = ChargeType.Ordinary;
+        public OrdinaryCharge() : base(ChargeType.Ordinary)
+        {   
         }
 
         public override bool Equals(object obj)

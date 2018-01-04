@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
+using Heraldry.Blazon.Charges;
 
 namespace Heraldry.Blazon.Vocabulary
 {
@@ -21,8 +22,9 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<NumberDefinition> Numbers { get; set; }
         internal List<OrdinaryDefinition> Ordinaries { get; set; }
         internal List<SubordinaryDefinition> Subordinaries { get; set; }
-        internal List<ChargeDefinition> ShapeCharges { get; set; }
         internal List<ShapeTypeDefinition> ShapeTypes { get; set; }
+
+        internal List<ChargeDefinition<ShapeCharge>> ShapeCharges { get; set; }
 
         internal NumberVocabulary NumberVocabulary { get; set; }
 

@@ -10,9 +10,8 @@ namespace Heraldry.Blazon.Charges
     {
         public CrossType CrossType { get; set; }
 
-        public Cross()
-        {
-            this.Type = ChargeType.Cross;
+        public Cross() : base(ChargeType.Cross)
+        {   
         }
 
         public override bool Equals(object obj)

@@ -1,5 +1,6 @@
 ﻿using Heraldry.App;
 using Heraldry.Blazon;
+using Heraldry.Blazon.Charges;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
@@ -178,7 +179,7 @@ namespace Heraldry.LexicalAnalysis
                 var chargeText = match.Captures[0].Value;
 
                 input = input.Remove(match.Index, match.Length).Insert(match.Index, "".PadRight(match.Length, ' '));
-                tokens.Add(CreateToken(new ChargeDefinition() { Text = chargeText }, match.Index));
+                tokens.Add(CreateToken(new ChargeDefinition<GenericCharge>(new GenericCharge(chargeText)) { Text = chargeText }, match.Index));
             }
 
             output = input;

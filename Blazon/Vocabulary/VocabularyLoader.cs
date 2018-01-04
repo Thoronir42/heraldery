@@ -171,7 +171,7 @@ namespace Heraldry.Blazon.Vocabulary
                         break;
                 }
 
-                return new PositionDefinition(position, type) { Text = parts[0]};
+                return new PositionDefinition(position, type) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);
@@ -229,9 +229,9 @@ namespace Heraldry.Blazon.Vocabulary
             return ParseCsvFile(filename, f);
         }
 
-        private static List<ChargeDefinition> LoadShapeCharges(string filename)
+        private static List<ChargeDefinition<ShapeCharge>> LoadShapeCharges(string filename)
         {
-            Func<string[], ChargeDefinition> f = new Func<string[], ChargeDefinition>(parts =>
+            Func<string[], ChargeDefinition<ShapeCharge>> f = new Func<string[], ChargeDefinition<ShapeCharge>>(parts =>
             {
                 ShapeCharge charge = new ShapeCharge();
 
@@ -249,7 +249,7 @@ namespace Heraldry.Blazon.Vocabulary
                     charge.ImplicitFilling = parts[2];
                 }
 
-                return new ChargeDefinition() { Text = parts[0], Charge = charge };
+                return new ChargeDefinition<ShapeCharge>(charge) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);
