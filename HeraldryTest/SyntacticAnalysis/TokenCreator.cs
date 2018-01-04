@@ -30,7 +30,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token TinctureFur(string pattern, string primaryColor, string secondaryColor)
         {
-            return Tincture(new FurTincture(pattern, primaryColor, secondaryColor));
+            return Tincture(new FurTincture(pattern, new Tincture(TinctureType.Html, primaryColor), new Tincture(TinctureType.Html, secondaryColor)));
         }
 
         public Token Number(NumberType type, int value)

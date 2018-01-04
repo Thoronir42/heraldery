@@ -50,8 +50,16 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns>Parsed fur.</returns>
         protected Tincture Fur(TinctureDefinition definition)
         {
-            return definition.Tincture;
-            
+            FurTincture tincture = definition.Tincture as FurTincture;
+
+            var nextToken = PeekToken();
+            if(nextToken.Type == DefinitionType.Tincture)
+            {
+                tincture.PrimaryColor = NonFurTincture();
+                PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+                tincture.SecondaryColor = NonFurTincture();
+            }
+
             // FurFilling filling = new FurFilling(definition.Value);
 
             /* custom color furs are not supported yet
@@ -66,19 +74,22 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
             filling.SecondaryColor = NonFurTincture();
             */
+
+            return tincture;
         }
 
-        protected TinctureDefinition NonFurTincture()
+        protected Tincture NonFurTincture()
         {
             var tDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
             var tincture = tDef.Tincture;
 
             if (tincture.TinctureType == TinctureType.Fur)
             {
-                throw new UnexpectedTokenException("Non-fur tincture definition is expected.");
+                TokenType[] expectedTypes = TokenType.Subtypes(DefinitionType.Tincture, TinctureType.Colour, TinctureType.Metal);
+                throw new ExpectedTokenNotFoundException("Non-fur tincture definition is expected.");
             }
 
-            return tDef;
+            return tincture;
         }
     }
 }

@@ -77,11 +77,18 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns>True if the token contains charge definition.</returns>
         protected bool IsTokenCharge(Token token)
         {
-            return token != null &&
-                token.Definition != null && (
-                    token.Definition.GetType() == typeof(ChargeDefinition) ||
-                    token.Definition.GetType() == typeof(OrdinaryDefinition)
-                );
+            if(token == null)
+            {
+                return false;
+            }
+            switch(token.Type)
+            {
+                case DefinitionType.Charge:
+                case DefinitionType.Ordinary:
+                    return true;
+            }
+
+            return false;
         }
     }
 }

@@ -5,6 +5,9 @@ using Heraldry.SyntacticAnalysis.Compilers;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using Heraldry.Blazon.Structure.Fillings;
+using Heraldry.SyntacticAnalysis;
+using Heraldry.Blazon.Vocabulary;
+using HeraldryTest.Helpers;
 
 namespace HeraldryTest.SyntacticAnalysis.Compilers
 {
@@ -43,8 +46,43 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
 
             Assert.IsNotNull(t);
             Assert.AreEqual("ermine", t.Pattern);
-            Assert.AreEqual("white", t.PrimaryColor);
-            Assert.AreEqual("black", t.SecondaryColor);
+            Assert.AreEqual("white", t.PrimaryColor.Value);
+            Assert.AreEqual("black", t.SecondaryColor.Value);
+        }
+
+        [TestMethod]
+        public void CustomTinctureFur()
+        {
+            var root = CreateRoot(
+                Token.TinctureFur("ermine", "foo", "bar"),
+                Token.Tincture(TinctureType.Colour, "pink"),
+                Token.Keyword(KeyWord.And),
+                Token.Tincture(TinctureType.Colour, "black")
+                );
+
+            TinctureCompiler tc = new TinctureCompiler(root);
+
+            var tincture = tc.Tincture() as FurTincture;
+
+            Assert.IsNotNull(tincture);
+
+            Assert.AreEqual("ermine", tincture.Pattern);
+            Assert.AreEqual(new Tincture(TinctureType.Colour, "pink"), tincture.PrimaryColor);
+            Assert.AreEqual(new Tincture(TinctureType.Colour, "black"), tincture.SecondaryColor);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ExpectedTokenNotFoundException))]
+        public void CustomTinctureFurException()
+        {
+            var root = CreateRoot(
+                Token.TinctureFur("ermine", "foo", "bar"),
+                Token.Tincture(TinctureType.Colour, "pink")
+                );
+
+            TinctureCompiler tc = new TinctureCompiler(root);
+
+            tc.Tincture();
         }
     }
 }
