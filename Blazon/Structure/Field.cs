@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Heraldry.Blazon.Structure.Augmentations;
 
 namespace Heraldry.Blazon.Structure
 {
     public abstract class Field
     {
         // add more possibilities to augment field with
-        public Charge Overall { get; set; }
+        public List<Augmentation> Augmentations { get; } = new List<Augmentation>();
     }
 }

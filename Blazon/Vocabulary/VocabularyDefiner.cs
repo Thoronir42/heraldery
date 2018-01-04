@@ -83,8 +83,6 @@ namespace Heraldry.Blazon.Vocabulary
         }
 
 
-
-
         private DefinitionT FindDefinition<DefinitionT>(List<DefinitionT> list, Func<DefinitionT, bool> equalityCheck) where DefinitionT : Definition
         {
             foreach (var def in list)
