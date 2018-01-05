@@ -19,7 +19,7 @@ namespace Heraldry.Blazon.Structure
             switch(variationType)
             {
                 case FieldVariationType.Fretty:
-                case FieldVariationType.Fusilly:
+                case FieldVariationType.Fusily:
                 case FieldVariationType.Lozengy:
                     return FillingType.Pattern;
 

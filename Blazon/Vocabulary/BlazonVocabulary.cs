@@ -24,7 +24,7 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<SubordinaryDefinition> Subordinaries { get; set; }
         internal List<ShapeTypeDefinition> ShapeTypes { get; set; }
 
-        internal List<ChargeDefinition<ShapeCharge>> ShapeCharges { get; set; }
+        internal List<ChargeDefinition> ShapeCharges { get; set; }
 
         internal NumberVocabulary NumberVocabulary { get; set; }
 

@@ -27,7 +27,18 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns>Principal charge.</returns>
         public Charge PrincipalCharge()
         {
-            return Ordinary();
+            var nextToken = PeekToken();
+            switch (nextToken.Type)
+            {
+                case DefinitionType.Ordinary:
+                    return Ordinary();
+                case DefinitionType.Charge:
+                    var def = PopDefinition<ChargeDefinition>(DefinitionType.Charge);
+
+                    return def.Charge;
+            }
+
+            throw new ExpectedTokenNotFoundException(new TokenType(DefinitionType.Charge), new TokenType(DefinitionType.Ordinary));
         }
 
         /// <summary>
@@ -44,7 +55,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
             OrdinaryDefinition def = currentToken.Definition as OrdinaryDefinition;
 
-            OrdinaryCharge charge = new OrdinaryCharge { OrdinaryType = def.Type, Filling = ordinaryFilling, OrdinarySize = def.Size};
+            OrdinaryCharge charge = new OrdinaryCharge { OrdinaryType = def.Type, Filling = ordinaryFilling, OrdinarySize = def.Size };
             return charge;
         }
     }

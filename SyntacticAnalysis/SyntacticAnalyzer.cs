@@ -25,8 +25,13 @@ namespace Heraldry.SyntacticAnalysis
             }
             catch (ExpectedTokenNotFoundException ex)
             {
-                throw new UnexpectedTokenException(ex);
-                throw;
+                Token currentToken = root.PeekToken();
+                string expectedTokenTypes = String.Join(", ", ex.ExpectedTypes.Select(token => token.ToString()).ToArray());
+
+                string message = String.Format("Token {0} was not one of the expected tokens [{1}]",
+                    currentToken.GetFullType().ToString(), expectedTokenTypes);
+
+                throw new UnexpectedTokenException(currentToken, message, ex);
             }
 
         }

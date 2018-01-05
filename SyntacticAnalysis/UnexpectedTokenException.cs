@@ -21,44 +21,29 @@ namespace Heraldry.SyntacticAnalysis
             get { return token.Definition.Text; }
         }
 
-        public UnexpectedTokenException(Token token, int iThToken = -1, DefinitionType? expectedType = null, object subtype = null)
-            : base(FormatMessage(token, iThToken, expectedType, subtype))
+        public UnexpectedTokenException(Token token, string message, Exception ex = null) : base(message, ex)
         {
             this.token = token;
         }
 
-        public UnexpectedTokenException(Token token, string message) : base(message)
+        public UnexpectedTokenException(Token token, TokenType expectedType, int iThToken = -1)
+            : this(token, FormatMessage(token, expectedType, iThToken))
         {
-            this.token = token;
+
         }
 
-        public UnexpectedTokenException(string message) : base(message)
+        private static String FormatMessage(Token token, TokenType expectedType, int iThToken = -1)
         {
-        }
-
-        public UnexpectedTokenException(ExpectedTokenNotFoundException ex) : base("", ex)
-        {
-            
-        }
-
-        private static String FormatMessage(Token token, int iThToken = -1, DefinitionType? expectedType = null, object subtype = null)
-        {
-            String iStr = iThToken != -1 ? iThToken + ": " : "";
-            String typeError = "";
-
-            bool subtypeMismatch = (subtype != null && token.Subtype != subtype);
-            if(expectedType != token.Type || subtypeMismatch)
+            if (token == null)
             {
-                String expectedTypeStr = "" + expectedType;
-                String actualTypeStr = "" + token.Type;
-                if(subtypeMismatch)
-                {
-                    expectedTypeStr += "-" + subtype;
-                    actualTypeStr += "-" + token.Subtype;
-                    typeError = " of type " + actualTypeStr+ ". Expecting type " + expectedTypeStr;
-                }
+                return String.Format("Token of type {0} was expected but no tokens found.",
+                    expectedType.ToString());
             }
-            return String.Format("Unexpected token {0}\"{1}\"{2} at char position {3}", iStr, token.Definition.Text, typeError, token.Position);
+
+            String iStr = iThToken != -1 ? " at position " + iThToken + " " : "";
+
+            return String.Format("Token of type {0}{1} did not met by expected token type of {2}",
+                    token.GetFullType().ToString(), iStr, expectedType.ToString());
         }
     }
 }

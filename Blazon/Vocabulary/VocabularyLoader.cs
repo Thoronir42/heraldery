@@ -95,10 +95,10 @@ namespace Heraldry.Blazon.Vocabulary
                 if (type == TinctureType.Fur)
                 {
                     String[] valueParts = parts[2].Split(FUR_PATTERN_SEPARATOR);
-                    
+
                     Tincture[] tinctures = valueParts[1].Split(FUR_COLOR_SEPARATOR)
                         .Select(s => new Tincture(TinctureType.Html, s)).ToArray();
-                    
+
                     tincture = new FurTincture(valueParts[0], tinctures)
                     {
                         Value = parts[2]
@@ -233,9 +233,9 @@ namespace Heraldry.Blazon.Vocabulary
             return ParseCsvFile(filename, f);
         }
 
-        private static List<ChargeDefinition<ShapeCharge>> LoadShapeCharges(string filename)
+        private static List<ChargeDefinition> LoadShapeCharges(string filename)
         {
-            Func<string[], ChargeDefinition<ShapeCharge>> f = new Func<string[], ChargeDefinition<ShapeCharge>>(parts =>
+            Func<string[], ChargeDefinition> f = new Func<string[], ChargeDefinition>(parts =>
             {
                 ShapeCharge charge = new ShapeCharge();
 
@@ -253,7 +253,7 @@ namespace Heraldry.Blazon.Vocabulary
                     charge.ImplicitFilling = parts[2];
                 }
 
-                return new ChargeDefinition<ShapeCharge>(charge) { Text = parts[0] };
+                return new ChargeDefinition(charge) { Text = parts[0] };
             });
 
             return ParseCsvFile(filename, f);

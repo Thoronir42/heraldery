@@ -23,7 +23,7 @@ namespace Heraldry.Blazon.Elements
         /// <summary> Rotated checky. </summary>
         Lozengy,
         /// <summary> Horizontally stretched Lozengy. </summary>
-        Fusilly,
+        Fusily,
         /// <summary> Crossed lines. </summary>
         Fretty,
 

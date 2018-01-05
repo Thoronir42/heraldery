@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class ChargeDefinition<TCharge> : Definition<ChargeType> where TCharge : Charge
+    class ChargeDefinition : Definition<ChargeType>
     {
-        public TCharge Charge { get; }
+        public Charge Charge { get; }
 
-        public ChargeDefinition(TCharge charge) : base(DefinitionType.Charge, charge.Type)
+        public ChargeDefinition(Charge charge) : base(DefinitionType.Charge, charge.Type)
         {
             this.Charge = charge;
         }

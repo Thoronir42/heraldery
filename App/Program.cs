@@ -53,7 +53,6 @@ namespace Heraldry.App
             {
                 var result = new ParseProcess<string>(input)
                 .Then(new LexAnalyzer(vocabulary), "Lexical analysis")
-                .Pause()
                 .Then(new SyntacticAnalyzer(), "Syntactic analysis")
                 .Then(renderer, "Rendering").Value;
 
@@ -68,7 +67,14 @@ namespace Heraldry.App
             }
             catch (UnexpectedTokenException ex)
             {
-                Console.Error.WriteLine("Unexpected token: " + ex.TokenText + " at position " + ex.TokenPosition);
+                Console.Error.WriteLine(ex.Message);
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write(input.Substring(0, ex.TokenPosition));
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(input.Substring(ex.TokenPosition, ex.TokenText.Length));
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(input.Substring(ex.TokenPosition + ex.TokenText.Length));
             }
 
 

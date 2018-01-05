@@ -43,6 +43,7 @@ namespace Heraldry.LexicalAnalysis
             switch(type)
             {
                 case DefinitionType.Ordinary:
+                    return ConsoleColor.DarkGreen;
                 case DefinitionType.Charge:
                     return ConsoleColor.Green;
 

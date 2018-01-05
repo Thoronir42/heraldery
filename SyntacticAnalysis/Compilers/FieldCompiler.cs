@@ -71,9 +71,9 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         protected DividedField PpDivision()
         {
             Field field1 = Field();
-            Token currentToken = PopToken();
 
-            EnsureTokenIs(currentToken, DefinitionType.KeyWord, KeyWord.And);
+            PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+
             Field field2 = Field();
 
             DividedField ppDividedField = new PartyPerDividedField(field1, field2);
@@ -235,8 +235,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     else
                     {
                         // 'and' is expected with more numbers following
-                        EnsureTokenIs(currentToken, DefinitionType.KeyWord, KeyWord.And);
-                        PopToken();
+                        PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
                         List<int> nums = Nums();
                         nums.Add(num);
                         Field subField = Field();

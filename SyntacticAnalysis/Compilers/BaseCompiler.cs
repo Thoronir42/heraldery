@@ -27,10 +27,14 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
         protected Token PopTokenAs(DefinitionType type, object subtype = null)
         {
-            Token token = PopToken();
-            EnsureTokenIs(token, type, subtype);
+            Token token = PeekToken();
+            if (!TokenIs(token, type, subtype))
+            {
+                throw new ExpectedTokenNotFoundException(type, subtype);
+            }
 
-            return token;
+
+            return PopToken();
         }
 
         protected TDefinition PopDefinition<TDefinition>(DefinitionType type, object subtype = null) where TDefinition : class, IDefinition
@@ -44,22 +48,6 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         protected Token PeekToken(int offset = 0)
         {
             return root.PeekToken(offset);
-        }
-
-
-        /// <summary>
-        /// Checks type of the token and thrown exception if it's wrong.
-        /// 
-        /// </summary>
-        /// <param name="token">Token to be checked.</param>
-        /// <param name="expectedType">Expected token type.</param>
-        /// <param name="expSubtype">If specified, also matches token subtype</param>
-        protected void EnsureTokenIs(Token token, DefinitionType expectedType, object expSubtype = null)
-        {
-            if (!TokenIs(token, expectedType, expSubtype))
-            {
-                throw new ExpectedTokenNotFoundException(expectedType, expSubtype);
-            }
         }
 
         /// <summary>
