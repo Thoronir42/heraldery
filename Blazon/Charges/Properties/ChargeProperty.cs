@@ -19,6 +19,10 @@ namespace Heraldry.Blazon.Charges.Properties
     public enum PropertyType
     {
         Tail,
-        Crown,
+        Feature,
+        Attitude,
+        AttitudeDirection,
+        TailStyle,
+        Value,
     }
 }

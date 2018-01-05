@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon.Structure;
+﻿using Heraldry.Blazon.Charges.Properties;
+using Heraldry.Blazon.Structure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace Heraldry.Blazon.Charges
     {
         public ChargeType Type { get; }
         public virtual Filling Filling { get; set; }
+
+        public List<ChargeProperty> Properties { get; set; } = new List<ChargeProperty>();
 
         protected Charge(ChargeType type)
         {
@@ -25,5 +28,9 @@ namespace Heraldry.Blazon.Charges
         Ordinary,
         Subordinary,
         Cross,
+
+        Beast,
+        Bird,
+
     }
 }

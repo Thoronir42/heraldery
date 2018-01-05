@@ -50,6 +50,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return root.PeekToken(offset);
         }
 
+        protected bool NextTokenIs(DefinitionType type, object subtype = null)
+        {
+            return TokenIs(PeekToken(), type, subtype);
+        }
+
         /// <summary>
         /// Checks whether token type matches expected type and if provided, if tokens subtype matches expected subtype
         /// </summary>

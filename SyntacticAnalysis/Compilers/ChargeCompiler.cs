@@ -1,9 +1,11 @@
 ﻿using Heraldry.Blazon.Charges;
+using Heraldry.Blazon.Charges.Properties;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Entries.ChargeProperties;
 using Heraldry.LexicalAnalysis;
 using Heraldry.SyntacticAnalysis.Attributes;
 using System;
@@ -29,6 +31,59 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         [SyntacticRule]
         public Charge PrincipalCharge()
         {
+            Charge charge = Charge();
+
+            var nextToken = PeekToken();
+            if(TokenIs(nextToken, DefinitionType.ChargeProperty))
+            {
+                charge.Properties.AddRange(Properties());
+            }
+
+            return charge;
+        }
+
+        [SyntacticRule]
+        public List<ChargeProperty> Properties()
+        {
+            List<ChargeProperty> list = new List<ChargeProperty>();
+
+            var token = PopTokenAs(DefinitionType.ChargeProperty);
+            var def = token.Definition as ChargePropertyDefinition;
+            do
+            {
+                switch (def.TokenSubtype)
+                {
+                    case PropertyType.Tail:
+                        var styleDef = PopDefinition<TailStylePropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.TailStyle);
+                        list.Add(new TailStyleProperty(styleDef.Style));
+                        break;
+                    case PropertyType.Attitude:
+                        var attitudeDef = def as AttitudePropertyDefinition;
+                        var direction = AttitudeDirection.Forward;
+                        if(NextTokenIs(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection))
+                        {
+                            var attDirDef = PopDefinition<AttitudeDirectionPropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection);
+                            direction = attDirDef.Direction;
+                        }
+                        list.Add(new AttitudeProperty(attitudeDef.Attitude, direction, attitudeDef.ExclusiveTo));
+                        break;
+                    case PropertyType.Feature:
+                        var featureDef = def as FeaturePropertyDefinition;
+                        list.Add(new FeatureProperty(featureDef.Feature, new SolidFilling(Compilers.Tincture.Tincture())));
+                        break;
+                    default:
+                        throw new UnexpectedTokenException(token, "Unexpected property of type " + def.TokenSubtype.ToString());
+                }
+
+                
+            } while (NextTokenIs(DefinitionType.ChargeProperty));
+            
+
+            return list;
+        }
+
+        private Charge Charge()
+        {
             var nextToken = PeekToken();
             switch (nextToken.Type)
             {
@@ -49,7 +104,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// 
         /// </summary>
         /// <returns>Ordinary charge.</returns>
-        protected Charge Ordinary()
+        private Charge Ordinary()
         {
             Token currentToken = PopTokenAs(DefinitionType.Ordinary);
 

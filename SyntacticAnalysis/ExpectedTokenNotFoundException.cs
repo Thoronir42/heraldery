@@ -13,7 +13,7 @@ namespace Heraldry.SyntacticAnalysis
         public TokenType[] ExpectedTypes { get; }
 
         public ExpectedTokenNotFoundException(DefinitionType expectedType, object expectedSubtype, string message = null)
-            : this(message, new TokenType(expectedType, expectedType))
+            : this(message, new TokenType(expectedType, expectedSubtype))
         {
 
         }

@@ -26,6 +26,9 @@ namespace Heraldry.Blazon.Vocabulary
 
         internal List<ChargeDefinition> ShapeCharges { get; set; }
 
+        internal List<ChargePropertyDefinition> ChargeProperties { get; set; }
+
+
         internal NumberVocabulary NumberVocabulary { get; set; }
 
         internal BlazonVocabulary()
@@ -48,6 +51,7 @@ namespace Heraldry.Blazon.Vocabulary
             list.AddRange(this.Subordinaries);
             list.AddRange(this.ShapeCharges);
             list.AddRange(this.ShapeTypes);
+            list.AddRange(this.ChargeProperties);
 
             if (sortByLength)
             {

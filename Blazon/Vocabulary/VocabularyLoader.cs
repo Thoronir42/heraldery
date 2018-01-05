@@ -1,6 +1,8 @@
 ﻿using Heraldry.Blazon.Charges;
+using Heraldry.Blazon.Charges.Properties;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Entries.ChargeProperties;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,8 @@ namespace Heraldry.Blazon.Vocabulary
 {
     public class VocabularyLoader
     {
+        private static readonly char VALUE_SEPARATOR = ';';
+
         public static readonly char FUR_PATTERN_SEPARATOR = ':',
             FUR_COLOR_SEPARATOR = ',';
 
@@ -53,6 +57,7 @@ namespace Heraldry.Blazon.Vocabulary
                 Subordinaries = LoadList(BlazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
                 ShapeCharges = LoadList(BlazonDirectory + "shapes.csv", "Shape charges", LoadShapeCharges),
                 ShapeTypes = LoadList(BlazonDirectory + "shape_types.csv", "Shape types", LoadShapeTypes),
+                ChargeProperties = LoadChargeProperties(BlazonDirectory),
 
                 NumberVocabulary = CreateNumberVocabulary(Numbers),
             };
@@ -75,15 +80,19 @@ namespace Heraldry.Blazon.Vocabulary
         {
             if (this.Verbose)
             {
-                Console.Write("Loading " + itemsLabel + "...");
+                Console.Write(String.Format("Loading {0,-30}", itemsLabel + " ..."));
             }
             List<T> list = loadFunc(file);
             if (this.Verbose)
             {
-                Console.WriteLine(" " + list.Count() + " loaded");
+                Console.WriteLine(String.Format(" {0,2} loaded", list.Count()));
             }
 
             return list;
+        }
+        private List<T> LoadCsvList<T>(string file, string itemsLabel, Func<string[], T> parseFunction)
+        {
+            return LoadList(file, itemsLabel, filename => ParseCsvFile(filename, parseFunction));
         }
 
         private static List<TinctureDefinition> LoadTinctures(string filename)
@@ -271,13 +280,67 @@ namespace Heraldry.Blazon.Vocabulary
             return ParseCsvFile(filename, f);
         }
 
+        private List<ChargePropertyDefinition> LoadChargeProperties(string blazondirectory)
+        {
+            List<ChargePropertyDefinition> properties = new List<ChargePropertyDefinition>();
+
+            properties.AddRange(LoadCsvList(BlazonDirectory + "charge_properties.csv", "Charge properties",
+                parts =>
+                {
+                    ChargePropertyDefinition propDef;
+                    PropertyType type = ParseEnumValue<PropertyType>(parts[1]);
+                    switch (type)
+                    {
+                        case PropertyType.Tail:
+                            propDef = new ChargePropertyDefinition(PropertyType.Tail);
+                            break;
+                        case PropertyType.TailStyle:
+                            propDef = new TailStylePropertyDefinition(ParseEnumValue<TailStyle>(parts[2]));
+                            break;
+                        default:
+                            return null;
+                    }
+                    propDef.Text = parts[0];
+                    return propDef;
+                }));
+
+            properties.AddRange(LoadCsvList(BlazonDirectory + "charge_prop_attitude.csv", "Charge attitudes",
+                parts =>
+                {
+                    ChargeType[] exclusiveTo = null;
+                    if (parts.Length > 2)
+                    {
+                        exclusiveTo = parts[2].Split(',')
+                        .Select(s => ParseEnumValue<ChargeType>(s))
+                        .ToArray();
+                    }
+                    return new AttitudePropertyDefinition(ParseEnumValue<Attitude>(parts[1]), exclusiveTo) { Text = parts[0] };
+                }));
+
+
+            properties.AddRange(LoadCsvList(BlazonDirectory + "charge_prop_attitude_direction.csv", "Charge attitude directions",
+                parts =>
+            {
+                return new AttitudeDirectionPropertyDefinition(ParseEnumValue<AttitudeDirection>(parts[1])){ Text = parts[0] };
+            }));
+
+            properties.AddRange(LoadCsvList(blazondirectory + "charge_prop_features.csv", "Charge features",
+                parts =>
+                {
+                    ChargeFeature feature = ParseEnumValue<ChargeFeature>(parts[1]);
+                    return new FeaturePropertyDefinition(feature) { Text = parts[0] };
+                }));
+
+            return properties;
+        }
+
 
         private static List<T> ParseCsvFile<T>(string filename, Func<string[], T> parseLineFunction)
         {
             int lineNumber = 0;
 
             return File.ReadLines(filename)
-                .Select(line => { return line.Split(';'); })
+                .Select(line => { return line.Split(VALUE_SEPARATOR); })
                 .Select(parts =>
                 {
                     lineNumber++;
