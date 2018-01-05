@@ -6,6 +6,7 @@ using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.Blazon.Vocabulary.Numbers;
 using Heraldry.LexicalAnalysis;
+using Heraldry.SyntacticAnalysis.Attributes;
 using Heraldry.SyntacticAnalysis.Formulas;
 using Heraldry.SyntacticAnalysis.Formulas.FieldDivisions;
 using System;
@@ -29,6 +30,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed.</param>
         /// <returns>Divided field.</returns>
+        [SyntacticRule]
         public DividedField Division()
         {
             Token currentToken = PopToken();
@@ -86,6 +88,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// </summary>
         /// <param name="tokens">List of tokens to be parsed using recursive descent.</param>
         /// <returns>One field.</returns>
+        [SyntacticRule]
         public Field Field()
         {
             Token currentToken = PeekToken();

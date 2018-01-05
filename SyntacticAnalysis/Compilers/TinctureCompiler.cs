@@ -4,6 +4,7 @@ using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
 using Heraldry.LexicalAnalysis;
+using Heraldry.SyntacticAnalysis.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// 
         /// </summary>
         /// <returns>Parsed filling - tincture or fur.</returns>
+        [SyntacticRule]
         public Tincture Tincture()
         {
             TinctureDefinition tinctureDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
