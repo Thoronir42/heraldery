@@ -7,25 +7,18 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public class OrdinaryDefinition : Definition
+    public class OrdinaryDefinition : Definition<object>
     {
         public Ordinary Type { get; }
         public OrdinarySize Size { get; }
 
+        public override object TokenSubtype { get { return Type; } }
+
         public OrdinaryDefinition(Ordinary type, OrdinarySize size = OrdinarySize.Honourable)
+            : base(DefinitionType.Ordinary, null)
         {
             this.Type = type;
             this.Size = size;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.Ordinary;
-        }
-
-        public override object GetSubtype()
-        {
-            return base.GetSubtype();
         }
 
         public override bool Equals(object obj)

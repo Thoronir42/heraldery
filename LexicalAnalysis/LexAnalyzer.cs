@@ -74,9 +74,9 @@ namespace Heraldry.LexicalAnalysis
             return " " + input + " ";
         }
 
-        private Token CreateToken(Definition def, int index)
+        private Token CreateToken(IDefinition def, int index)
         {
-            switch (def.GetTokenType())
+            switch (def.TokenType)
             {
                 case DefinitionType.Tincture:
                     TinctureDefinition tdef = (TinctureDefinition)def;
@@ -132,13 +132,12 @@ namespace Heraldry.LexicalAnalysis
             Number number;
             while ((number = BlazonVocabulary.NumberVocabulary.FindInText(text, out int position, out int length)) != null)
             {
-                text = text.Remove(position, length)
-                           .Insert(position, "".PadLeft(length));
-
                 var definition = new NumberDefinition(number) { Text = text.Substring(position, length) };
                 var numTok = new Token(position, definition);
                 tokens.Add(numTok);
-                
+
+                text = text.Remove(position, length)
+                           .Insert(position, "".PadLeft(length));
             }
 
             output = text;
@@ -148,7 +147,7 @@ namespace Heraldry.LexicalAnalysis
 
         private List<Token> FindDefinedTokens(String input, out String output)
         {
-            List<Definition> definitions = BlazonVocabulary.GetAllDefinitions(true);
+            var definitions = BlazonVocabulary.GetAllDefinitions(true);
             List<Token> tokens = new List<Token>();
 
             foreach (var def in definitions)

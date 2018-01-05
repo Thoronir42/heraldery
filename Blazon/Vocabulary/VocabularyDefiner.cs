@@ -18,18 +18,18 @@ namespace Heraldry.Blazon.Vocabulary
         {
             this.vocabulary = vocabulary;
         }
-
+        
         public String Tincture(Tincture tincture)
         {
             return Tincture(tincture.Value, tincture.TinctureType);
         }
-
+        
         public String Tincture(string value, TinctureType type)
         {
             var definition = FindDefinition(vocabulary.Tinctures, (d) => d.Tincture.Value == value && d.Tincture.TinctureType == type);
             return FormatDefinition(definition);
         }
-
+        
         public String FieldDivision(FieldDivisionType divisionType)
         {
             var definition = FindDefinition(vocabulary.FieldDivisions, (d) => d.Type == divisionType);
@@ -83,7 +83,7 @@ namespace Heraldry.Blazon.Vocabulary
         }
 
 
-        private DefinitionT FindDefinition<DefinitionT>(List<DefinitionT> list, Func<DefinitionT, bool> equalityCheck) where DefinitionT : Definition
+        private TDefinition FindDefinition<TDefinition>(List<TDefinition> list, Func<TDefinition, bool> equalityCheck) where TDefinition : IDefinition
         {
             foreach (var def in list)
             {
@@ -93,10 +93,10 @@ namespace Heraldry.Blazon.Vocabulary
                 }
             }
 
-            return null;
+            return default(TDefinition);
         }
 
-        private string FormatDefinition(Definition definition, string fallback = null)
+        private string FormatDefinition(IDefinition definition, string fallback = null)
         {
             if (definition == null)
             {

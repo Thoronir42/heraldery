@@ -7,20 +7,16 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class PositionDefinition : Definition
+    class PositionDefinition : Definition<PositionType>
     {
         public PositionType Type { get; }
         public Position Position { get; }
 
         public PositionDefinition(Position position, PositionType type)
+            : base(DefinitionType.Position, type)
         {
             this.Position = position;
             this.Type = type;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.Position;
         }
 
         public override bool Equals(object obj)

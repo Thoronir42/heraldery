@@ -33,9 +33,9 @@ namespace Heraldry.Blazon.Vocabulary
 
         }
 
-        public List<Definition> GetAllDefinitions(Boolean sortByLength = false)
+        public List<IDefinition> GetAllDefinitions(Boolean sortByLength = false)
         {
-            var list = new List<Definition>();
+            var list = new List<IDefinition>();
 
             list.AddRange(this.Tinctures);
             list.AddRange(this.FieldDivisions);

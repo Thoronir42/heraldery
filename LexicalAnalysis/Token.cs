@@ -11,21 +11,22 @@ namespace Heraldry.LexicalAnalysis
 {
     public class Token
     {
-        public Definition Definition { get; }
+        public IDefinition Definition { get; }
+
         public DefinitionType Type
         {
-            get { return Definition.GetTokenType(); }
+            get { return this.Definition.TokenType; }
         }
         public object Subtype
         {
-            get { return Definition.GetSubtype(); }
+            get { return this.Definition.TokenObjSubtype; }
         }
 
         public int Position { get; set; }
 
         
 
-        public Token(Definition definition)
+        public Token(IDefinition definition)
         {
             Definition = definition;
         }
@@ -36,7 +37,7 @@ namespace Heraldry.LexicalAnalysis
         /// </summary>
         /// <param name="position">Token position.</param>
         /// <param name="definition">Token definition.</param>
-        public Token(int position, Definition definition)
+        public Token(int position, IDefinition definition)
         {
             Definition = definition;
             Position = position;
@@ -51,14 +52,14 @@ namespace Heraldry.LexicalAnalysis
         {
             var token = obj as Token;
             return token != null &&
-                   EqualityComparer<Definition>.Default.Equals(Definition, token.Definition) &&
+                   EqualityComparer<IDefinition>.Default.Equals(Definition, token.Definition) &&
                    Position == token.Position;
         }
 
         public override int GetHashCode()
         {
             var hashCode = 1698227724;
-            hashCode = hashCode * -1521134295 + EqualityComparer<Definition>.Default.GetHashCode(Definition);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IDefinition>.Default.GetHashCode(Definition);
             hashCode = hashCode * -1521134295 + Position.GetHashCode();
             return hashCode;
         }

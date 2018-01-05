@@ -10,23 +10,13 @@ namespace Heraldry.Blazon.Vocabulary.Entries
     /// <summary>
     /// Token with this definition represents variation. 
     /// </summary>
-    public class FieldVariationDefinition : Definition
+    public class FieldVariationDefinition : Definition<FieldVariationType>
     {
         public FieldVariationType VariationType { get; }
 
-        public FieldVariationDefinition(FieldVariationType type)
+        public FieldVariationDefinition(FieldVariationType type) : base(DefinitionType.Variation, type)
         {
             this.VariationType = type;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.Variation;
-        }
-
-        public override object GetSubtype()
-        {
-            return VariationType;
         }
     }
 }

@@ -7,23 +7,13 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public class ShapeTypeDefinition : Definition
+    public class ShapeTypeDefinition : Definition<ShapeType>
     {
         public ShapeType ShapeType { get; }
 
-        public ShapeTypeDefinition(ShapeType type = ShapeType.Solid)
+        public ShapeTypeDefinition(ShapeType type = ShapeType.Solid) : base(DefinitionType.ShapeType, type)
         {
             this.ShapeType = type;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.ShapeType;
-        }
-
-        public override object GetSubtype()
-        {
-            return ShapeType;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return token;
         }
 
-        protected TDefinition PopDefinition<TDefinition>(DefinitionType type, object subtype = null) where TDefinition : Definition
+        protected TDefinition PopDefinition<TDefinition>(DefinitionType type, object subtype = null) where TDefinition : class, IDefinition
         {
             Token token = PopTokenAs(type, subtype);
             TDefinition definition = token.Definition as TDefinition;
@@ -58,7 +58,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             if (!TokenIs(token, expectedType, expSubtype))
             {
-                throw new UnexpectedTokenException(token, root.Position, expectedType, expSubtype);
+                throw new ExpectedTokenNotFoundException(expectedType, expSubtype);
             }
         }
 

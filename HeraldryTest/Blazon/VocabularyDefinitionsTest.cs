@@ -15,7 +15,7 @@ namespace HeraldryTest.Blazon
             var a = new FieldDivisionDefinition(FieldDivisionType.PerSaltire);
             var b = new FieldDivisionDefinition(FieldDivisionType.PerSaltire);
 
-            Assert.AreEqual<Definition>(a, b);
+            Assert.AreEqual<IDefinition>(a, b);
         }
 
         [TestMethod]
@@ -24,7 +24,7 @@ namespace HeraldryTest.Blazon
             var a = new NumberDefinition(37, NumberType.Cardinal);
             var b = new NumberDefinition(37, NumberType.Cardinal);
 
-            Assert.AreEqual<Definition>(a, b);
+            Assert.AreEqual<IDefinition>(a, b);
         }
 
     }

@@ -733,7 +733,7 @@ namespace HeraldryTest
         /// </summary>
         /// <param name="definition">Definition to be added.</param>
         /// <returns>Instance of this builder.</returns>
-        public TokenListBuilder Add(Definition definition)
+        public TokenListBuilder Add(IDefinition definition)
         {
             return Add(new Token(++lastPos, definition));
         }

@@ -6,33 +6,45 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public abstract class Definition
+    public interface IDefinition
+    {
+        DefinitionType TokenType { get; }
+
+        object TokenObjSubtype { get; }
+
+        string Text { get; set; }
+    }
+
+
+    public abstract class Definition<TSubtype> : IDefinition
     {
         public string Text { get; set; }
 
-        abstract public DefinitionType GetTokenType();
+        public DefinitionType TokenType { get; }
+        public virtual TSubtype TokenSubtype { get; }
+        public object TokenObjSubtype { get { return TokenSubtype; } }
 
-        public virtual object GetSubtype()
+        protected Definition(DefinitionType type, TSubtype subtype)
         {
-            return null;
+            TokenType = type;
+            TokenSubtype = subtype;
         }
 
         public override bool Equals(object obj)
         {
-            var definition = obj as Definition;
+            var definition = obj as Definition<TSubtype>;
             return definition != null &&
-                Object.Equals(GetType(), definition.GetType()) &&
-                Object.Equals(GetSubtype(), definition.GetSubtype());
+                Object.Equals(TokenType, definition.TokenType) &&
+                Object.Equals(TokenSubtype, definition.TokenSubtype);
         }
 
         public override int GetHashCode()
         {
             var hashCode = 1265339359;
             hashCode = hashCode * -1521134295 + GetType().GetHashCode();
-            var subtype = GetSubtype();
-            if (subtype != null)
+            if (TokenSubtype != null)
             {
-                hashCode = hashCode * -1521134295 + subtype.GetHashCode();
+                hashCode = hashCode * -1521134295 + TokenType.GetHashCode();
             }
             return hashCode;
         }

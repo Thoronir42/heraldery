@@ -7,28 +7,13 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class ChargeDefinition<TCharge> : Definition where TCharge : Charge
+    class ChargeDefinition<TCharge> : Definition<ChargeType> where TCharge : Charge
     {
         public TCharge Charge { get; }
 
-        public ChargeDefinition(TCharge charge)
+        public ChargeDefinition(TCharge charge) : base(DefinitionType.Charge, charge.Type)
         {
             this.Charge = charge;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.Charge;
-        }
-
-        public override object GetSubtype()
-        {
-            if (Charge == null)
-            {
-                return ChargeType.Generic;
-            }
-
-            return Charge.Type;
         }
     }
 }

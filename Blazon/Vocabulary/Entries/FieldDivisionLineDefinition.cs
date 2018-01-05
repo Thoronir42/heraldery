@@ -7,23 +7,13 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    class FieldDivisionLineDefinition : Definition
+    class FieldDivisionLineDefinition : Definition<FieldDivisionLine>
     {
         public FieldDivisionLine Line { get; }
 
-        public FieldDivisionLineDefinition(FieldDivisionLine line)
+        public FieldDivisionLineDefinition(FieldDivisionLine line) : base(DefinitionType.FieldDivision, line)
         {
             this.Line = line;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.FieldDivisionLine;
-        }
-
-        public override object GetSubtype()
-        {
-            return Line;
         }
     }
 }

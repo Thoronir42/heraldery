@@ -6,23 +6,13 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public class KeyWordDefinition : Definition
+    public class KeyWordDefinition : Definition<KeyWord>
     {
         public KeyWord KeyWord { get; }
 
-        public KeyWordDefinition(KeyWord keyword)
+        public KeyWordDefinition(KeyWord keyword) : base(DefinitionType.KeyWord, keyword)
         {
             this.KeyWord = keyword;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.KeyWord;
-        }
-
-        public override object GetSubtype()
-        {
-            return this.KeyWord;
         }
     }
 }

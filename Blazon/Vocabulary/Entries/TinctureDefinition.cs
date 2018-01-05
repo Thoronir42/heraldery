@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public class TinctureDefinition : Definition
+    public class TinctureDefinition : Definition<TinctureType>
     {
         public Tincture Tincture { get; }
         
@@ -15,6 +15,7 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         /// Default constructor, does nothing.
         /// </summary>
         public TinctureDefinition(Tincture tincture)
+            :base (DefinitionType.Tincture, tincture.TinctureType)
         {
             this.Tincture = tincture;
         }
@@ -27,11 +28,6 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         public TinctureDefinition(TinctureType tinctureType, String tinctureValue) : this(new Tincture(tinctureType, tinctureValue))
         {
             
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.Tincture;
         }
 
         public override bool Equals(object obj)

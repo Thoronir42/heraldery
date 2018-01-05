@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public class NumberDefinition : Definition
+    public class NumberDefinition : Definition<NumberType>
     {
         public Number Number { get; }
 
-        public NumberDefinition(Number number)
+        public NumberDefinition(Number number) : base(DefinitionType.Number, number.Type)
         {
             this.Number = number;
         }
@@ -30,16 +30,6 @@ namespace Heraldry.Blazon.Vocabulary.Entries
         public override int GetHashCode()
         {
             return Number.GetHashCode();
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.Number;
-        }
-
-        public override object GetSubtype()
-        {
-            return Number.Type;
         }
     }
 }

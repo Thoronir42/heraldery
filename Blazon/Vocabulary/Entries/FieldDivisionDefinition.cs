@@ -7,23 +7,14 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Vocabulary.Entries
 {
-    public class FieldDivisionDefinition : Definition
+    public class FieldDivisionDefinition : Definition<FieldDivisionType>
     {
         public FieldDivisionType Type { get; }
 
         public FieldDivisionDefinition(FieldDivisionType type)
+            : base(DefinitionType.FieldDivision, type)
         {
             this.Type = type;
-        }
-
-        public override DefinitionType GetTokenType()
-        {
-            return DefinitionType.FieldDivision;
-        }
-
-        public override object GetSubtype()
-        {
-            return Type;
         }
     }
 }

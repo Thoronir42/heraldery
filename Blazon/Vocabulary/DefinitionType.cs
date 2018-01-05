@@ -24,6 +24,7 @@ namespace Heraldry.Blazon.Vocabulary
         Number,
         Ordinary,
         Subordinary,
+        ChargeProperty,
 
         // todo: TODD! The token types.
         Motto,
