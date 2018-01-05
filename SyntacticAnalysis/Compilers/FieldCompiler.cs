@@ -1,5 +1,6 @@
 ﻿using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Structure.Augmentations;
 using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
@@ -88,15 +89,14 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         public Field Field()
         {
             Token currentToken = PeekToken();
-            if (currentToken.Type == DefinitionType.FieldDivision)
-            {
-                return Division();
-            }
-
-            ContentField field;
+            Field field;
             // todo: support for variation
             switch (currentToken.Type)
             {
+                case DefinitionType.FieldDivision:
+                    field = Division();
+                    break;
+
                 case DefinitionType.Tincture:
                     var tincture = Compilers.Tincture.Tincture();
 
@@ -119,9 +119,17 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             }
 
             Token nextToken = PeekToken();
-            if (IsTokenCharge(nextToken))
+
+            if(field is ContentField && IsTokenCharge(nextToken))
             {
-                field.Charge = Compilers.Charge.PrincipalCharge();
+                (field as ContentField).Charge = Compilers.Charge.PrincipalCharge();
+            }
+
+            if (TokenIs(nextToken, DefinitionType.KeyWord, KeyWord.Overall)) {
+                PopToken();
+                var aug = new FieldAugmentation(Compilers.Charge.PrincipalCharge());
+
+                field.Augmentations.Add(aug);
             }
 
             return field;
@@ -254,6 +262,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     // todo: support more ways of specifying the division
                     return null;
             }
+
         }
 
 

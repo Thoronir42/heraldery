@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Structure.Augmentations
 {
-    class FieldAugmentation : Augmentation
+    public class FieldAugmentation : Augmentation
     {
         public FieldAugType Type { get; }
 

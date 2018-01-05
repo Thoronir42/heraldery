@@ -18,6 +18,8 @@ namespace HeraldryTest.SyntacticAnalysis
     /// </summary>
     public class TokenCreator
     {
+        private int n = 0;
+
         public Token Tincture(TinctureType type, string text)
         {
             return Tincture(new Tincture(type, text));
@@ -25,7 +27,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token Tincture(Tincture tincture)
         {
-            return new Token(new TinctureDefinition(tincture));
+            return new Token(++n, new TinctureDefinition(tincture));
         }
 
         public Token TinctureFur(string pattern, string primaryColor, string secondaryColor)
@@ -35,7 +37,7 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token Number(NumberType type, int value)
         {
-            return new Token(new NumberDefinition(value, type));
+            return new Token(++n, new NumberDefinition(value, type));
         }
 
         public Token Number(int value)
@@ -45,28 +47,28 @@ namespace HeraldryTest.SyntacticAnalysis
 
         public Token FieldDivision(FieldDivisionType type)
         {
-            return new Token(new FieldDivisionDefinition(type));
+            return new Token(++n, new FieldDivisionDefinition(type));
         }
 
         public Token FieldVariation(FieldVariationType type)
         {
-            return new Token(new FieldVariationDefinition(type));
+            return new Token(++n, new FieldVariationDefinition(type));
         }
 
         public Token Ordinary(Ordinary type, OrdinarySize size)
         {
-            return new Token(new OrdinaryDefinition(type, size));
+            return new Token(++n, new OrdinaryDefinition(type, size));
         }
 
 
         public Token Keyword(KeyWord keyword)
         {
-            return new Token(new KeyWordDefinition(KeyWord.And));
+            return new Token(++n, new KeyWordDefinition(keyword));
         }
 
         public Token Separator(Separator separator)
         {
-            return new Token(new SeparatorDefinition(separator));
+            return new Token(++n, new SeparatorDefinition(separator));
         }
 
     }
