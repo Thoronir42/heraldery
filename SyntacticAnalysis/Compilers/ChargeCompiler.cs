@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis.Compilers
 {
-    class ChargeCompiler : BaseCompiler
+    public class ChargeCompiler : BaseCompiler
     {
-        internal ChargeCompiler(RootCompiler root) : base(root)
+        public ChargeCompiler(RootCompiler root) : base(root)
         {
 
         }
@@ -38,69 +38,60 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
             Charge charge = Charge();
 
-            var nextToken = PeekToken();
-            if(TokenIs(nextToken, DefinitionType.ChargeProperty))
+            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Attitude))
             {
-                charge.Properties.AddRange(Properties());
+                charge.Properties.Add(Attitude());
+            }
+
+            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Tail) || NextTokenIs(DefinitionType.ChargeProperty, PropertyType.TailStyle))
+            {
+                charge.Properties.Add(Tail());
+            }
+
+            var filling = charge.Filling = Compilers.Filling.Filling();
+
+            while (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Feature))
+            {
+                var list = PopList(DefinitionType.ChargeProperty, PropertyType.Feature, (FeaturePropertyDefinition def) => def.Feature);
+
+                filling = Compilers.Filling.Filling();
+
+                foreach (var feature in list)
+                {
+                    charge.Properties.Add(new FeatureProperty(feature, filling));
+                }
             }
 
             return charge;
         }
 
         [SyntacticRule]
-        public List<ChargeProperty> Properties()
+        public AttitudeProperty Attitude()
         {
-            List<ChargeProperty> list = new List<ChargeProperty>();
+            var def = PopDefinition<AttitudePropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.Attitude);
 
-            do
+            var direction = AttitudeDirection.Forward;
+
+            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection))
             {
-                if(NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Feature))
-                {
-                    var features = PopList(DefinitionType.ChargeProperty, PropertyType.Feature, (FeaturePropertyDefinition d) => d.Feature);
-                    var filling = Compilers.Filling.Filling();
+                var dirDef = PopDefinition<AttitudeDirectionPropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection);
+                direction = dirDef.Direction;
+            }
 
-                    list.AddRange(features.Select(feature => new FeatureProperty(feature, filling)));
-
-                    continue;
-                }
-                list.Add(Property());
-                
-            } while (NextTokenIs(DefinitionType.ChargeProperty));
-            
-
-            return list;
+            return new AttitudeProperty(def.Attitude, direction, def.ExclusiveTo);
         }
 
         [SyntacticRule]
-        public ChargeProperty Property(PropertyType? expectedType = null)
+        public TailProperty Tail()
         {
-            var token = PopTokenAs(DefinitionType.ChargeProperty);
-            var def = token.Definition as ChargePropertyDefinition;
-
-            if(expectedType.HasValue && def.TokenSubtype != expectedType.Value)
+            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Tail))
             {
-                throw new ExpectedTokenNotFoundException(DefinitionType.ChargeProperty, expectedType.Value);
+                PopToken();
             }
 
-            switch (def.TokenSubtype)
-            {
-                case PropertyType.TailStyle:
-                    var styleDef = def as TailStylePropertyDefinition;
-                    return new TailProperty(styleDef.Style, Compilers.Filling.Filling());
+            var def = PopDefinition<TailStylePropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.TailStyle);
 
-                case PropertyType.Attitude:
-                    var attitudeDef = def as AttitudePropertyDefinition;
-                    var direction = AttitudeDirection.Forward;
-                    if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection))
-                    {
-                        var attDirDef = PopDefinition<AttitudeDirectionPropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection);
-                        direction = attDirDef.Direction;
-                    }
-                    return new AttitudeProperty(attitudeDef.Attitude, direction, attitudeDef.ExclusiveTo);
-
-                default:
-                    throw new UnexpectedTokenException(token, "Unexpected property of type " + def.TokenSubtype.ToString());
-            }
+            return new TailProperty(def.Style);
         }
 
         private Charge Charge()
@@ -109,7 +100,10 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             switch (nextToken.Type)
             {
                 case DefinitionType.Ordinary:
-                    return Ordinary();
+                    var ordDef = PopDefinition<OrdinaryDefinition>(DefinitionType.Ordinary);
+
+                    return new OrdinaryCharge(ordDef.Type, ordDef.Size);
+
                 case DefinitionType.Charge:
                     var def = PopDefinition<ChargeDefinition>(DefinitionType.Charge);
 
@@ -117,24 +111,6 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             }
 
             throw new ExpectedTokenNotFoundException(new TokenType(DefinitionType.Charge), new TokenType(DefinitionType.Ordinary));
-        }
-
-        /// <summary>
-        /// Rule which will parse ordinary charges.
-        /// Ordinates consist of ordinary type and tincture.
-        /// 
-        /// </summary>
-        /// <returns>Ordinary charge.</returns>
-        private Charge Ordinary()
-        {
-            Token currentToken = PopTokenAs(DefinitionType.Ordinary);
-
-            var ordinaryFilling = Compilers.Filling.Filling();
-
-            OrdinaryDefinition def = currentToken.Definition as OrdinaryDefinition;
-
-            OrdinaryCharge charge = new OrdinaryCharge { OrdinaryType = def.Type, Filling = ordinaryFilling, OrdinarySize = def.Size };
-            return charge;
         }
     }
 }

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Charges.Properties
 {
-    class FeatureProperty : ChargeProperty
+    public class FeatureProperty : ChargeProperty
     {
         public ChargeFeature Feature { get; }
-        public Filling Tincture { get; }
+        public Filling Filling { get; set; }
 
-        public FeatureProperty(ChargeFeature feature, Filling filling) : base(PropertyType.Feature)
+        public FeatureProperty(ChargeFeature feature, Filling filling = null) : base(PropertyType.Feature)
         {
             Feature = feature;
-            Tincture = filling;
+            Filling = filling;
         }
     }
 

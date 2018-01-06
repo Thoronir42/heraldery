@@ -21,6 +21,7 @@ namespace Heraldry.Blazon.Structure
                 case FieldVariationType.Fretty:
                 case FieldVariationType.Fusily:
                 case FieldVariationType.Lozengy:
+                case FieldVariationType.Chequy:
                     return FillingType.Pattern;
 
                 case FieldVariationType.BarryOf:

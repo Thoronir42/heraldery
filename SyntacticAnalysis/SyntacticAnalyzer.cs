@@ -39,9 +39,10 @@ namespace Heraldry.SyntacticAnalysis
             {
                 Token currentToken = root.PeekToken();
                 string expectedTokenTypes = String.Join(", ", ex.ExpectedTypes.Select(type => type.ToString()).ToArray());
+                string currentTokenString = currentToken != null ? currentToken.GetFullType().ToString() : "null";
 
                 string message = String.Format("Token {0} was not one of the expected tokens [{1}]",
-                    currentToken.GetFullType().ToString(), expectedTokenTypes);
+                    currentTokenString, expectedTokenTypes);
 
                 throw new UnexpectedTokenException(currentToken, message, ex);
             }

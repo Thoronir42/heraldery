@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Charges.Properties
 {
+    [DebuggerDisplay("Attitude = {Attitude}, {Direction}  (Exclusive to: {ExclusiveToList})")]
     public class AttitudeProperty : ChargeProperty
     {
         public Attitude Attitude { get; }
@@ -47,6 +49,9 @@ namespace Heraldry.Blazon.Charges.Properties
             hashCode = hashCode * -1521134295 + Attitude.GetHashCode();
             return hashCode;
         }
+
+
+        private string ExclusiveToList { get { return String.Join(", ", exclusiveTo.Select(t => t.ToString())); } }
     }
 
     public enum Attitude

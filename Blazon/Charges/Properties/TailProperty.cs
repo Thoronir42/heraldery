@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Charges.Properties
 {
-    class TailProperty : FeatureProperty
+    public class TailProperty : FeatureProperty
     {
         public TailStyle Style { get; }
 
-        public TailProperty(TailStyle style, Filling filling) : base(ChargeFeature.Tail, filling)
+        public TailProperty(TailStyle style, Filling filling = null) : base(ChargeFeature.Tail, filling)
         {
             Style = style;
         }

@@ -7,7 +7,7 @@ using Heraldry.Blazon.Charges.Properties;
 
 namespace Heraldry.Blazon.Vocabulary.Entries.ChargeProperties
 {
-    class FeaturePropertyDefinition : ChargePropertyDefinition
+    public class FeaturePropertyDefinition : ChargePropertyDefinition
     {
         public ChargeFeature Feature { get; }
 

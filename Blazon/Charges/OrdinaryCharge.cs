@@ -26,8 +26,10 @@ namespace Heraldry.Blazon.Charges
         /// </summary>
         public OrdinarySize OrdinarySize { get; set; }
 
-        public OrdinaryCharge() : base(ChargeType.Ordinary)
-        {   
+        public OrdinaryCharge(Ordinary type, OrdinarySize size = OrdinarySize.Honourable) : base(ChargeType.Ordinary)
+        {
+            OrdinaryType = type;
+            OrdinarySize = size;
         }
 
         public override bool Equals(object obj)
