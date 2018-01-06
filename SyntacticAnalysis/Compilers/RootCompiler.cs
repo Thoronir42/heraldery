@@ -41,8 +41,8 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             BlazonInstance bi = new BlazonInstance();
 
-            CoatOfArms coa = Coa();
-            bi.CoatOfArms = coa;
+            bi.CoatOfArms = Coa();
+
             return bi;
         }
 

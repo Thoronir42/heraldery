@@ -80,6 +80,10 @@ namespace Heraldry
                         {
                             this.InputFile = args[i];
                         }
+                        if(n == 1)
+                        {
+                            this.OutputFile = args[i];
+                        }
                         n++;
                         break;
                 }

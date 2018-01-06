@@ -22,7 +22,8 @@ namespace Heraldry.App
             CliSettings settings = new CliSettings(args);
 
             // todo: remove debug settings initialization
-            settings = new CliSettings("-v", "-l", "en_olde", "-r", "Text", ".\\resources\\input\\Czech.txt");
+            settings = new CliSettings("-v", "-l", "en_olde", 
+                "-r", "Text", ".\\resources\\input\\Czech-SimpleSilesia.txt", ".\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt");
 
             if (settings.Verbose)
             {
@@ -41,14 +42,16 @@ namespace Heraldry.App
             var settings = ProcesArgs(args);
 
             Console.WriteLine("\n=== Loading blazon vocabulary from " + settings.Language);
-            BlazonVocabulary vocabulary = VocabularyLoader.LoadFromDirectory(Environment.CurrentDirectory + "\\resources\\" + settings.Language + "\\");
+            BlazonVocabulary vocabulary = VocabularyLoader.LoadFromDirectory(".\\resources\\" + settings.Language + "\\");
 
 
             string input = File.ReadAllText(settings.InputFile);
 
 
             var renderer = RendererByType(settings.RenderType, vocabulary);
-            renderer.PrintStream = File.Open(settings.OutputFile, FileMode.Create);
+            
+            renderer.PrintStream = File.Open(settings.OutputFile, FileMode.OpenOrCreate);
+
             try
             {
                 var result = new ParseProcess<string>(input)
