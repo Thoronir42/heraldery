@@ -1,12 +1,14 @@
 ﻿using Heraldry.Blazon.Elements;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Structure.Fillings
 {
+    [DebuggerDisplay("Solid [{Tincture.TinctureType}] = {Tincture.Value}")]
     public class SolidFilling : Filling
     {
         public Tincture Tincture { get; set; }

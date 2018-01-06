@@ -12,7 +12,7 @@ using HeraldryTest.Helpers;
 namespace HeraldryTest.SyntacticAnalysis.Compilers
 {
     [TestClass]
-    public class TinctureCompilerTest : CompilerTestBase
+    public class FillingCompilerTest : CompilerTestBase
     {
         [TestMethod]
         public void SimpleTincture()
@@ -23,7 +23,7 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
                 Token.Number(NumberType.Cardinal, 6)
                 );
 
-            TinctureCompiler tc = new TinctureCompiler(root);
+            FillingCompiler tc = new FillingCompiler(root);
 
             Tincture t = tc.Tincture();
 
@@ -40,7 +40,7 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
                 Token.Number(NumberType.Cardinal, 6)
                 );
 
-            TinctureCompiler tc = new TinctureCompiler(root);
+            FillingCompiler tc = new FillingCompiler(root);
 
             var t = tc.Tincture() as FurTincture;
 
@@ -60,7 +60,7 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
                 Token.Tincture(TinctureType.Colour, "black")
                 );
 
-            TinctureCompiler tc = new TinctureCompiler(root);
+            FillingCompiler tc = new FillingCompiler(root);
 
             var tincture = tc.Tincture() as FurTincture;
 
@@ -80,7 +80,7 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
                 Token.Tincture(TinctureType.Colour, "pink")
                 );
 
-            TinctureCompiler tc = new TinctureCompiler(root);
+            FillingCompiler tc = new FillingCompiler(root);
 
             tc.Tincture();
         }

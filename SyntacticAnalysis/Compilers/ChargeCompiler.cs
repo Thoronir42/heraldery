@@ -57,7 +57,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 if(NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Feature))
                 {
                     var features = PopList(DefinitionType.ChargeProperty, PropertyType.Feature, (FeaturePropertyDefinition d) => d.Feature);
-                    var filling = new SolidFilling(Compilers.Tincture.Tincture());
+                    var filling = Compilers.Filling.Filling();
 
                     list.AddRange(features.Select(feature => new FeatureProperty(feature, filling)));
 
@@ -86,7 +86,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             {
                 case PropertyType.TailStyle:
                     var styleDef = def as TailStylePropertyDefinition;
-                    return new TailProperty(styleDef.Style, new SolidFilling(Compilers.Tincture.Tincture()));
+                    return new TailProperty(styleDef.Style, Compilers.Filling.Filling());
 
                 case PropertyType.Attitude:
                     var attitudeDef = def as AttitudePropertyDefinition;
@@ -129,7 +129,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             Token currentToken = PopTokenAs(DefinitionType.Ordinary);
 
-            var ordinaryFilling = new SolidFilling(Compilers.Tincture.Tincture());
+            var ordinaryFilling = Compilers.Filling.Filling();
 
             OrdinaryDefinition def = currentToken.Definition as OrdinaryDefinition;
 

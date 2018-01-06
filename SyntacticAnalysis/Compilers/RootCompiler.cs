@@ -15,7 +15,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         private int position;
 
         internal FieldCompiler Field { get; }
-        internal TinctureCompiler Tincture { get; }
+        internal FillingCompiler Filling { get; }
         internal ChargeCompiler Charge { get; }
         internal NumberCompiler Numbers { get; }
         internal PopCompiler Pop { get; }
@@ -31,7 +31,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             this.tokens = tokens;
 
             this.Field = new FieldCompiler(this);
-            this.Tincture = new TinctureCompiler(this);
+            this.Filling = new FillingCompiler(this);
             this.Charge = new ChargeCompiler(this);
             this.Numbers = new NumberCompiler(this);
             this.Pop = new PopCompiler(this);

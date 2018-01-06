@@ -3,6 +3,7 @@ using Heraldry.Blazon.Structure;
 using Heraldry.Blazon.Structure.Fillings;
 using Heraldry.Blazon.Vocabulary;
 using Heraldry.Blazon.Vocabulary.Entries;
+using Heraldry.Blazon.Vocabulary.Numbers;
 using Heraldry.LexicalAnalysis;
 using Heraldry.SyntacticAnalysis.Attributes;
 using System;
@@ -13,12 +14,75 @@ using System.Threading.Tasks;
 
 namespace Heraldry.SyntacticAnalysis.Compilers
 {
-    public class TinctureCompiler : BaseCompiler
+    public class FillingCompiler : BaseCompiler
     {
-        public TinctureCompiler(RootCompiler root) : base(root)
+        public FillingCompiler(RootCompiler root) : base(root)
         {
+        }
+
+        [SyntacticRule]
+        public Filling Filling()
+        {
+            if(NextTokenIs(DefinitionType.Tincture))
+            {
+                return new SolidFilling(Tincture());
+            }
+
+            if(NextTokenIs(DefinitionType.Variation))
+            {
+                return VariatedFilling();
+            }
+
+            throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.Tincture, DefinitionType.Variation));
+        }
+
+        public Filling VariatedFilling()
+        {
+            // first, the type of variation follows, then variation tinctures should be defined
+            FieldVariationDefinition definition = PopDefinition<FieldVariationDefinition>(DefinitionType.Variation);
+            
+           switch (Blazon.Structure.Filling.TypeByVariation(definition.VariationType))
+            {
+                // todo: implement various field variation
+                case FillingType.NPattern:
+                    NumberDefinition numDef = PopDefinition<NumberDefinition>(DefinitionType.Number, NumberType.Cardinal);
+                    return new PatternFilling(definition.VariationType, numDef.Number.Value, VariationFillings());
+
+                case FillingType.Pattern:
+                    return new PatternFilling(definition.VariationType, VariationFillings());
+
+                case FillingType.Seme:
+                    return new SemeFilling(null, Compilers.Charge.PrincipalCharge());
+
+                default:
+                    throw new NotImplementedException("Filling type of " + definition.VariationType + " is not implemented");
+            }
 
         }
+
+        /// <summary>
+        /// Rule which will parse fillings for a variation.
+        /// Basically: TINCTURE AND TINCTURE
+        /// 
+        /// </summary>
+        /// <param name="tokens">Tokens to be parsed.</param>
+        /// <returns>List of defined tinctures.</returns>
+        private Tincture[] VariationFillings()
+        {
+            Tincture[] fillings = new Tincture[2];
+
+            // first filling
+            fillings[0] = Compilers.Filling.Tincture();
+
+            // and
+            Token currentToken = PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+
+            // second filling
+            fillings[1] = Compilers.Filling.Tincture();
+
+            return fillings;
+        }
+
 
         /// <summary>
         /// Tincture rule - tincture definition is expected to be at the current token.
@@ -61,21 +125,6 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
                 tincture.SecondaryColor = NonFurTincture();
             }
-
-            // FurFilling filling = new FurFilling(definition.Value);
-
-            /* custom color furs are not supported yet
-            Token nextToken = PeekToken();
-            if(!TokenIs(nextToken, DefinitionType.Tincture))
-            {
-                return filling;
-            }
-
-
-            filling.PrimaryColor = NonFurTincture();
-            PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
-            filling.SecondaryColor = NonFurTincture();
-            */
 
             return tincture;
         }

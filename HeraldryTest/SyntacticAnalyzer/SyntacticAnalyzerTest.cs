@@ -307,7 +307,9 @@ namespace HeraldryTest
                 Token.Tincture(tincture1),
                 Token.Separator(Separator.Semicolon),
 
+
                 Token.Number(NumberType.Ordinal, 1),
+
                 Token.FieldDivision(FieldDivisionType.Quarterly),
                 Token.Number(NumberType.Ordinal, 4),
                 Token.Separator(Separator.Comma),
@@ -317,7 +319,7 @@ namespace HeraldryTest
                 Token.Tincture(tincture1),
                 Token.Separator(Separator.Semicolon),
 
-                Token.Number(1),
+                Token.Number(NumberType.Ordinal, 1),
                 Token.Tincture(tincture2)
             };
             //tokens.Add(new Token{Position = 19, Definition = KeyWord.Semicolon});
@@ -361,16 +363,19 @@ namespace HeraldryTest
         [TestMethod]
         public void TestVariation1()
         {
-            List<Token> tokens = new List<Token>();
-
             // paly of three azure and or
             Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
             Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
-            tokens.Add(Token.FieldVariation(FieldVariationType.PalyOf));
-            tokens.Add(Token.Number(4));
-            tokens.Add(Token.Tincture(tincture1));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Tincture(tincture2));
+
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldVariation(FieldVariationType.PalyOf),
+                Token.Number(4),
+
+                Token.Tincture(tincture1),
+                Token.Keyword(KeyWord.And),
+                Token.Tincture(tincture2)
+            };
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
