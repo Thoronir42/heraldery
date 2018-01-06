@@ -55,7 +55,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 {
                     case PropertyType.Tail:
                         var styleDef = PopDefinition<TailStylePropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.TailStyle);
-                        list.Add(new TailStyleProperty(styleDef.Style));
+                        list.Add(new TailProperty(styleDef.Style, new SolidFilling(Compilers.Tincture.Tincture())));
                         break;
                     case PropertyType.Attitude:
                         var attitudeDef = def as AttitudePropertyDefinition;

@@ -46,6 +46,8 @@ namespace Heraldry.LexicalAnalysis
                     return ConsoleColor.DarkGreen;
                 case DefinitionType.Charge:
                     return ConsoleColor.Green;
+                case DefinitionType.ChargeProperty:
+                    return ConsoleColor.Cyan;
 
                 case DefinitionType.Subordinary:
                     return ConsoleColor.Red;

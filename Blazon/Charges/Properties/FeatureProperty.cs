@@ -12,10 +12,10 @@ namespace Heraldry.Blazon.Charges.Properties
         public ChargeFeature Feature { get; }
         public Filling Tincture { get; }
 
-        public FeatureProperty(ChargeFeature feature, Filling tincture) : base(PropertyType.Feature)
+        public FeatureProperty(ChargeFeature feature, Filling filling) : base(PropertyType.Feature)
         {
             Feature = feature;
-            Tincture = tincture;
+            Tincture = filling;
         }
     }
 
@@ -28,6 +28,6 @@ namespace Heraldry.Blazon.Charges.Properties
         Hooves,
         ManeHair,
         Crown,
-
+        Tail,
     }
 }

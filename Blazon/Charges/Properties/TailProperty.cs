@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Heraldry.Blazon.Structure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Blazon.Charges.Properties
 {
-    class TailStyleProperty : ChargeProperty
+    class TailProperty : FeatureProperty
     {
         public TailStyle Style { get; }
 
-        public TailStyleProperty(TailStyle style) : base(PropertyType.TailStyle)
+        public TailProperty(TailStyle style, Filling filling) : base(ChargeFeature.Tail, filling)
         {
             Style = style;
         }
 
         public override bool Equals(object obj)
         {
-            var property = obj as TailStyleProperty;
+            var property = obj as TailProperty;
             return property != null &&
                    Style == property.Style;
         }
@@ -34,5 +35,6 @@ namespace Heraldry.Blazon.Charges.Properties
         Coward,
         Fourche,
         Saltire,
+        QueueForchee,
     }
 }
