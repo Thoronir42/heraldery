@@ -91,6 +91,7 @@
     <Compile Include="Blazon\Vocabulary\Entries\ChargeProperties\FeaturePropertyDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\ChargeProperties\TailStylePropertyDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\ChargePropertyDefinition.cs" />
+    <Compile Include="Blazon\Vocabulary\Entries\CommentDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\ShapeTypeDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\Definition.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\FieldDivisionDefinition.cs" />

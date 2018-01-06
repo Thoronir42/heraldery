@@ -61,6 +61,7 @@ namespace Heraldry.LexicalAnalysis
                 case DefinitionType.Tincture:
                     return ConsoleColor.Magenta;
 
+                case DefinitionType.Comment:
                 case DefinitionType.Separator:
                     return ConsoleColor.Gray;
                 case DefinitionType.KeyWord:

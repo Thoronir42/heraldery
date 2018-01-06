@@ -98,7 +98,7 @@ namespace HeraldryTest.App
         public void TestQuaterlyDividedBlazon2()
         {
             LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
-            SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
+            SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(false);
 
             string[] expectedTinctures = { "blue", "red", "gold", "black" };
             TinctureType[] expectedTypes = { TinctureType.Colour, TinctureType.Colour, TinctureType.Metal, TinctureType.Colour };

@@ -24,6 +24,8 @@ namespace Heraldry.LexicalAnalysis
             this.debug = new DebugPrinter();
         }
 
+        delegate List<Token> InputEditFunction<T>(T input, out T output);
+
         public override List<Token> Execute(string input)
         {
             List<Token> tokens = new List<Token>();
@@ -32,18 +34,24 @@ namespace Heraldry.LexicalAnalysis
             debug.Print("Input text to be scanned:", input);
 
 
-            var separators = SepareSeparators(input, out input);
-            tokens.AddRange(separators);
 
-            var numbers = ParseNumberTokens(input, out input);
-            tokens.AddRange(numbers);
+            InputEditFunction<string>[] tokenizerFunctions = {
+                SepareSeparators,
+                ParseNumberTokens,
+                FindDefinedTokens,
+                CaptureComments,
+                CollectRemainingTokensAsCharges,
+            };
 
-            var definedTokens = FindDefinedTokens(input, out input);
-            tokens.AddRange(definedTokens);
+            foreach (var func in tokenizerFunctions)
+            {
+                string output;
 
-            var charges = CollectRemainingTokensAsCharges(input, out input);
-            tokens.AddRange(charges);
+                List<Token> found = func(input, out output);
+                tokens.AddRange(found);
 
+                input = output;
+            }
 
             debug.PrintSeparator();
             debug.Print("Unprocessed text:\n", input);
@@ -51,7 +59,8 @@ namespace Heraldry.LexicalAnalysis
             tokens = tokens.OrderBy(t => t.Position).ToList();
 
             debug.PrintTokens("Token text:", tokens);
-            
+            debug.PrintSeparator();
+
             // tokens are found on space-padded input - align back to original text
             foreach (var token in tokens)
             {
@@ -74,38 +83,23 @@ namespace Heraldry.LexicalAnalysis
             return " " + input + " ";
         }
 
-        private Token CreateToken(IDefinition def, int index)
-        {
-            switch (def.TokenType)
-            {
-                case DefinitionType.Tincture:
-                    TinctureDefinition tdef = (TinctureDefinition)def;
-                    return new Token(index, def);
-            }
 
-            return new Token(index, def);
-        }
 
         private List<Token> SepareSeparators(String input, out String output)
         {
             var separators = new List<Token>();
             String text = input;
 
-            var separatorRegex = "(\\.|,|;)";
+            var separatorRegex = "(\\.|,|:|;)";
 
             Match match;
-            var i = 0;
+
             while ((match = Regex.Match(text, separatorRegex)).Success)
             {
-
                 var def = new SeparatorDefinition(StringToSeparator(match.Captures[0].Value)) { Text = match.Value };
                 separators.Add(new Token(match.Index, def));
                 text = text.Remove(match.Index, match.Value.Length)
                            .Insert(match.Index, "".PadRight(match.Value.Length));
-                if (++i > 10)
-                {
-                    break;
-                }
             }
 
             output = text;
@@ -118,10 +112,33 @@ namespace Heraldry.LexicalAnalysis
             {
                 case ".": return Separator.Dot;
                 case ",": return Separator.Comma;
+                case ":": return Separator.Colon;
                 case ";": return Separator.Semicolon;
             }
 
             return Separator.Other;
+        }
+
+        private List<Token> CaptureComments(String input, out String output)
+        {
+            string commentRegexp = "\\((\\w+)\\)";
+
+            var separators = new List<Token>();
+            String text = input;
+
+            Match match;
+
+            while ((match = Regex.Match(text, commentRegexp)).Success)
+            {
+
+                var def = new CommentDefinition(match.Captures[0].Value) { Text = match.Value };
+                separators.Add(new Token(match.Index, def));
+                text = text.Remove(match.Index, match.Value.Length)
+                           .Insert(match.Index, "".PadRight(match.Value.Length));
+            }
+
+            output = text;
+            return separators;
         }
 
         private List<Token> ParseNumberTokens(String input, out String output)
@@ -157,7 +174,7 @@ namespace Heraldry.LexicalAnalysis
                 while ((i = input.IndexOf(search, StringComparison.CurrentCultureIgnoreCase)) != -1)
                 {
                     input = input.Remove(i + 1, def.Text.Length).Insert(i + 1, "".PadRight(def.Text.Length, ' '));
-                    tokens.Add(CreateToken(def, i + 1));
+                    tokens.Add(new Token(i + 1, def));
                 }
             }
 
@@ -176,9 +193,11 @@ namespace Heraldry.LexicalAnalysis
             while ((match = pattern.Match(input)).Success)
             {
                 var chargeText = match.Captures[0].Value;
+                var definition = new ChargeDefinition(new GenericCharge(chargeText)) { Text = chargeText };
+
+                tokens.Add(new Token(match.Index, definition));
 
                 input = input.Remove(match.Index, match.Length).Insert(match.Index, "".PadRight(match.Length, ' '));
-                tokens.Add(CreateToken(new ChargeDefinition(new GenericCharge(chargeText)) { Text = chargeText }, match.Index));
             }
 
             output = input;

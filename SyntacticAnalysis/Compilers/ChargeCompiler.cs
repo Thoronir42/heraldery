@@ -31,6 +31,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         [SyntacticRule]
         public Charge PrincipalCharge()
         {
+            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Determiner))
+            {
+                PopToken();
+            }
+
             Charge charge = Charge();
 
             var nextToken = PeekToken();
@@ -47,39 +52,55 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             List<ChargeProperty> list = new List<ChargeProperty>();
 
-            var token = PopTokenAs(DefinitionType.ChargeProperty);
-            var def = token.Definition as ChargePropertyDefinition;
             do
             {
-                switch (def.TokenSubtype)
+                if(NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Feature))
                 {
-                    case PropertyType.Tail:
-                        var styleDef = PopDefinition<TailStylePropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.TailStyle);
-                        list.Add(new TailProperty(styleDef.Style, new SolidFilling(Compilers.Tincture.Tincture())));
-                        break;
-                    case PropertyType.Attitude:
-                        var attitudeDef = def as AttitudePropertyDefinition;
-                        var direction = AttitudeDirection.Forward;
-                        if(NextTokenIs(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection))
-                        {
-                            var attDirDef = PopDefinition<AttitudeDirectionPropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection);
-                            direction = attDirDef.Direction;
-                        }
-                        list.Add(new AttitudeProperty(attitudeDef.Attitude, direction, attitudeDef.ExclusiveTo));
-                        break;
-                    case PropertyType.Feature:
-                        var featureDef = def as FeaturePropertyDefinition;
-                        list.Add(new FeatureProperty(featureDef.Feature, new SolidFilling(Compilers.Tincture.Tincture())));
-                        break;
-                    default:
-                        throw new UnexpectedTokenException(token, "Unexpected property of type " + def.TokenSubtype.ToString());
-                }
+                    var features = PopList(DefinitionType.ChargeProperty, PropertyType.Feature, (FeaturePropertyDefinition d) => d.Feature);
+                    var filling = new SolidFilling(Compilers.Tincture.Tincture());
 
+                    list.AddRange(features.Select(feature => new FeatureProperty(feature, filling)));
+
+                    continue;
+                }
+                list.Add(Property());
                 
             } while (NextTokenIs(DefinitionType.ChargeProperty));
             
 
             return list;
+        }
+
+        [SyntacticRule]
+        public ChargeProperty Property(PropertyType? expectedType = null)
+        {
+            var token = PopTokenAs(DefinitionType.ChargeProperty);
+            var def = token.Definition as ChargePropertyDefinition;
+
+            if(expectedType.HasValue && def.TokenSubtype != expectedType.Value)
+            {
+                throw new ExpectedTokenNotFoundException(DefinitionType.ChargeProperty, expectedType.Value);
+            }
+
+            switch (def.TokenSubtype)
+            {
+                case PropertyType.TailStyle:
+                    var styleDef = def as TailStylePropertyDefinition;
+                    return new TailProperty(styleDef.Style, new SolidFilling(Compilers.Tincture.Tincture()));
+
+                case PropertyType.Attitude:
+                    var attitudeDef = def as AttitudePropertyDefinition;
+                    var direction = AttitudeDirection.Forward;
+                    if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection))
+                    {
+                        var attDirDef = PopDefinition<AttitudeDirectionPropertyDefinition>(DefinitionType.ChargeProperty, PropertyType.AttitudeDirection);
+                        direction = attDirDef.Direction;
+                    }
+                    return new AttitudeProperty(attitudeDef.Attitude, direction, attitudeDef.ExclusiveTo);
+
+                default:
+                    throw new UnexpectedTokenException(token, "Unexpected property of type " + def.TokenSubtype.ToString());
+            }
         }
 
         private Charge Charge()

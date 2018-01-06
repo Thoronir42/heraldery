@@ -10,6 +10,7 @@ namespace Heraldry.Blazon.Vocabulary
     {
         Comma,
         Dot,
+        Colon,
         Semicolon,
         Other
     }

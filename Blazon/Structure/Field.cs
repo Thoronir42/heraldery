@@ -14,5 +14,7 @@ namespace Heraldry.Blazon.Structure
     {
         // add more possibilities to augment field with
         public List<Augmentation> Augmentations { get; } = new List<Augmentation>();
+
+        public string Comment { get; set; }
     }
 }

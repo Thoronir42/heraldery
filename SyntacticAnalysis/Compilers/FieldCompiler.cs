@@ -108,22 +108,31 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     field = Variation();
                     break;
                 default:
-                    return null;
+                    throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.FieldDivision, DefinitionType.Tincture, DefinitionType.Variation));
             }
 
-            Token nextToken = PeekToken();
+            if (NextTokenIs(DefinitionType.Separator, Separator.Comma))
+            {
+                PopToken();
+            }
 
-            if (field is ContentField && IsTokenCharge(nextToken))
+            if (field is ContentField && (NextTokenIs(DefinitionType.KeyWord, KeyWord.Determiner) || IsTokenCharge(PeekToken())))
             {
                 (field as ContentField).Charge = Compilers.Charge.PrincipalCharge();
             }
 
-            if (TokenIs(nextToken, DefinitionType.KeyWord, KeyWord.Overall))
+            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Overall))
             {
                 PopToken();
                 var aug = new FieldAugmentation(Compilers.Charge.PrincipalCharge());
 
                 field.Augmentations.Add(aug);
+            }
+
+            if (NextTokenIs(DefinitionType.Comment))
+            {
+                var commentDef = PopDefinition<CommentDefinition>(DefinitionType.Comment);
+                field.Comment = commentDef.Comment;
             }
 
             return field;
@@ -197,6 +206,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <param name="tokens">List of tokens to be parsed.</param>
         protected DividedField QDivision()
         {
+            if (NextTokenIs(DefinitionType.Separator, Separator.Colon))
+            {
+                PopToken();
+            }
+
             if (NextTokenIs(DefinitionType.Tincture))
             {
                 // quaterly division is defined by tinctures
@@ -210,34 +224,31 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
             Dictionary<int, Field> subfields = new Dictionary<int, Field>();
 
-            if (NextTokenIs(DefinitionType.Number))
+            int groupsParsed = 0;
+            while (NextTokenIs(DefinitionType.Number, NumberType.Ordinal))
             {
-                // quaterly definition can be also defined by sequence of number-coa pairs
-                // or number and number coa
-
-                List<Number> nums = Compilers.Numbers.Nums(NumberType.Ordinal);
-                Field subField = Field();
-
-                foreach (var n in nums)
+                foreach (var n in NumsField())
                 {
-                    subfields.Add(n.Value, subField);
+                    subfields.Add(n.Key, n.Value);
                 }
 
-                // semicolon should follow now
-                PopTokenAs(DefinitionType.Separator, Separator.Semicolon);
-
-                Dictionary<int, Field> otherSubfields = NumDef();
-                foreach (int fieldNum in otherSubfields.Keys)
+                if (NextTokenIs(DefinitionType.Separator, Separator.Semicolon))
                 {
-                    subfields.Add(fieldNum, otherSubfields[fieldNum]);
+                    PopToken();
                 }
-
-                // put it all together
-                QuaterlyDividedField qDef = new QuaterlyDividedField(subfields);
-                return qDef;
+                else
+                {
+                    if (groupsParsed == 0)
+                    {
+                        throw new ExpectedTokenNotFoundException(DefinitionType.Separator, Separator.Semicolon);
+                    }
+                }
             }
 
-            throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.Number, DefinitionType.Tincture));
+            // put it all together
+            return new QuaterlyDividedField(subfields);
+
+            //throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.Number, DefinitionType.Tincture));
         }
 
 
@@ -246,7 +257,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// </summary>
         /// <param name="tokens">Tokens to be parsed.</param>
         /// <returns></returns>
-        protected Dictionary<int, Field> NumDef()
+        protected Dictionary<int, Field> NumsField()
         {
             List<Number> numbers = Compilers.Numbers.Nums();
             Field f = Field();
@@ -265,9 +276,9 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 PopToken();
 
                 // if null, coa definition ends here
-                if (PeekToken() != null)
+                if (NextTokenIs(DefinitionType.Number, NumberType.Ordinal))
                 {
-                    Dictionary<int, Field> otherFields = NumDef();
+                    Dictionary<int, Field> otherFields = NumsField();
                     foreach (int num in otherFields.Keys)
                     {
                         fields.Add(num, otherFields[num]);

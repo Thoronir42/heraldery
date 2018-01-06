@@ -28,5 +28,6 @@ namespace Heraldry.Blazon.Vocabulary
 
         // todo: TODD! The token types.
         Motto,
+        Comment,
     }
 }
