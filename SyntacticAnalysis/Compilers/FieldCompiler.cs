@@ -33,33 +33,23 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         [SyntacticRule]
         public DividedField Division()
         {
-            Token currentToken = PopToken();
+            var definition = PopDefinition<FieldDivisionDefinition>(DefinitionType.FieldDivision);
 
             // first of all, type of the division is expected - quaterly, per pale, per fess, ...
-            if (currentToken.Type == DefinitionType.FieldDivision)
+
+            FieldDivisionType divisionType = definition.Type;
+            if (divisionType == FieldDivisionType.Quarterly)
             {
-                FieldDivisionType divisionType = ((FieldDivisionDefinition)currentToken.Definition).Type;
-                if (divisionType == FieldDivisionType.Quarterly)
-                {
-                    return QDivision();
-                }
-                else if (divisionType.IsPartyPerDivision())
-                {
-                    DividedField f = PpDivision();
-                    f.Division = divisionType;
-                    return f;
-                }
-                else
-                {
-                    // todo: throw exception when undefined division type is found
-                    return null;
-                }
+                return QDivision();
             }
-            else
+            if (divisionType.IsPartyPerDivision())
             {
-                return null;
-                // todo: throw exception or something
+                DividedField f = PpDivision();
+                f.Division = divisionType;
+                return f;
             }
+
+            throw new NotImplementedException("Field division " + divisionType.ToString() + " is not implemented");
         }
 
         /// <summary>
@@ -123,12 +113,13 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
             Token nextToken = PeekToken();
 
-            if(field is ContentField && IsTokenCharge(nextToken))
+            if (field is ContentField && IsTokenCharge(nextToken))
             {
                 (field as ContentField).Charge = Compilers.Charge.PrincipalCharge();
             }
 
-            if (TokenIs(nextToken, DefinitionType.KeyWord, KeyWord.Overall)) {
+            if (TokenIs(nextToken, DefinitionType.KeyWord, KeyWord.Overall))
+            {
                 PopToken();
                 var aug = new FieldAugmentation(Compilers.Charge.PrincipalCharge());
 
@@ -206,96 +197,49 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <param name="tokens">List of tokens to be parsed.</param>
         protected DividedField QDivision()
         {
-            Token currentToken = PeekToken();
-            switch (currentToken.Type)
+            if (NextTokenIs(DefinitionType.Tincture))
             {
-                case DefinitionType.Tincture:
-                    // quaterly division is defined by tinctures
-                    // load them and create field from them
-                    Filling tincture1 = new SolidFilling(Compilers.Tincture.Tincture());
-                    currentToken = PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+                // quaterly division is defined by tinctures
+                // load them and create field from them
+                Filling tincture1 = new SolidFilling(Compilers.Tincture.Tincture());
+                PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
 
-                    Filling tincture2 = new SolidFilling(Compilers.Tincture.Tincture());
-                    return new QuaterlyDividedField(tincture1, tincture2);
-
-                case DefinitionType.Number:
-                    // quaterly definition can be also defined by sequence of number-coa pairs
-                    // or number and number coa
-                    currentToken = PopTokenAs(DefinitionType.Number);
-                    int num = ((NumberDefinition)currentToken.Definition).Number.Value;
-
-                    Dictionary<int, Field> subfields = new Dictionary<int, Field>();
-
-
-                    // now either field definition or sequence of other numbers may follow
-                    currentToken = PeekToken();
-                    if (currentToken.Type != DefinitionType.KeyWord)
-                    {
-                        // if the token is not and, assume field definition follows
-                        Field subField = Field();
-                        subfields.Add(num, subField);
-                    }
-                    else
-                    {
-                        // 'and' is expected with more numbers following
-                        PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
-                        List<int> nums = Nums();
-                        nums.Add(num);
-                        Field subField = Field();
-                        foreach (int n in nums)
-                        {
-                            subfields.Add(n, subField);
-                        }
-                    }
-
-                    // semicolon should follow now
-                    currentToken = PopTokenAs(DefinitionType.Separator, Separator.Semicolon);
-
-                    Dictionary<int, Field> otherSubfields = NumDef();
-                    foreach (int fieldNum in otherSubfields.Keys)
-                    {
-                        subfields.Add(fieldNum, otherSubfields[fieldNum]);
-                    }
-
-                    // put it all together
-                    QuaterlyDividedField qDef = new QuaterlyDividedField(subfields);
-                    return qDef;
-                default:
-                    // todo: support more ways of specifying the division
-                    return null;
+                Filling tincture2 = new SolidFilling(Compilers.Tincture.Tincture());
+                return new QuaterlyDividedField(tincture1, tincture2);
             }
 
-        }
+            Dictionary<int, Field> subfields = new Dictionary<int, Field>();
 
-
-        /// <summary>
-        /// A rule for parsing sequences of numbers in this form:
-        /// number and number and ... and number 
-        /// 
-        /// </summary>
-        /// <param name="tokens"></param>
-        /// <returns></returns>
-        protected List<int> Nums()
-        {
-            List<int> numbers = new List<int>();
-            Token currentToken = PopTokenAs(DefinitionType.Number);
-
-            numbers.Add(((NumberDefinition)currentToken.Definition).Number.Value);
-
-            // after the number token, either AND or something else is expected.
-            currentToken = PeekToken();
-            switch (currentToken.Type)
+            if (NextTokenIs(DefinitionType.Number))
             {
-                case DefinitionType.KeyWord:
-                    currentToken = PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
-                    numbers.AddRange(Nums());
+                // quaterly definition can be also defined by sequence of number-coa pairs
+                // or number and number coa
 
-                    return numbers;
-                default:
-                    // continue with parsing
-                    return numbers;
+                List<Number> nums = Compilers.Numbers.Nums(NumberType.Ordinal);
+                Field subField = Field();
+
+                foreach (var n in nums)
+                {
+                    subfields.Add(n.Value, subField);
+                }
+
+                // semicolon should follow now
+                PopTokenAs(DefinitionType.Separator, Separator.Semicolon);
+
+                Dictionary<int, Field> otherSubfields = NumDef();
+                foreach (int fieldNum in otherSubfields.Keys)
+                {
+                    subfields.Add(fieldNum, otherSubfields[fieldNum]);
+                }
+
+                // put it all together
+                QuaterlyDividedField qDef = new QuaterlyDividedField(subfields);
+                return qDef;
             }
+
+            throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.Number, DefinitionType.Tincture));
         }
+
 
         /// <summary>
         /// Parsing rule for divisions defined by numbers (1 field, 2 field, 3 and 4 field, ...).
@@ -304,28 +248,24 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns></returns>
         protected Dictionary<int, Field> NumDef()
         {
-            List<int> numbers = Nums();
+            List<Number> numbers = Compilers.Numbers.Nums();
             Field f = Field();
 
             Dictionary<int, Field> fields = new Dictionary<int, Field>();
-            foreach (int num in numbers)
+            foreach (var num in numbers)
             {
-                fields.Add(num, f);
+                fields.Add(num.Value, f);
             }
 
             // if semicolon follows, more definitions are expected.
             // however, blazon may end here and in that case, next token will be null
-            Token currentToken = PeekToken();
-            if (TokenIs(currentToken, DefinitionType.Separator, Separator.Semicolon))
+            if (NextTokenIs(DefinitionType.Separator, Separator.Semicolon))
             {
                 // this one contains semicolon
                 PopToken();
 
-                // this is the next token
-                currentToken = PeekToken();
-
                 // if null, coa definition ends here
-                if (currentToken != null)
+                if (PeekToken() != null)
                 {
                     Dictionary<int, Field> otherFields = NumDef();
                     foreach (int num in otherFields.Keys)

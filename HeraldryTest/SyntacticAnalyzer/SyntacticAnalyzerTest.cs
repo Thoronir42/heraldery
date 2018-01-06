@@ -39,8 +39,10 @@ namespace HeraldryTest
         public void TestTinctureOnly()
         {
             // prepare data
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.Tincture(TinctureType.Colour, "AZURE"));
+            List<Token> tokens = new List<Token>
+            {
+                Token.Tincture(TinctureType.Colour, "AZURE")
+            };
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -64,10 +66,6 @@ namespace HeraldryTest
         [TestMethod]
         public void TestQuaterlyDivision1()
         {
-            // prepare data
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-
             // quaterly division qhich consists of two colours
             Tincture[] tinctures = {
                 new Tincture(TinctureType.Colour, "AZURE"),
@@ -77,9 +75,13 @@ namespace HeraldryTest
             tinctures[2] = tinctures[1];
             tinctures[3] = tinctures[0];
 
-            tokens.Add(Token.Tincture(tinctures[0]));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Tincture(tinctures[1]));
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldDivision(FieldDivisionType.Quarterly),
+                Token.Tincture(tinctures[0]),
+                Token.Keyword(KeyWord.And),
+                Token.Tincture(tinctures[1])
+            };
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -124,19 +126,19 @@ namespace HeraldryTest
             {
                 Token.FieldDivision(FieldDivisionType.Quarterly),
 
-                Token.Number(1),
+                Token.Number(NumberType.Ordinal, 1),
                 Token.Tincture(tinctures[0]),
                 Token.Separator(Separator.Semicolon),
 
-                Token.Number(2),
+                Token.Number(NumberType.Ordinal, 2),
                 Token.Tincture(tinctures[1]),
                 Token.Separator(Separator.Semicolon),
 
-                Token.Number(3),
+                Token.Number(NumberType.Ordinal, 3),
                 Token.Tincture(tinctures[2]),
                 Token.Separator(Separator.Semicolon),
 
-                Token.Number(4),
+                Token.Number(NumberType.Ordinal, 4),
                 Token.Tincture(tinctures[3])
             };
 
@@ -170,10 +172,6 @@ namespace HeraldryTest
         [TestMethod]
         public void TestQuaterlyDivision3()
         {
-            // prepare data
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-
             // quaterly division qhich consists of four colours
             Tincture[] tinctures = {
                 new Tincture(TinctureType.Colour, "AZURE"),
@@ -182,21 +180,25 @@ namespace HeraldryTest
                 new Tincture(TinctureType.Colour, "SABLE"),
             };
 
-            tokens.Add(Token.Number(4));
-            tokens.Add(Token.Tincture(tinctures[0]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldDivision(FieldDivisionType.Quarterly),
+                Token.Number(NumberType.Ordinal, 4),
+                Token.Tincture(tinctures[0]),
+                Token.Separator(Separator.Semicolon),
 
-            tokens.Add(Token.Number(2));
-            tokens.Add(Token.Tincture(tinctures[1]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+                Token.Number(NumberType.Ordinal, 2),
+                Token.Tincture(tinctures[1]),
+                Token.Separator(Separator.Semicolon),
 
-            tokens.Add(Token.Number(1));
-            tokens.Add(Token.Tincture(tinctures[2]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+                Token.Number(NumberType.Ordinal, 1),
+                Token.Tincture(tinctures[2]),
+                Token.Separator(Separator.Semicolon),
 
-            tokens.Add(Token.Number(3));
-            tokens.Add(Token.Tincture(tinctures[3]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+                Token.Number(NumberType.Ordinal, 3),
+                Token.Tincture(tinctures[3]),
+                Token.Separator(Separator.Semicolon)
+            };
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();
@@ -229,9 +231,6 @@ namespace HeraldryTest
         [TestMethod]
         public void TestQuaterlyDivision4()
         {
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-
             // quaterly division qhich consists of two colours:
             // 4 and 3 and 2 colour; 1 colour
             Tincture[] tinctures = {
@@ -241,20 +240,25 @@ namespace HeraldryTest
             };
             tinctures[3] = tinctures[2] = tinctures[0];
 
-            tokens.Add(Token.Number(4));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Number(3));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Number(2));
-            tokens.Add(Token.Tincture(tinctures[0]));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldDivision(FieldDivisionType.Quarterly),
 
-            tokens.Add(Token.Number(1));
-            tokens.Add(Token.Tincture(tinctures[1]));
+                Token.Number(NumberType.Ordinal, 4),
+                Token.Separator(Separator.Comma),
+                Token.Number(NumberType.Ordinal, 3),
+                Token.Keyword(KeyWord.And),
+                Token.Number(NumberType.Ordinal, 2),
+                Token.Tincture(tinctures[0]),
+                Token.Separator(Separator.Semicolon),
+
+                Token.Number(NumberType.Ordinal, 1),
+                Token.Tincture(tinctures[1])
+            };
             //tokens.Add(new Token{Position = 10, Definition = KeyWord.Semicolon});
 
             // feed the parser
-            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            SyntacticAnalyzer sa = new SyntacticAnalyzer(false);
             BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
@@ -282,41 +286,45 @@ namespace HeraldryTest
         /// Division is defined by mixed combinations of numbers and colours and nested quaterly division.
         /// </summary>
         [TestMethod]
-        public void TestQuaterlyDivision5()
-        {
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
+        public void TestQuaterlyDivisionNested()
+        {   
 
             // quaterly division qhich consists of two colours:
             // 4 and 3 and 2 colour; 1 quaterly 4 and 3 and 2 colour; 1 colour
             // note that the nested division is in the 1st field
             Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
             Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
-            tokens.Add(Token.Number(4));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Number(3));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Number(2));
-            tokens.Add(Token.Tincture(tincture1));
-            tokens.Add(Token.Separator(Separator.Semicolon));
 
-            tokens.Add(Token.Number(1));
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-            tokens.Add(Token.Number(4));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Number(3));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Number(2));
-            tokens.Add(Token.Tincture(tincture1));
-            tokens.Add(Token.Separator(Separator.Semicolon));
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldDivision(FieldDivisionType.Quarterly),
 
-            tokens.Add(Token.Number(1));
-            tokens.Add(Token.Tincture(tincture2));
+                Token.Number(NumberType.Ordinal, 4),
+                Token.Separator(Separator.Comma),
+                Token.Number(NumberType.Ordinal, 3),
+                Token.Keyword(KeyWord.And),
+                Token.Number(NumberType.Ordinal, 2),
+                Token.Tincture(tincture1),
+                Token.Separator(Separator.Semicolon),
+
+                Token.Number(NumberType.Ordinal, 1),
+                Token.FieldDivision(FieldDivisionType.Quarterly),
+                Token.Number(NumberType.Ordinal, 4),
+                Token.Separator(Separator.Comma),
+                Token.Number(NumberType.Ordinal, 3),
+                Token.Keyword(KeyWord.And),
+                Token.Number(NumberType.Ordinal, 2),
+                Token.Tincture(tincture1),
+                Token.Separator(Separator.Semicolon),
+
+                Token.Number(1),
+                Token.Tincture(tincture2)
+            };
             //tokens.Add(new Token{Position = 19, Definition = KeyWord.Semicolon});
             //tokens.Add(new Token{Position = 20, Definition = KeyWord.Semicolon});
 
             // feed the parser
-            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            SyntacticAnalyzer sa = new SyntacticAnalyzer(false);
             BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
@@ -502,6 +510,7 @@ namespace HeraldryTest
                 Token.Tincture(tinctures[0]),
                 Token.Keyword(KeyWord.And),
                 Token.Tincture(tinctures[1]),
+
                 Token.Keyword(KeyWord.Overall),
                 Token.Ordinary(Ordinary.Bend, OrdinarySize.Honourable),
                 Token.Tincture(tinctures[2]),
@@ -582,27 +591,29 @@ namespace HeraldryTest
 
             Tincture tincture1 = new Tincture(TinctureType.Colour, "AZURE");
             Tincture tincture2 = new Tincture(TinctureType.Colour, "OR");
-
-            // create token list
-            List<Token> tokens = new List<Token>();
-            tokens.Add(Token.FieldDivision(ppType));
-
-            // first field will be variated: paly of three azure and or
-            tokens.Add(Token.FieldVariation(FieldVariationType.PalyOf));
-            tokens.Add(Token.Number(3));
-            tokens.Add(Token.Tincture(tincture1));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Tincture(tincture2));
-
-            tokens.Add(Token.Keyword(KeyWord.And));
-
-            // second field will be quarterly divided
             Tincture tincture3 = new Tincture(TinctureType.Colour, "GULES");
             Tincture tincture4 = new Tincture(TinctureType.Colour, "SABLE");
-            tokens.Add(Token.FieldDivision(FieldDivisionType.Quarterly));
-            tokens.Add(Token.Tincture(tincture3));
-            tokens.Add(Token.Keyword(KeyWord.And));
-            tokens.Add(Token.Tincture(tincture4));
+
+            // create token list
+            List<Token> tokens = new List<Token>
+            {
+                Token.FieldDivision(ppType),
+
+                // first field will be variated: paly of three azure and or
+                Token.FieldVariation(FieldVariationType.PalyOf),
+                Token.Number(3),
+                Token.Tincture(tincture1),
+                Token.Keyword(KeyWord.And),
+                Token.Tincture(tincture2),
+
+                Token.Keyword(KeyWord.And),
+
+                // second field will be quarterly divided
+                Token.FieldDivision(FieldDivisionType.Quarterly),
+                Token.Tincture(tincture3),
+                Token.Keyword(KeyWord.And),
+                Token.Tincture(tincture4)
+            };
 
             // feed the parser
             SyntacticAnalyzer sa = new SyntacticAnalyzer();

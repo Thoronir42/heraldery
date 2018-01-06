@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Heraldry.Blazon.Elements;
+using System.Diagnostics;
 
 namespace Heraldry.LexicalAnalysis
 {
+    [DebuggerDisplay("Type = {Type}-{Subtype} at {Position}")]
     public class Token
     {
         public IDefinition Definition { get; }

@@ -13,7 +13,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
     {
         private RootCompiler root;
 
-        protected RootCompiler Compilers { get { return root; }  }
+        protected RootCompiler Compilers { get { return root; } }
 
         internal BaseCompiler(RootCompiler root)
         {
@@ -37,11 +37,46 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return PopToken();
         }
 
+        protected List<T> PopList<T, TDef>(DefinitionType type, Func<TDef, T> defToVal) where TDef : class, IDefinition
+        {
+            return PopList(type, null, defToVal);
+        }
+
+        protected List<T> PopList<T, TDef>(DefinitionType type, object subtype, Func<TDef, T> defToVal) where TDef : class, IDefinition
+        {
+            List<T> list = new List<T>
+            {
+                defToVal(PopDefinition<TDef>(type, subtype))
+            };
+
+            while (NextTokenIs(DefinitionType.Separator, Separator.Comma))
+            {
+                PopToken();
+
+                list.Add(defToVal(PopDefinition<TDef>(type, subtype)));
+            }
+
+            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.And))
+            {
+                PopToken();
+                list.Add(defToVal(PopDefinition<TDef>(type, subtype)));
+
+
+            }
+            else if (list.Count > 1)
+            {
+                throw new ExpectedTokenNotFoundException(DefinitionType.KeyWord, KeyWord.And);
+            }
+
+            return list;
+        }
+
+
         protected TDefinition PopDefinition<TDefinition>(DefinitionType type, object subtype = null) where TDefinition : class, IDefinition
         {
             Token token = PopTokenAs(type, subtype);
             TDefinition definition = token.Definition as TDefinition;
-            
+
             return definition;
         }
 
@@ -70,11 +105,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// <returns>True if the token contains charge definition.</returns>
         protected bool IsTokenCharge(Token token)
         {
-            if(token == null)
+            if (token == null)
             {
                 return false;
             }
-            switch(token.Type)
+            switch (token.Type)
             {
                 case DefinitionType.Charge:
                 case DefinitionType.Ordinary:

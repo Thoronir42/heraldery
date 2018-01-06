@@ -122,7 +122,10 @@
     <Compile Include="SyntacticAnalysis\Compilers\BaseCompiler.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\ChargeCompiler.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\FieldCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\NumberCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\PopCompiler.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\RootCompiler.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\SequenceLink.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\TinctureCompiler.cs" />
     <Compile Include="SyntacticAnalysis\ExpectedTokenNotFoundException.cs" />
     <Compile Include="SyntacticAnalysis\Formulas\PartyPerDividedField.cs" />

@@ -18,14 +18,20 @@ namespace Heraldry.SyntacticAnalysis
 
         }
 
-        public ExpectedTokenNotFoundException(params TokenType[] expectedTypes)
+        public ExpectedTokenNotFoundException(params TokenType[] expectedTypes) :base()
         {
             this.ExpectedTypes = expectedTypes;
         }
 
-        public ExpectedTokenNotFoundException(string message, params TokenType[] expectedTypes) : base(message)
+        public ExpectedTokenNotFoundException(string message, params TokenType[] expectedTypes) : base(message ?? FormatTypes(expectedTypes))
         {
             this.ExpectedTypes = expectedTypes;
+        }
+
+
+        private static string FormatTypes(TokenType[] types)
+        {
+            return "Expected types: " + String.Join(", ", types.Select(t => t.ToString()).ToArray());
         }
     }
 }

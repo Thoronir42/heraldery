@@ -62,6 +62,7 @@
     <Compile Include="Helpers\BlazonMock.cs" />
     <Compile Include="Rendering\Text\TextRendererTest.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\CompilerTestBase.cs" />
+    <Compile Include="SyntacticAnalysis\Compilers\NumberCompilerTest.cs" />
     <Compile Include="SyntacticAnalysis\Compilers\TinctureCompilerTest.cs" />
     <Compile Include="SyntacticAnalysis\TokenCreator.cs" />
     <Compile Include="SyntacticAnalyzer\SyntacticAnalyzerTest.cs" />

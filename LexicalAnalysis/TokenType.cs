@@ -23,6 +23,13 @@ namespace Heraldry.LexicalAnalysis
             return Type.ToString() + (Subtype != null ? " - " + Subtype.ToString() : "");
         }
 
+        public static TokenType[] Types(params DefinitionType[] types)
+        {
+            return types
+                .Select(type => new TokenType(type))
+                .ToArray();
+        }
+
         public static TokenType[] Subtypes(DefinitionType type, params object[] subtypes)
         {
             if(subtypes.Length == 0)

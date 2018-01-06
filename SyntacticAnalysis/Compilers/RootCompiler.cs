@@ -1,4 +1,5 @@
 ﻿using Heraldry.Blazon.Structure;
+using Heraldry.Blazon.Vocabulary;
 using Heraldry.LexicalAnalysis;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         internal FieldCompiler Field { get; }
         internal TinctureCompiler Tincture { get; }
         internal ChargeCompiler Charge { get; }
+        internal NumberCompiler Numbers { get; }
+        internal PopCompiler Pop { get; }
 
         /// <summary>
         /// Current position in tokens list.
@@ -30,6 +33,8 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             this.Field = new FieldCompiler(this);
             this.Tincture = new TinctureCompiler(this);
             this.Charge = new ChargeCompiler(this);
+            this.Numbers = new NumberCompiler(this);
+            this.Pop = new PopCompiler(this);
         }
 
         public BlazonInstance Compile()
@@ -56,7 +61,6 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
             return coa;
         }
-
 
         /// <summary>
         /// Returns the current token and increments the position counter.
@@ -97,6 +101,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             
             Token currentToken = tokens.ElementAt(position + lookahead);
             return currentToken;
+        }
+
+        public SequenceLink Sequence()
+        {
+            return new SequenceLink(this);
         }
     }
 }

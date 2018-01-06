@@ -16,9 +16,21 @@ namespace Heraldry.SyntacticAnalysis
 {
     public class SyntacticAnalyzer : ParseStep<List<Token>, BlazonInstance>
     {
+        private readonly bool formatExceptions;
+
+        public SyntacticAnalyzer(bool formatExceptions = true)
+        {
+            this.formatExceptions = formatExceptions;
+        }
+
         public override BlazonInstance Execute(List<Token> tokens)
         {
             RootCompiler root = new RootCompiler(tokens);
+            if(!formatExceptions)
+            {
+                return root.Compile();
+            }
+
             try
             {
                 return root.Compile();
