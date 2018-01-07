@@ -13,11 +13,11 @@ namespace Heraldry.Rendering.Svg
 {
     class SvgRenderer : CrestRenderer
     {
-        private SvgLoader Loader { get; set; }
+        private SvgLoader Loader { get; }
 
-        public SvgRenderer() : this(new SvgLoader(100, 100)) { /* default constructor */ }
+        public SvgRenderer(Stream stream) : this(new SvgLoader(100, 100), stream) { /* default constructor */ }
 
-        public SvgRenderer(SvgLoader loader)
+        public SvgRenderer(SvgLoader loader, Stream stream) : base(stream)
         {
             this.Loader = loader;
         }

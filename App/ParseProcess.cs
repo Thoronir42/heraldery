@@ -6,15 +6,29 @@ using System.Threading.Tasks;
 
 namespace Heraldry.App
 {
+    public class ParseProcess : ParseProcess<object>
+    {
+        public ParseProcess(object val) : base(val)
+        {
+
+        }
+
+        public static ParseProcess<T> Begin<T>(T input)
+        {
+            return new ParseProcess<T>(input);
+        }
+    }
+
     public class ParseProcess<ValueType>
     {
         public ValueType Value { get; }
         Boolean Verbose { get; set; }
 
 
-        public ParseProcess(ValueType value)
+        public ParseProcess(ValueType value, Boolean verbose = false)
         {
             this.Value = value;
+            this.Verbose = Verbose;
         }
 
         public ParseProcess<ValueType> Pause()
@@ -25,19 +39,19 @@ namespace Heraldry.App
             return this;
         }
 
-        public ParseProcess<OutType> Then<OutType>(ParseStep<ValueType, OutType> step)
+        public ParseProcess<OutType> Then<OutType>(ParseStep<ValueType, OutType> step, string label = null)
         {
-            return new ParseProcess<OutType>(step.Execute(this.Value)) { Verbose = this.Verbose };
-        }
-
-        public ParseProcess<OutType> Then<OutType>(ParseStep<ValueType, OutType> step, string label)
-        {
-            if(this.Verbose)
+            if(this.Verbose && label != null)
             {
                 Console.WriteLine("\n==== " + label);
             }
 
-            return this.Then(step);
+            return new ParseProcess<OutType>(step.Execute(this.Value)) { Verbose = this.Verbose };
+        }
+
+        public void Then(Action<ValueType> action)
+        {
+            action(this.Value);
         }
     }
 }

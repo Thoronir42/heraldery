@@ -63,9 +63,6 @@ namespace Heraldry
             {
                 switch (args[i])
                 {
-                    case "-o":
-                        this.OutputFile = GetString(args, ++i);
-                        break;
                     case "-l":
                         this.Language = GetString(args, ++i);
                         break;

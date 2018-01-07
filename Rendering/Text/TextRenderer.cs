@@ -14,7 +14,7 @@ namespace Heraldry.Rendering.Text
     {
         private readonly VocabularyDefiner definer;
 
-        public TextRenderer(VocabularyDefiner definer)
+        public TextRenderer(VocabularyDefiner definer, Stream printStream) : base(printStream)
         {
             this.definer = definer;
         }
@@ -26,6 +26,7 @@ namespace Heraldry.Rendering.Text
             RootPrinter printer = new RootPrinter(writer, definer);
             printer.Print(instance);
 
+            writer.WriteLine();
             writer.Flush();
 
             return true;

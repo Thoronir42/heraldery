@@ -13,7 +13,12 @@ namespace Heraldry.Rendering
 {
     public abstract class CrestRenderer : ParseStep<BlazonInstance, Boolean>
     {
-        public Stream PrintStream { get; set; }
+        protected Stream PrintStream { get; }
+
+        public CrestRenderer(Stream printStream)
+        {
+            this.PrintStream = printStream;
+        }
 
         public override bool Execute(BlazonInstance input)
         {

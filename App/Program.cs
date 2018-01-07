@@ -47,26 +47,33 @@ namespace Heraldry.App
 
             string input = File.ReadAllText(settings.InputFile);
 
+            Stream stream = File.Open(settings.OutputFile, FileMode.OpenOrCreate);
+            //MemoryStream stream = new MemoryStream();
 
-            var renderer = RendererByType(settings.RenderType, vocabulary);
-            
-            renderer.PrintStream = File.Open(settings.OutputFile, FileMode.OpenOrCreate);
+            var renderer = RendererByType(stream, settings.RenderType, vocabulary);
 
             try
             {
-                var result = new ParseProcess<string>(input)
+                ParseProcess.Begin(input)
                 .Then(new LexAnalyzer(vocabulary), "Lexical analysis")
                 .Then(new SyntacticAnalyzer(), "Syntactic analysis")
-                .Then(renderer, "Rendering").Value;
+                .Then(renderer, "Rendering")
+                .Then(result =>
+                {
+                    if (result)
+                    {
+                        Console.WriteLine("Rendition finished successfully.");
 
-                if (result)
-                {
-                    Console.WriteLine("Rendition finished successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("Error occurred during rendition");
-                }
+                        //stream.Position = 0;
+                        //(new LexAnalyzer(vocabulary)).Execute((new StreamReader(stream).ReadToEnd()));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error occurred during rendition");
+                    }
+                });
+
+                
             }
             catch (UnexpectedTokenException ex)
             {
@@ -85,12 +92,12 @@ namespace Heraldry.App
             Console.ReadLine();
         }
 
-        static CrestRenderer RendererByType(RenderType type, BlazonVocabulary vocabulary)
+        static CrestRenderer RendererByType(Stream stream, RenderType type, BlazonVocabulary vocabulary)
         {
             switch (type)
             {
-                case RenderType.Svg: return new SvgRenderer();
-                case RenderType.Text: return new TextRenderer(vocabulary.GetDefiner());
+                case RenderType.Svg: return new SvgRenderer(stream);
+                case RenderType.Text: return new TextRenderer(vocabulary.GetDefiner(), stream);
             }
 
             throw new ArgumentException("Render type " + type.ToString() + " is not supported yet");
