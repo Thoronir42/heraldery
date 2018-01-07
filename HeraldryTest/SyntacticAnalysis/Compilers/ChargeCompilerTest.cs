@@ -49,13 +49,8 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
 
             Assert.AreEqual(expectedFilling, charge.Filling);
 
-            Assert.AreEqual(1, charge.Properties.Count);
-
-            var tailProp = charge.Properties[0] as TailProperty;
-
-            Assert.IsNotNull(tailProp);
-
-            Assert.AreEqual(TailStyle.Fourche, tailProp.Style);
+            Assert.IsNotNull(charge.Tail);
+            Assert.AreEqual(TailStyle.Fourche, charge.Tail.Style);
         }
 
         [TestMethod]
@@ -75,8 +70,9 @@ namespace HeraldryTest.SyntacticAnalysis.Compilers
             var charge = cc.PrincipalCharge() as GenericCharge;
 
             Assert.IsNotNull(charge);
+            Assert.IsNotNull(charge.Attitude);
 
-            Assert.AreEqual(new AttitudeProperty(Attitude.Passant, AttitudeDirection.Regardant), charge.Properties[0]);
+            Assert.AreEqual(new AttitudeProperty(Attitude.Passant, AttitudeDirection.Regardant), charge.Attitude);
 
             Assert.AreEqual(expectedFilling, charge.Filling);
 

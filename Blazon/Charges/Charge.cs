@@ -13,12 +13,16 @@ namespace Heraldry.Blazon.Charges
         public ChargeType Type { get; }
         public virtual Filling Filling { get; set; }
 
-        public List<ChargeProperty> Properties { get; set; } = new List<ChargeProperty>();
+        public List<FeatureProperty> Features { get; set; } = new List<FeatureProperty>();
 
         protected Charge(ChargeType type)
         {
             this.Type = type;
         }
+
+        public AttitudeProperty Attitude { get; set; }
+
+        public TailProperty Tail { get; set; }
     }
 
     public enum ChargeType

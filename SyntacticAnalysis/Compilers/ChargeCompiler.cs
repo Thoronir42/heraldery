@@ -40,12 +40,12 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
             if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Attitude))
             {
-                charge.Properties.Add(Attitude());
+                charge.Attitude = Attitude();
             }
 
             if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Tail) || NextTokenIs(DefinitionType.ChargeProperty, PropertyType.TailStyle))
             {
-                charge.Properties.Add(Tail());
+                charge.Tail = Tail();
             }
 
             var filling = charge.Filling = Compilers.Filling.Filling();
@@ -58,7 +58,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
 
                 foreach (var feature in list)
                 {
-                    charge.Properties.Add(new FeatureProperty(feature, filling));
+                    charge.Features.Add(new FeatureProperty(feature, filling));
                 }
             }
 

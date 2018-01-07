@@ -121,7 +121,7 @@ namespace Heraldry.LexicalAnalysis
 
         private List<Token> CaptureComments(String input, out String output)
         {
-            string commentRegexp = "\\((\\w+)\\)";
+            string commentRegexp = "\\( ?(\\w+) ?\\)";
 
             var separators = new List<Token>();
             String text = input;
@@ -131,7 +131,7 @@ namespace Heraldry.LexicalAnalysis
             while ((match = Regex.Match(text, commentRegexp)).Success)
             {
 
-                var def = new CommentDefinition(match.Captures[0].Value) { Text = match.Value };
+                var def = new CommentDefinition(match.Groups[1].Value) { Text = match.Value };
                 separators.Add(new Token(match.Index, def));
                 text = text.Remove(match.Index, match.Value.Length)
                            .Insert(match.Index, "".PadRight(match.Value.Length));
