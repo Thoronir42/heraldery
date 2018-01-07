@@ -96,7 +96,7 @@ namespace Heraldry.LexicalAnalysis
 
             while ((match = Regex.Match(text, separatorRegex)).Success)
             {
-                var def = new SeparatorDefinition(StringToSeparator(match.Captures[0].Value)) { Text = match.Value };
+                var def = new SeparatorDefinition(BlazonVocabulary.Separator(match.Captures[0].Value)) { Text = match.Value };
                 separators.Add(new Token(match.Index, def));
                 text = text.Remove(match.Index, match.Value.Length)
                            .Insert(match.Index, "".PadRight(match.Value.Length));
@@ -104,19 +104,6 @@ namespace Heraldry.LexicalAnalysis
 
             output = text;
             return separators;
-        }
-
-        private Separator StringToSeparator(String s)
-        {
-            switch (s)
-            {
-                case ".": return Separator.Dot;
-                case ",": return Separator.Comma;
-                case ":": return Separator.Colon;
-                case ";": return Separator.Semicolon;
-            }
-
-            return Separator.Other;
         }
 
         private List<Token> CaptureComments(String input, out String output)

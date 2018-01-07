@@ -13,6 +13,11 @@ namespace Heraldry.Blazon.Elements
         public string Value { get; set; }
         public TinctureType TinctureType { get; set; }
 
+        public Tincture(string value) : this(TinctureType.Colour, value)
+        {
+
+        }
+
         public Tincture(TinctureType type, string value)
         {
             this.TinctureType = type;

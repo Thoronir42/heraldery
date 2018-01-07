@@ -20,7 +20,7 @@ namespace HeraldryTest.Helpers
             };
         }
 
-        public static ContentField SolidColorField(String color, TinctureType tinctureType)
+        public static ContentField SolidColorField(string color, TinctureType tinctureType = TinctureType.Colour)
         {
             return new ContentField()
             {
@@ -29,7 +29,7 @@ namespace HeraldryTest.Helpers
         }
 
 
-        public static Filling SolidFilling(String color, TinctureType tinctureType)
+        public static Filling SolidFilling(string color, TinctureType tinctureType = TinctureType.Colour)
         {
             return SolidFilling(new Tincture(tinctureType, color));
         }

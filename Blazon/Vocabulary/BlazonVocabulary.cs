@@ -65,5 +65,34 @@ namespace Heraldry.Blazon.Vocabulary
         {
             return new VocabularyDefiner(this);
         }
+
+
+        private static Dictionary<string, Separator> separatorDictionary = new Dictionary<string, Separator>()
+        {
+            {",", Vocabulary.Separator.Comma },
+            {".", Vocabulary.Separator.Dot },
+            {":", Vocabulary.Separator.Colon },
+            {";", Vocabulary.Separator.Semicolon },
+        };
+
+        public static Separator Separator(string s)
+        {
+            if (!separatorDictionary.ContainsKey(s))
+            {
+                return Blazon.Vocabulary.Separator.Other;
+            }
+
+            return separatorDictionary[s];
+        }
+
+        public static string Separator(Separator s)
+        {
+            if (!separatorDictionary.ContainsValue(s))
+            {
+                return "[Separator-" + s.ToString() + "]";
+            }
+
+            return separatorDictionary.FirstOrDefault(keyVal => keyVal.Value == s).Key;
+        }
     }
 }
