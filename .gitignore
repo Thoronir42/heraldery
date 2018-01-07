@@ -7,5 +7,9 @@ packages/
 bin/*
 obj/*
 
+doc/*
+!doc/*.tex
+!doc/img
+
 HeraldryTest/obj/
 HeraldryTest/bin/
