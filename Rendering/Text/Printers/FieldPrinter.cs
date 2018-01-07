@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Rendering.Text.Printers
 {
-    class FieldPrinter : BasePrinter<Field>
+    public class FieldPrinter : BasePrinter<Field>
     {
         public FieldPrinter(RootPrinter root) : base(root)
         {
@@ -27,6 +27,11 @@ namespace Heraldry.Rendering.Text.Printers
                 PrintDividedField(field as DividedField);
             }
             PrintAugmentations(field);
+
+            if (field.Comment != null)
+            {
+                Print.Format("({0})", field.Comment);
+            }
         }
 
         private void PrintContentField(ContentField field)
@@ -40,6 +45,12 @@ namespace Heraldry.Rendering.Text.Printers
 
         private void PrintDividedField(DividedField field)
         {
+            if (field.Division == Blazon.Elements.FieldDivisionType.Quarterly)
+            {
+                PrintQuarterlyDividedField(field);
+                return;
+            }
+
             // todo: optimize divided field printing
             Print.Write(Print.Define.FieldDivision(field.Division));
 
@@ -47,12 +58,47 @@ namespace Heraldry.Rendering.Text.Printers
             {
                 if (i != 0)
                 {
-                    Print.Print(KeyWord.And);
+                    Print.Write(KeyWord.And);
                 }
                 var subfield = field.Subfields[i];
                 Print.Field.P(subfield);
             }
+        }
 
+        private void PrintQuarterlyDividedField(DividedField field)
+        {
+            Print.Write(Print.Define.FieldDivision(field.Division));
+            Print.Write(Separator.Colon, SpaceRule.Never);
+
+            bool[] definedBitmap = new bool[field.Subfields.Length];
+            int toBeDefined = field.Subfields.Length;
+
+            for (int i = 0; i < field.Subfields.Length; i++)
+            {
+                if (definedBitmap[i])
+                {
+                    continue;
+                }
+                Field f = field.Subfields[i];
+
+                List<string> fieldList = new List<string>();
+
+                for (int j = i; j < field.Subfields.Length; j++)
+                {
+                    if(field.Subfields[j] == f)
+                    {
+                        fieldList.Add(Define.Number(j + 1, Blazon.Vocabulary.Numbers.NumberType.Ordinal));
+                        definedBitmap[j] = true; toBeDefined--;
+                    }
+                }
+
+                Print.WriteList(fieldList);
+                Print.Field.P(field.Subfields[i]);
+                if(toBeDefined > 0)
+                {
+                    Print.Write(Separator.Semicolon, SpaceRule.Never);
+                }
+            }
         }
 
         private void PrintAugmentations(Field field)

@@ -5,21 +5,23 @@ using Heraldry.Rendering.Text;
 using HeraldryTest.Blazon;
 using Heraldry.Blazon.Structure;
 using HeraldryTest.Helpers;
+using HeraldryTest.Rendering.Text.Printers;
 
 namespace HeraldryTest.Rendering.Text
 {
     [TestClass]
-    public class TextRendererTest
+    public class TextRendererTest : PrinterTestBase
     {
+        [TestInitialize]
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
         [TestMethod]
         public void PrintDividedField()
         {
-            MemoryStream stream = new MemoryStream();
-
-            TextRenderer renderer = new TextRenderer(MockVocabulary.Get().GetDefiner())
-            {
-                PrintStream = stream
-            };
+            TextRenderer renderer = new TextRenderer(MockVocabulary.Get().GetDefiner(), GetStream());
 
             BlazonInstance instance = new BlazonInstance();
             CoatOfArms coa = instance.CoatOfArms = new CoatOfArms();
@@ -35,9 +37,14 @@ namespace HeraldryTest.Rendering.Text
 
             renderer.Execute(instance);
 
-            stream.Position = 0;
-            String s = (new StreamReader(stream)).ReadToEnd();
-            Assert.AreEqual("party per fess azure and or", s);
+            var text = GetPrintedText();
+            Assert.AreEqual("party per fess azure and or.\r\n", text);
+        }
+
+        [TestMethod]
+        public void PrintChargeFeatures()
+        {
+
         }
     }
 }

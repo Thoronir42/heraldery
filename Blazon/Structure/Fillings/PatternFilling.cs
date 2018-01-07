@@ -12,9 +12,10 @@ namespace Heraldry.Blazon.Structure.Fillings
         /// <summary>
         /// Number parameter needed for some type of variation layouts.
         /// Namely: 'PalyOf', 'BarryOf', 'BendyOf'.
-        /// For every other type NO_NUMBER constant is used.
         /// </summary>
         public int Number { get; set; }
+
+        public bool HasNumber { get {return Number != 0; } }
 
         public FieldVariationType Type { get; set; }
 
@@ -29,11 +30,6 @@ namespace Heraldry.Blazon.Structure.Fillings
         {
             get { return Tinctures[1]; }
             set { Tinctures[1] = value; }
-        }
-
-        public PatternFilling()
-        {
-
         }
 
         public PatternFilling(FieldVariationType type, params Tincture[] tinctures)

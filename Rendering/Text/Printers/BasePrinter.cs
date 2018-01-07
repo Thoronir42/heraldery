@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Heraldry.Rendering.Text.Printers
 {
-    abstract class BasePrinter<T>
+    public abstract class BasePrinter<T>
     {
         protected RootPrinter Print { get; }
         protected VocabularyDefiner Define { get { return Print.Define; } }
