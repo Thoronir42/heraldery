@@ -19,6 +19,7 @@ namespace Heraldry.Blazon.Vocabulary
             FUR_COLOR_SEPARATOR = ',';
 
         private int totalDefinitions = 0;
+        private int definitionTypes = 0;
 
         public string BlazonDirectory { get; set; }
         public string Numbers { get; set; } = "english";
@@ -44,7 +45,7 @@ namespace Heraldry.Blazon.Vocabulary
                 Numbers = LoadList(BlazonDirectory + "numbers.csv", "Numbers", LoadNumbers),
                 Ordinaries = LoadList(BlazonDirectory + "ordinaries.csv", "Ordinaries", LoadOrdinaries),
                 Subordinaries = LoadList(BlazonDirectory + "subordinaries.csv", "Subordinaries", LoadSubordinaries),
-                ShapeCharges = LoadList(BlazonDirectory + "shapes.csv", "Shape charges", LoadShapeCharges),
+                Shapes = LoadList(BlazonDirectory + "shapes.csv", "Shapes", LoadShapes),
                 ShapeTypes = LoadList(BlazonDirectory + "shape_types.csv", "Shape types", LoadShapeTypes),
                 ChargeProperties = LoadChargeProperties(BlazonDirectory),
 
@@ -54,7 +55,8 @@ namespace Heraldry.Blazon.Vocabulary
             if(PrintSettings.PrintVocabularyLoadProgress)
             {
                 Console.WriteLine();
-                Console.WriteLine(String.Format("{0,-38}{1}", "Total items loaded ...", totalDefinitions));
+                Console.WriteLine(String.Format("{0,-38}{1} in {2} types", 
+                    "Total items loaded ...", totalDefinitions, definitionTypes));
             }
 
             return vocabulary;
@@ -83,6 +85,7 @@ namespace Heraldry.Blazon.Vocabulary
 
             List<T> list = loadFunc(file);
             totalDefinitions += list.Count();
+            definitionTypes++;
 
             if (PrintSettings.PrintVocabularyLoadProgress)
             {
@@ -243,7 +246,7 @@ namespace Heraldry.Blazon.Vocabulary
             return ParseCsvFile(filename, f);
         }
 
-        private static List<ChargeDefinition> LoadShapeCharges(string filename)
+        private static List<ChargeDefinition> LoadShapes(string filename)
         {
             Func<string[], ChargeDefinition> f = new Func<string[], ChargeDefinition>(parts =>
             {

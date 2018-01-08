@@ -45,10 +45,10 @@ namespace Heraldry.App
             string input = File.ReadAllText(settings.InputFile);
 
             Stream stream = File.Open(settings.OutputFile, FileMode.OpenOrCreate);
-            //MemoryStream stream = new MemoryStream();
 
             var renderer = RendererByType(stream, settings.RenderType, vocabulary);
             renderer.CloseWhenDone = true;
+
             try
             {
                 ParseProcess.Begin(input, settings)
@@ -64,9 +64,6 @@ namespace Heraldry.App
                             Console.WriteLine("Rendition to file '{0}' finished successfully.",
                                 Path.GetFullPath(settings.OutputFile));
                         }
-
-                        //stream.Position = 0;
-                        //(new LexAnalyzer(vocabulary)).Execute((new StreamReader(stream).ReadToEnd()));
                     }
                     else
                     {

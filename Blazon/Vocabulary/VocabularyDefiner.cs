@@ -65,7 +65,7 @@ namespace Heraldry.Blazon.Vocabulary
 
         public string Shape(Shape shape)
         {
-            var def = FindDefinition(vocabulary.ShapeCharges, (d) =>
+            var def = FindDefinition(vocabulary.Shapes, (d) =>
             {
                 ShapeCharge defCharge = d.Charge as ShapeCharge;
                 return defCharge != null && defCharge.Shape == shape && defCharge.ImplicitFilling == null;

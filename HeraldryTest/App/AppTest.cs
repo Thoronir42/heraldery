@@ -10,6 +10,8 @@ using Heraldry.Blazon.Vocabulary.Entries;
 using HeraldryTest.Blazon;
 using HeraldryTest.Helpers;
 using Heraldry.Blazon.Structure.Fillings;
+using Heraldry.Rendering.Text;
+using System.IO;
 
 namespace HeraldryTest.App
 {
@@ -19,18 +21,13 @@ namespace HeraldryTest.App
     [TestClass]
     public class AppTest
     {
-        private BlazonVocabulary CreateVocabulary()
-        {
-            return MockVocabulary.Get();
-        }
-
         /// <summary>
         /// Just single color background.
         /// </summary>
         [TestMethod]
-        public void TestSimpleBlazon1 ()
+        public void TestSimpleBlazon1()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
+            LexAnalyzer analyzer = new LexAnalyzer(MockVocabulary.Get());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string input = "Or";
@@ -48,8 +45,9 @@ namespace HeraldryTest.App
 
             ContentField content = blazon.CoatOfArms.Content as ContentField;
             Assert.IsNotNull(content.Background);
-            Filling bg = content.Background;
-            CheckFillingColour(TinctureType.Metal, "gold", bg);
+
+            var expectedFilling = new SolidFilling(new Tincture(TinctureType.Metal, "gold"));
+            Assert.AreEqual(expectedFilling, content.Background);
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace HeraldryTest.App
         [TestMethod]
         public void TestQuaterlyDividedBlazon1()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
+            LexAnalyzer analyzer = new LexAnalyzer(MockVocabulary.Get());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer();
 
             string[] expectedTinctures = new String[] { "blue", "gold", "gold", "blue" };
@@ -75,7 +73,7 @@ namespace HeraldryTest.App
             Assert.IsNotNull(blazon.CoatOfArms);
             Assert.IsNotNull(blazon.CoatOfArms.Content);
             Assert.IsInstanceOfType(blazon.CoatOfArms.Content, typeof(DividedField));
-            
+
             DividedField coa = blazon.CoatOfArms.Content as DividedField;
 
             Assert.IsNotNull(coa.Division);
@@ -83,11 +81,13 @@ namespace HeraldryTest.App
             Assert.IsNotNull(coa.Subfields);
             Assert.AreEqual(4, coa.Subfields.Length);
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Assert.IsInstanceOfType(coa.Subfields[i], typeof(ContentField));
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(expectedTypes[i], expectedTinctures[i], subfield.Background);
+
+                var expectedFilling = new SolidFilling(new Tincture(expectedTypes[i], expectedTinctures[i]));
+                Assert.AreEqual(expectedFilling, subfield.Background);
             }
         }
 
@@ -97,7 +97,7 @@ namespace HeraldryTest.App
         [TestMethod]
         public void TestQuaterlyDividedBlazon2()
         {
-            LexAnalyzer analyzer = new LexAnalyzer(CreateVocabulary());
+            LexAnalyzer analyzer = new LexAnalyzer(MockVocabulary.Get());
             SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(false);
 
             string[] expectedTinctures = { "blue", "red", "gold", "black" };
@@ -124,23 +124,42 @@ namespace HeraldryTest.App
             {
                 Assert.IsInstanceOfType(coa.Subfields[i], typeof(ContentField));
                 ContentField subfield = coa.Subfields[i] as ContentField;
-                CheckFillingColour(expectedTypes[i], expectedTinctures[i], subfield.Background);
+
+                var expectedFilling = new SolidFilling(new Tincture(expectedTypes[i], expectedTinctures[i]));
+                Assert.AreEqual(expectedFilling, subfield.Background);
             }
         }
 
-        /// <summary>
-        /// Checks whether the filling contains exactly one tincture and has expected type and value.
-        /// </summary>
-        /// <param name="expectedType">Expected type of filling.</param>
-        /// <param name="expectedText">Expected text of filling (probably colour).</param>
-        /// <param name="filling">Filling to be checked.</param>
-        private void CheckFillingColour(TinctureType expectedType, String expectedText, Filling filling)
-        {
-            Assert.IsInstanceOfType(filling, typeof(SolidFilling));
 
-            Tincture tDef = (filling as SolidFilling).Tincture;
-            Assert.AreEqual(expectedType, tDef.TinctureType);
-            Assert.AreEqual(expectedText, tDef.Value);
+        [Ignore][TestMethod]
+        public void TestReLexical()
+        {
+            var testInput = "Quarterly: first and fourth gules, a lion rampant queue forchée argent armed, langued and crowned Or (Bohemia); second azure, an eagle displayed chequé gules and argent armed, langued and crowned Or (Moravia); third Or, an eagle displayed sable armed and langued gules crowned or (Silesia).";
+
+            MemoryStream stream = new MemoryStream();
+
+            var vocabulary = MockVocabulary.Get();
+
+            var lex = new LexAnalyzer(vocabulary);
+            var tokens = lex.Execute(testInput);
+
+            var synt = new SyntacticAnalyzer();
+            var instance = synt.Execute(tokens);
+
+            var rend = new TextRenderer(vocabulary.GetDefiner(), stream);
+            var result = rend.Execute(instance);
+
+            if (!result.Success)
+            {
+                Assert.Inconclusive("Rendition failed");
+            }
+
+            stream.Position = 0;
+            var reTokens = (new LexAnalyzer(vocabulary)).Execute((new StreamReader(stream).ReadToEnd()));
+
+            Assert.AreEqual(tokens.Count, reTokens.Count);
+
+            Assert.AreEqual(tokens, reTokens);
         }
     }
 }

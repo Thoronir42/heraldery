@@ -24,7 +24,7 @@ namespace Heraldry.Blazon.Vocabulary
         internal List<SubordinaryDefinition> Subordinaries { get; set; }
         internal List<ShapeTypeDefinition> ShapeTypes { get; set; }
 
-        internal List<ChargeDefinition> ShapeCharges { get; set; }
+        internal List<ChargeDefinition> Shapes { get; set; }
 
         internal List<ChargePropertyDefinition> ChargeProperties { get; set; }
 
@@ -49,7 +49,7 @@ namespace Heraldry.Blazon.Vocabulary
             list.AddRange(this.Numbers);
             list.AddRange(this.Ordinaries);
             list.AddRange(this.Subordinaries);
-            list.AddRange(this.ShapeCharges);
+            list.AddRange(this.Shapes);
             list.AddRange(this.ShapeTypes);
             list.AddRange(this.ChargeProperties);
 
