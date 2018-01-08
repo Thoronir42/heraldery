@@ -15,7 +15,7 @@ namespace Heraldry.App
 
         public CommandLineInterface()
         {
-            this.Option("help", 0, args => PrintHelp());
+            this.Option("help", "h", 0, args => PrintHelp(), "Displays this help");
         }
 
         public CommandLineInterface Option(string name, string shortcut, int argc, Action<string[]> action,
@@ -61,6 +61,11 @@ namespace Heraldry.App
                     continue;
                 }
 
+                if(n >= parameters.Count)
+                {
+                    throw new ArgumentException("Too many parameters specified");
+                }
+
                 parameters[n].Action(args[i]);
                 i++;
                 n++;
@@ -74,14 +79,18 @@ namespace Heraldry.App
 
         internal void PrintHelp()
         {
-            string paramString = String.Join(" ", parameters.Select(param => param.Required ? param.Name : "[" + param.Name + "]"));
-            string usage = String.Format("usage: \n {0} {1}",
-                System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName, paramString);
+            string paramString = String.Join(" ", parameters.Select(param => param.Required ? "<" + param.Name + ">" : "[" + param.Name + "]"));
+            string usage = String.Format("usage:\n{0} (options) {1}",
+                AppDomain.CurrentDomain.FriendlyName, paramString);
 
             Console.WriteLine(usage);
+            Console.WriteLine("  Available options:");
             foreach (var opt in options)
             {
-                Console.WriteLine("\t--{0,12} -{1} {2}", opt.Name, opt.Shortcut, opt.Help);
+                Console.WriteLine("\t--{0,-12} {1,-2} ( {2, -12} ) \t{3}",
+                    opt.Name, opt.Shortcut != null ? "-" + opt.Shortcut : "",
+                    opt.Argc == 0 ? "No arguments" : opt.Argc + " arguments",
+                    opt.Help);
             }
         }
 

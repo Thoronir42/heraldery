@@ -20,9 +20,21 @@ namespace Heraldry.App
         static void Main(string[] args)
         {
             CliSettings settings = new CliSettings();
-            //settings.ProcessArguments(args);
-            settings.ProcessArguments("-l", "en_olde", "-v",
-                "-r", "Text", ".\\resources\\input\\Czech-SimpleSilesia.txt", ".\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt");
+            try
+            {
+                //settings.ProcessArguments(args);
+                settings.ProcessArguments("-l", "en_olde", "-v",
+                    "-r", "Text", ".\\resources\\input\\Czech-SimpleSilesia.txt", ".\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt");
+            } catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                settings.PrintHelp();
+
+                Console.WriteLine("Press enter to exit");
+                Console.ReadLine();
+                return;
+            }
+            
             var print = settings.GetPrintSettings();
 
             if (print.PrintSetupInfo)
