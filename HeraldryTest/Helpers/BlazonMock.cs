@@ -13,9 +13,8 @@ namespace HeraldryTest.Helpers
     {
         public static DividedField DividedField(FieldDivisionType divisionType, params Field[] fields)
         {
-            return new DividedField()
+            return new DividedField(divisionType)
             {
-                Division = divisionType,
                 Subfields = fields,
             };
         }

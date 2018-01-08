@@ -70,6 +70,19 @@ namespace Heraldry.Rendering.Text.Printers
             Print.Write(Print.Define.FieldDivision(field.Division));
             Print.Write(Separator.Colon, SpaceRule.Never);
 
+            if(field.Subfields.Length == 4)
+            {
+                // zig zag definition
+                if(field.Subfields[0] == field.Subfields[3] && field.Subfields[1] == field.Subfields[2])
+                {
+                    Print.Field.P(field.Subfields[0]);
+                    Print.Write(KeyWord.And);
+                    Print.Field.P(field.Subfields[1]);
+
+                    return;
+                }
+            }
+
             bool[] definedBitmap = new bool[field.Subfields.Length];
             int toBeDefined = field.Subfields.Length;
 
@@ -124,17 +137,18 @@ namespace Heraldry.Rendering.Text.Printers
 
         private void PrintFieldAugmentation(FieldAugmentation aug)
         {
-
+            Print.Write(KeyWord.Overall);
+            Print.Charge.P(aug.Charge);
         }
 
         private void PrintPositionAugmentation(PositionAugmentation aug)
         {
-
+            throw new NotImplementedException();
         }
 
         private void PrintSubordinaryAugmentation(SubordinaryAugmentation aug)
         {
-
+            throw new NotImplementedException();
         }
 
     }

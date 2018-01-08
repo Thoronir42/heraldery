@@ -6,6 +6,7 @@ using HeraldryTest.Blazon;
 using Heraldry.Blazon.Structure;
 using HeraldryTest.Helpers;
 using HeraldryTest.Rendering.Text.Printers;
+using Heraldry.Blazon.Elements;
 
 namespace HeraldryTest.Rendering.Text
 {
@@ -25,9 +26,8 @@ namespace HeraldryTest.Rendering.Text
 
             BlazonInstance instance = new BlazonInstance();
             CoatOfArms coa = instance.CoatOfArms = new CoatOfArms();
-            coa.Content = new DividedField()
+            coa.Content = new DividedField(FieldDivisionType.PartyPerFess)
             {
-                Division = Heraldry.Blazon.Elements.FieldDivisionType.PartyPerFess,
                 Subfields =
                 new Field[] {
                     BlazonMock.SolidColorField("blue", Heraldry.Blazon.Elements.TinctureType.Colour),

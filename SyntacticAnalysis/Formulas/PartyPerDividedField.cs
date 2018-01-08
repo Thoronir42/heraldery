@@ -16,28 +16,16 @@ namespace Heraldry.SyntacticAnalysis.Formulas
     public class PartyPerDividedField : DividedField
     {
         /// <summary>
-        /// Division type may only be set to PartyPer* division types. Everything other will cause 
-        /// exception to be thrown.
-        /// </summary>
-        public override FieldDivisionType Division { get => base.Division;
-            set {
-                if (value.IsPartyPerDivision())
-                {
-                    base.Division = value;
-                } else
-                {
-                    throw new ArgumentException(String.Format("%s is not a valid division type for party per * divided field!", value));
-                }
-            }
-        }
-
-        /// <summary>
         /// Constructor which takes the first and the second field as arguemnts.
         /// </summary>
         /// <param name="field1">First field.</param>
         /// <param name="field2">Second field.</param>
-        public PartyPerDividedField(Field field1, Field field2)
+        public PartyPerDividedField(FieldDivisionType division, Field field1, Field field2) : base(division)
         {
+            if (!division.IsPartyPerDivision())
+            {
+                throw new ArgumentException(String.Format("%s is not a valid division type for party per * divided field!", division));
+            }
             Subfields = new Field[] { field1, field2 };
         }
 

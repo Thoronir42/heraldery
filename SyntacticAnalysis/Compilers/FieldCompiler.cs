@@ -21,55 +21,6 @@ namespace Heraldry.SyntacticAnalysis.Compilers
     {
         public FieldCompiler(RootCompiler root) : base(root)
         {
-
-        }
-
-        /// <summary>
-        /// Division of the field.
-        /// 
-        /// </summary>
-        /// <param name="tokens">List of tokens to be parsed.</param>
-        /// <returns>Divided field.</returns>
-        [SyntacticRule]
-        public DividedField Division()
-        {
-            var definition = PopDefinition<FieldDivisionDefinition>(DefinitionType.FieldDivision);
-
-            // first of all, type of the division is expected - quaterly, per pale, per fess, ...
-
-            FieldDivisionType divisionType = definition.Type;
-            if (divisionType == FieldDivisionType.Quarterly)
-            {
-                return QDivision();
-            }
-            if (divisionType.IsPartyPerDivision())
-            {
-                DividedField f = PpDivision();
-                f.Division = divisionType;
-                return f;
-            }
-
-            throw new NotImplementedException("Field division " + divisionType.ToString() + " is not implemented");
-        }
-
-        /// <summary>
-        /// Party per * division rule.
-        /// 
-        /// Party per * division is defined by two fields definitions.
-        /// 
-        /// </summary>
-        /// <param name="tokens">List of tokens to be parsed.</param>
-        /// <returns>Field defined by party per * division.</returns>
-        protected DividedField PpDivision()
-        {
-            Field field1 = Field();
-
-            PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
-
-            Field field2 = Field();
-
-            DividedField ppDividedField = new PartyPerDividedField(field1, field2);
-            return ppDividedField;
         }
 
         /// <summary>
@@ -83,13 +34,41 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             Token currentToken = PeekToken();
             Field field;
-            // todo: support for variation
+
             switch (currentToken.Type)
             {
                 case DefinitionType.FieldDivision:
-                    field = Division();
+                    field = DividedField();
                     break;
 
+                case DefinitionType.Tincture:
+                    goto case DefinitionType.Variation;
+                case DefinitionType.Variation:
+                    field = ContentField();
+                    break;
+
+                default:
+                    throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.FieldDivision, DefinitionType.Tincture, DefinitionType.Variation));
+            }
+
+            if (NextTokenIs(DefinitionType.Comment))
+            {
+                var commentDef = PopDefinition<CommentDefinition>(DefinitionType.Comment);
+                field.Comment = commentDef.Comment;
+            }
+
+            return field;
+        }
+
+
+        protected ContentField ContentField()
+        {
+            ContentField field;
+
+            Token nextToken = PeekToken();
+
+            switch (nextToken.Type)
+            {
                 case DefinitionType.Tincture:
                     var tincture = Compilers.Filling.Tincture();
 
@@ -109,37 +88,75 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     break;
 
                 default:
-                    throw new ExpectedTokenNotFoundException(TokenType.Types(DefinitionType.FieldDivision, DefinitionType.Tincture, DefinitionType.Variation));
+                    throw new ExpectedTokenNotFoundException(DefinitionType.Tincture, DefinitionType.Variation);
             }
+
 
             if (NextTokenIs(DefinitionType.Separator, Separator.Comma))
             {
                 PopToken();
             }
 
-            if (field is ContentField && (NextTokenIs(DefinitionType.KeyWord, KeyWord.Determiner) || IsTokenCharge(PeekToken())))
+            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Determiner) || IsTokenCharge(PeekToken()))
             {
-                (field as ContentField).Charge = Compilers.Charge.PrincipalCharge();
-            }
-
-            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Overall))
-            {
-                PopToken();
-                var aug = new FieldAugmentation(Compilers.Charge.PrincipalCharge());
-
-                field.Augmentations.Add(aug);
-            }
-
-            if (NextTokenIs(DefinitionType.Comment))
-            {
-                var commentDef = PopDefinition<CommentDefinition>(DefinitionType.Comment);
-                field.Comment = commentDef.Comment;
+                field.Charge = Compilers.Charge.PrincipalCharge();
             }
 
             return field;
         }
 
-        
+
+        protected DividedField DividedField()
+        {
+            var definition = PopDefinition<FieldDivisionDefinition>(DefinitionType.FieldDivision);
+
+            
+            DividedField field = null;
+            if (definition.Type == FieldDivisionType.Quarterly)
+            {
+                field = QDivision();
+            }
+
+            if (definition.Type.IsPartyPerDivision())
+            {
+                field = PpDivision(definition.Type);
+            }
+
+            if(field == null)
+            {
+                throw new NotImplementedException("Field division " + definition.Type.ToString() + " is not implemented");
+            }
+
+            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Overall))
+            {
+                PopToken();
+                var aug = new FieldAugmentation(Compilers.Charge.PrincipalCharge(), FieldAugType.Overall);
+
+                field.Augmentations.Add(aug);
+            }
+
+            return field;
+        }
+
+        /// <summary>
+        /// Party per * division rule.
+        /// 
+        /// Party per * division is defined by two fields definitions.
+        /// 
+        /// </summary>
+        /// <param name="tokens">List of tokens to be parsed.</param>
+        /// <returns>Field defined by party per * division.</returns>
+        protected DividedField PpDivision(FieldDivisionType divisionType)
+        {
+            Field field1 = Field();
+
+            PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+
+            Field field2 = Field();
+
+            DividedField ppDividedField = new PartyPerDividedField(divisionType, field1, field2);
+            return ppDividedField;
+        }
 
         /// <summary>
         /// Definition of quaterly division is parsed by this rule.
@@ -157,11 +174,12 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             {
                 // quaterly division is defined by tinctures
                 // load them and create field from them
-                Filling tincture1 = new SolidFilling(Compilers.Filling.Tincture());
-                PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
 
-                Filling tincture2 = new SolidFilling(Compilers.Filling.Tincture());
-                return new QuaterlyDividedField(tincture1, tincture2);
+                Field field = Compilers.Field.Field();
+                PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
+                Field field1 = Compilers.Field.Field();
+
+                return new QuaterlyDividedField(field, field1);
             }
 
             Dictionary<int, Field> subfields = new Dictionary<int, Field>();

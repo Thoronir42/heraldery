@@ -63,6 +63,12 @@ namespace Heraldry.Blazon.Vocabulary
             return BlazonVocabulary.Separator(separator);
         }
 
+        public string Ordinary(Ordinary ordinary, OrdinarySize size)
+        {
+            var def = FindDefinition(vocabulary.Ordinaries, d => d.Type == ordinary && d.Size == size);
+            return FormatDefinition(def, "[ordinary {0} {1}]", ordinary.ToString(), size.ToString());
+        }
+
         public string Shape(Shape shape)
         {
             var def = FindDefinition(vocabulary.Shapes, (d) =>

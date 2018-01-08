@@ -71,13 +71,11 @@ namespace Heraldry.Rendering.Text.Printers
                     Print.Write("[hole of shape " + charge.Hole.Value.ToString() + "]");
                 }
             }
-
-            Print.Filling.P(charge.Filling);
         }
 
         private void PrintOrdinaryCharge(OrdinaryCharge charge)
         {
-
+            Print.Write(Define.Ordinary(charge.OrdinaryType, charge.OrdinarySize));
         }
 
         private void PrintSubordinaryCharge(SubordinaryCharge charge)
