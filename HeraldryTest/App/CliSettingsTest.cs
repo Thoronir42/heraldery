@@ -12,10 +12,10 @@ namespace HeraldryTest.App
         [TestMethod]
         public void TestRenderType()
         {
-            CliSettings settings = new CliSettings("-r", "Text");
+            CliSettings settings = new CliSettings("-r", "Text", "in-file");
             Assert.AreEqual(RenderType.Text, settings.RenderType);
 
-            settings = new CliSettings("-r", "Svg");
+            settings = new CliSettings("-r", "Svg", "in-file");
             Assert.AreEqual(RenderType.Svg, settings.RenderType);
         }
 

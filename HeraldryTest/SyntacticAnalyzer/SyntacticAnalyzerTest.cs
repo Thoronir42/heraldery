@@ -527,6 +527,7 @@ namespace HeraldryTest
 
             // check the results
             CheckBlazonInstanceContent(blazon);
+
             DividedField coa = blazon.CoatOfArms.Content as DividedField;
             CheckFieldDivision(coa, FieldDivisionType.Quarterly, 4);
 
@@ -537,7 +538,6 @@ namespace HeraldryTest
                 Assert.IsNotNull(cf);
 
                 Assert.AreEqual(new SolidFilling(tinctures[tti[i]]), cf.Background);
-
             }
 
             Assert.AreEqual(1, coa.Augmentations.Count);

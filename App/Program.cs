@@ -53,7 +53,7 @@ namespace Heraldry.App
 
             string input = File.ReadAllText(settings.InputFile);
 
-            Stream stream = File.Open(settings.OutputFile, FileMode.OpenOrCreate);
+            Stream stream = File.Open(settings.OutputFile, FileMode.Create);
 
             var renderer = RendererByType(stream, settings.RenderType, vocabulary);
             renderer.CloseWhenDone = true;
