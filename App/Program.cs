@@ -22,9 +22,7 @@ namespace Heraldry.App
             CliSettings settings = new CliSettings();
             try
             {
-                //settings.ProcessArguments(args);
-                settings.ProcessArguments("-l", "en_olde", "-v",
-                    "-r", "Text", ".\\resources\\input\\Czech-SimpleSilesia.txt", ".\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt");
+                settings.ProcessArguments(args);
             } catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
