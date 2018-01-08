@@ -17,32 +17,29 @@ namespace Heraldry.App
 
     class Program
     {
-        private static CliSettings ProcesArgs(params string[] args)
+        static void Main(string[] args)
         {
             CliSettings settings = new CliSettings(args);
 
             // todo: remove debug settings initialization
-            settings = new CliSettings("-v", "-l", "en_olde", 
+            settings = new CliSettings("-l", "en_olde", "-v",
                 "-r", "Text", ".\\resources\\input\\Czech-SimpleSilesia.txt", ".\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt");
+            var print = settings.GetPrintSettings();
 
-            if (settings.Verbose)
+            if (print.PrintSetupInfo)
             {
                 Console.WriteLine("=== Initializing blazon convertor with: ");
                 Console.WriteLine(" Language   : " + settings.Language);
-                Console.WriteLine(" InputFile  : " + settings.InputFile);
-                Console.WriteLine(" OutputFile : " + settings.OutputFile);
+                Console.WriteLine(" InputFile  : " + Path.GetFullPath(settings.InputFile));
+                Console.WriteLine(" OutputFile : " + Path.GetFullPath(settings.OutputFile));
                 Console.WriteLine(" RenderType : " + settings.RenderType);
             }
-
-            return settings;
-        }
-
-        static void Main(string[] args)
-        {
-            var settings = ProcesArgs(args);
-
-            Console.WriteLine("\n=== Loading blazon vocabulary from " + settings.Language);
-            BlazonVocabulary vocabulary = VocabularyLoader.LoadFromDirectory(".\\resources\\" + settings.Language + "\\");
+            if(print.PrintVocabularyLoadProgress)
+            {
+                Console.WriteLine("\n=== Loading blazon vocabulary from " + settings.Language);
+            }
+            
+            BlazonVocabulary vocabulary = new VocabularyLoader(".\\resources\\" + settings.Language + "\\") { PrintSettings = settings.GetPrintSettings() }.Load();
 
 
             string input = File.ReadAllText(settings.InputFile);
@@ -51,33 +48,37 @@ namespace Heraldry.App
             //MemoryStream stream = new MemoryStream();
 
             var renderer = RendererByType(stream, settings.RenderType, vocabulary);
-
+            renderer.CloseWhenDone = true;
             try
             {
-                ParseProcess.Begin(input)
-                .Then(new LexAnalyzer(vocabulary), "Lexical analysis")
+                ParseProcess.Begin(input, settings)
+                .Then(new LexAnalyzer(vocabulary, settings.GetPrintSettings()), "Lexical analysis")
                 .Then(new SyntacticAnalyzer(), "Syntactic analysis")
                 .Then(renderer, "Rendering")
                 .Then(result =>
                 {
-                    if (result)
+                    if (result.Success)
                     {
-                        Console.WriteLine("Rendition finished successfully.");
+                        if(print.PrintResult)
+                        {
+                            Console.WriteLine("Rendition to file '{0}' finished successfully.",
+                                Path.GetFullPath(settings.OutputFile));
+                        }
 
                         //stream.Position = 0;
                         //(new LexAnalyzer(vocabulary)).Execute((new StreamReader(stream).ReadToEnd()));
                     }
                     else
                     {
-                        Console.WriteLine("Error occurred during rendition");
+                        Console.Error.WriteLine("Error occurred during rendition: " + result.Error);
                     }
                 });
 
-                
+
             }
             catch (UnexpectedTokenException ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.Message + "\n");
 
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.Write(input.Substring(0, ex.TokenPosition));
@@ -87,9 +88,11 @@ namespace Heraldry.App
                 Console.WriteLine(input.Substring(ex.TokenPosition + ex.TokenText.Length));
             }
 
-
-            Console.WriteLine("Done. Press Enter to exit.");
-            Console.ReadLine();
+            if(print.PromptExit)
+            {
+                Console.WriteLine("Press Enter to exit.");
+                Console.ReadLine();
+            }
         }
 
         static CrestRenderer RendererByType(Stream stream, RenderType type, BlazonVocabulary vocabulary)

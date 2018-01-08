@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Heraldry.SyntacticAnalysis
 {
-    public class SyntacticAnalyzer : ParseStep<List<Token>, BlazonInstance>
+    public class SyntacticAnalyzer : ParseProcess.Step<List<Token>, BlazonInstance>
     {
         private readonly bool formatExceptions;
 

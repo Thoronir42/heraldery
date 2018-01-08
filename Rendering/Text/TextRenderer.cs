@@ -7,6 +7,7 @@ using Heraldry.Blazon.Structure;
 using System.IO;
 using Heraldry.Rendering.Text.Printers;
 using Heraldry.Blazon.Vocabulary;
+using Heraldry.App;
 
 namespace Heraldry.Rendering.Text
 {
@@ -19,7 +20,7 @@ namespace Heraldry.Rendering.Text
             this.definer = definer;
         }
 
-        public override bool Render(BlazonInstance instance, Stream stream)
+        public override ParseProcess.Result Render(BlazonInstance instance, Stream stream)
         {
             StreamWriter writer = new StreamWriter(stream);
 
@@ -29,7 +30,7 @@ namespace Heraldry.Rendering.Text
             writer.WriteLine();
             writer.Flush();
 
-            return true;
+            return new ParseProcess.Result(true);
         }
     }
 }

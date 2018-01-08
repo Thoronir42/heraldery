@@ -12,26 +12,30 @@ using System.Text.RegularExpressions;
 
 namespace Heraldry.LexicalAnalysis
 {
-    public class LexAnalyzer : ParseStep<string, List<Token>>
+    public class LexAnalyzer : ParseProcess.Step<string, List<Token>>
     {
-        private DebugPrinter debug;
-
         private BlazonVocabulary BlazonVocabulary { get; }
 
-        public LexAnalyzer(BlazonVocabulary blazonVocabulary)
+        private PrintSettings printSettings;
+
+        public LexAnalyzer(BlazonVocabulary blazonVocabulary, PrintSettings settings = null)
         {
             this.BlazonVocabulary = blazonVocabulary;
-            this.debug = new DebugPrinter();
+
+            this.printSettings = settings ?? new PrintSettings();
         }
 
         delegate List<Token> InputEditFunction<T>(T input, out T output);
 
         public override List<Token> Execute(string input)
         {
+            DebugPrinter debug = new DebugPrinter();
+
             List<Token> tokens = new List<Token>();
 
             input = NormalizeInput(input);
-            debug.Print("Input text to be scanned:", input);
+            if (printSettings.PrintLexTokens)
+                debug.PrintText("Input text to be scanned:", input);
 
 
 
@@ -53,13 +57,18 @@ namespace Heraldry.LexicalAnalysis
                 input = output;
             }
 
-            debug.PrintSeparator();
-            debug.Print("Unprocessed text:\n", input);
-
             tokens = tokens.OrderBy(t => t.Position).ToList();
 
-            debug.PrintTokens("Token text:", tokens);
-            debug.PrintSeparator();
+            if (printSettings.PrintLexTokens)
+            {
+                debug.PrintSeparator();
+                debug.PrintText("Unprocessed text:\n", input);
+                debug.PrintSeparator();
+                debug.PrintTokens("Token text:", tokens);
+                debug.PrintSeparator();
+            }
+
+            
 
             // tokens are found on space-padded input - align back to original text
             foreach (var token in tokens)

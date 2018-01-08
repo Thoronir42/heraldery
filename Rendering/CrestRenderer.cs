@@ -11,20 +11,27 @@ using System.Text;
 
 namespace Heraldry.Rendering
 {
-    public abstract class CrestRenderer : ParseStep<BlazonInstance, Boolean>
+    public abstract class CrestRenderer : ParseProcess.Step<BlazonInstance, ParseProcess.Result>
     {
         protected Stream PrintStream { get; }
+        public bool CloseWhenDone { get; set; } = false;
 
         public CrestRenderer(Stream printStream)
         {
             this.PrintStream = printStream;
         }
 
-        public override bool Execute(BlazonInstance input)
+        public override ParseProcess.Result Execute(BlazonInstance input)
         {
-            return this.Render(input, PrintStream);
+            var result = this.Render(input, PrintStream);
+
+            if(CloseWhenDone)
+            {
+                PrintStream.Close();
+            }
+            return result;
         }
 
-        public abstract Boolean Render(BlazonInstance instance, Stream writer);
+        public abstract ParseProcess.Result Render(BlazonInstance instance, Stream stream);
     }
 }

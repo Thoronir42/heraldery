@@ -9,10 +9,11 @@ namespace Heraldry.LexicalAnalysis
 {
     internal class DebugPrinter
     {
-        internal void Print(string label, string text)
+        internal void PrintText(string label, string text)
         {
             Console.WriteLine(label + "\n" + text);
         }
+
         internal void PrintSeparator()
         {
             Console.WriteLine("".PadRight(12, '-'));
@@ -40,7 +41,7 @@ namespace Heraldry.LexicalAnalysis
 
         static private ConsoleColor ColorByType(DefinitionType type)
         {
-            switch(type)
+            switch (type)
             {
                 case DefinitionType.Ordinary:
                     return ConsoleColor.DarkGreen;
@@ -69,7 +70,7 @@ namespace Heraldry.LexicalAnalysis
 
                 case DefinitionType.Position:
                     return ConsoleColor.DarkYellow;
-                    
+
             }
 
             return ConsoleColor.White;

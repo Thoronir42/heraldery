@@ -16,11 +16,12 @@ namespace HeraldryTest.Helpers
         {
             var sourcesDirectory = Environment.CurrentDirectory + "\\..\\..\\..";
 
-            return VocabularyLoader.LoadFromDirectory(
+            var loader = new VocabularyLoader(
                 blazonDirectory: sourcesDirectory + "\\resources\\en_olde\\",
-                numbers: "english",
-                verbose: false
-                );
+                numbers: "english");
+            
+
+            return loader.Load(); ;
         }
     }
 }

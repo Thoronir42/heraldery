@@ -18,33 +18,22 @@ namespace Heraldry.Blazon.Vocabulary
         public static readonly char FUR_PATTERN_SEPARATOR = ':',
             FUR_COLOR_SEPARATOR = ',';
 
-        public static BlazonVocabulary LoadFromDirectory(string blazonDirectory, string numbers = null, bool verbose = true)
-        {
-            var loader = new VocabularyLoader(blazonDirectory)
-            {
-                Verbose = verbose
-            };
-
-            if (numbers != null)
-            {
-                loader.Numbers = numbers;
-            }
-
-            return loader.Load();
-        }
+        private int totalDefinitions = 0;
 
         public string BlazonDirectory { get; set; }
         public string Numbers { get; set; } = "english";
-        public bool Verbose { get; set; } = true;
 
-        private VocabularyLoader(string blazonDirectory)
+        public PrintSettings PrintSettings { get; set; } = new PrintSettings();
+
+        public VocabularyLoader(string blazonDirectory, string numbers = "english")
         {
             this.BlazonDirectory = blazonDirectory;
+            this.Numbers = numbers;
         }
 
         public BlazonVocabulary Load()
         {
-            return new BlazonVocabulary
+            var vocabulary = new BlazonVocabulary
             {
                 Tinctures = LoadList(BlazonDirectory + "tinctures.csv", "Tinctures", LoadTinctures),
                 FieldDivisions = LoadList(BlazonDirectory + "field_divisions.csv", "Field Divisions", LoadFieldDivisions),
@@ -61,7 +50,16 @@ namespace Heraldry.Blazon.Vocabulary
 
                 NumberVocabulary = CreateNumberVocabulary(Numbers),
             };
+
+            if(PrintSettings.PrintVocabularyLoadProgress)
+            {
+                Console.WriteLine();
+                Console.WriteLine(String.Format("{0,-38}{1}", "Total items loaded ...", totalDefinitions));
+            }
+
+            return vocabulary;
         }
+
 
         private static NumberVocabulary CreateNumberVocabulary(string id)
         {
@@ -78,12 +76,15 @@ namespace Heraldry.Blazon.Vocabulary
 
         private List<T> LoadList<T>(string file, string itemsLabel, Func<string, List<T>> loadFunc)
         {
-            if (this.Verbose)
+            if (PrintSettings.PrintVocabularyLoadProgress)
             {
                 Console.Write(String.Format("Loading {0,-30}", itemsLabel + " ..."));
             }
+
             List<T> list = loadFunc(file);
-            if (this.Verbose)
+            totalDefinitions += list.Count();
+
+            if (PrintSettings.PrintVocabularyLoadProgress)
             {
                 Console.WriteLine(String.Format(" {0,2} loaded", list.Count()));
             }
