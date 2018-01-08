@@ -1,4 +1,5 @@
-﻿using Heraldry.Blazon.Charges;
+﻿using Heraldry.App;
+using Heraldry.Blazon.Charges;
 using Heraldry.Blazon.Charges.Properties;
 using Heraldry.Blazon.Elements;
 using Heraldry.Blazon.Vocabulary.Entries;

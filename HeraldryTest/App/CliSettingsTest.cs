@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Heraldry.Rendering;
 using Heraldry;
+using Heraldry.App;
 
 namespace HeraldryTest.App
 {

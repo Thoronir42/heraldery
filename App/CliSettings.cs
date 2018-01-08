@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Heraldry.Rendering;
 
-namespace Heraldry
+namespace Heraldry.App
 {
     public class CliSettings
     {
@@ -48,9 +48,23 @@ namespace Heraldry
             }
         }
 
+        private CommandLineInterface cli;
 
         public CliSettings()
-        {   
+        {
+            this.cli = new CommandLineInterface()
+                .Option("language", "l", 1, args => Language = args[0], "sets language")
+                .Option("render", "r", 1, args => RenderType = (RenderType)Enum.Parse(typeof(RenderType), args[0]), "sets renderer")
+                .Option("verbose", "v", 0, args => Verbose = true, "verbose output")
+                .Option("silent", "s", 0, args => Silent = true, "mutes output")
+                .Option("no-prompt", 0, args => PromtExit = false, "disables exit prompts")
+                .Param("Input file", param => InputFile = param, true)
+                .Param("Output file", param => OutputFile = param);
+        }
+
+        public void PrintHelp()
+        {
+            this.cli.PrintHelp();
         }
 
         public CliSettings(params string[] args) : this()
@@ -58,46 +72,9 @@ namespace Heraldry
             this.ProcessArguments(args);
         }
 
-        public void ProcessArguments(string[] args)
+        public void ProcessArguments(params string[] args)
         {
-            int i = 0;
-            int n = 0;
-            while (i < args.Length)
-            {
-                switch (args[i])
-                {
-                    case "-l":
-                        this.Language = GetString(args, ++i);
-                        break;
-                    case "-r":
-                        this.RenderType = (RenderType)Enum.Parse(typeof(RenderType), GetString(args, ++i));
-                        break;
-                    case "--verbose":
-                    case "-v":
-                        this.Verbose = true;
-                        break;
-                    case "--silent":
-                    case "-s":
-                        this.Silent = true;
-                        break;
-                    case "--no-prompt":
-                        this.PromtExit = false;
-                        break;
-                    default:
-                        if (n == 0)
-                        {
-                            this.InputFile = args[i];
-                        }
-                        if (n == 1)
-                        {
-                            this.OutputFile = args[i];
-                        }
-                        n++;
-                        break;
-                }
-
-                i++;
-            }
+            this.cli.Execute(args);
         }
 
         private String GetString(string[] args, int i)

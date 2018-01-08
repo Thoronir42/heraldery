@@ -19,10 +19,9 @@ namespace Heraldry.App
     {
         static void Main(string[] args)
         {
-            CliSettings settings = new CliSettings(args);
-
-            // todo: remove debug settings initialization
-            settings = new CliSettings("-l", "en_olde", "-v",
+            CliSettings settings = new CliSettings();
+            //settings.ProcessArguments(args);
+            settings.ProcessArguments("-l", "en_olde", "-v",
                 "-r", "Text", ".\\resources\\input\\Czech-SimpleSilesia.txt", ".\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt");
             var print = settings.GetPrintSettings();
 
