@@ -208,22 +208,36 @@ The initial symbol represents the whole coat of arms and the set of production r
 
 \section{Compilation}
 As previously stated, a language consists of symbols which form words when put together.
-For blazon these symbols are for instance \textit{Tinctures}, \textit{divisions of field}, \textit{charges} and other elements.
 
 Recognizing and joining these symbols together are first two main disciplines of the compilation whose result is a word or in this case, a blazon instance.
-The last stage of compilation is interpretation of a recognized word.
+The last stage of compilation is interpretation of a recognized word, which is implemented in form of textual rendition using a vocabulary.
 
 
 \subsection{Lexical analysis} 
 Lexical analysis or tokenization is the first stage of translation process and its role is to recognize language valid symbols.
 In this phase the input text is converted into a list of tokens defined by the translator tool.
 
-Most elements of blazon like Tinctures, ordinaries or field divisions are strictly defined and are not likely to change. 
-Thanks to this, they are listed in a lexical vocabulary and easily transformed.
+Most elements of blazon like Tinctures, ordinaries or field divisions are strictly defined and are not likely to change.
+Assuming this fact, most of the terminal symbols are listed in a lexical vocabulary and are easily captured into tokens.
 
-On contrary, with exception of geometrical shapes, it would be practically impossible to list every charge.
-Because of this, the tokenization is run in two phases: first the vocabulary conversion is run and then the remaining text is interpreted as Charge tokens.
+Definitions to form tokens are sometimes formed from longer strings of words and mean different things. For this reason, definitions are ordered by length and matched from input text from longest to shortest.
+This naive approach covers most of the cases but fails to cover cases in which same word can mean different things in different contexts such as \textit{saltire}, which can either mean a cross or a split tail.
 
+There are some special cases of tokens which would not make sense to parse by a vocabulary, which are:
+\begin{itemize}
+\setlength\itemsep{-0.5em}
+\item Numbers - they are parsed automatically using number rules,
+\item Separators, such as dot, comma, colon, etc...,
+\item Comments (text in brackets).
+\end{itemize}
+Each of this case has its custom method of matching from source text but are considerably simple to perform.
+
+On contrary, with exception of simple shapes, it would be practically impossible to list every possible charge.
+Because of this, the tokenization is run in two phases: first the vocabulary lookup is run and then the remaining blocks of text are interpreted as Charge tokens.
+
+Each token contains a definition of a recognized element it represents and position in source text which allows description of erroneous token sequences to be projected into source text.
+
+If verbose mode is enabled, lexical analysis also prints the recognized tokens coloured by their types to help understand the text.
 
 
 \subsection{Syntactic analysis} 

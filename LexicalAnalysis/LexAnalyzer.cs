@@ -40,10 +40,10 @@ namespace Heraldry.LexicalAnalysis
 
 
             InputEditFunction<string>[] tokenizerFunctions = {
-                SepareSeparators,
                 ParseNumberTokens,
-                FindDefinedTokens,
+                SepareSeparators,
                 CaptureComments,
+                FindDefinedTokens,
                 CollectRemainingTokensAsCharges,
             };
 
