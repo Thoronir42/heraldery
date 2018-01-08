@@ -91,33 +91,19 @@ While there are other parts such as the supporters, crest, helmet and more, this
 
 This article briefly introduces the formal languages and grammars defining them which will help with understanding the transformation process. Then the blazon language is examined and its elements described and finally the process transforming blazon into corresponding visual representation.
 
-
-\subsection{Formal language}
-In order to define a formal language, we need to understand the parts it is composed of - the words and the alphabet.
-A word (or string) is a finite sequence of items, so-called symbols or letters chosen from a specified finite set called the alphabet.
-Examples of common alphabets are e.g. letters in the Latin alphabet (+ interword space, punctuation marks, etc.), and the bits 0 and 1.\cite{ruohonen2009formal}
-By definition formal language is a set of words over some alphabet and in other words, formal language is a rule set enumerating possible combinations of words that are.
-
-For example integers could be defined by a language whose 
-
-\subsection{Grammar}
-Grammar is necessary in order to describe a language and is usually denoted as a quadruple $G = (N, T, S, P)$, where:
-\begin{itemize}	\setlength\itemsep{-0.5em}
-\item N is a set of non-terminal symbols, which are rewritten into other symbols using production rules,
-\item T is a set of terminal symbols, which with few exceptions are never rewritten once defined,
-\item S describes the initial symbol of a word,
-\item P is a set of production rules.
+\section{Assignment}
+The goal of this project is to:
+\begin{itemize}
+\item formalize blazon into a formal language,
+\item design grammar,
+\item at least partially implement generator functionality allowing rendition of a crest.
 \end{itemize}
 
-For example elements of grammar describing non-negative integers could be defined in a following manner: $G = (N, T, INT, P)$, $N = \{INT, CIPHER\}$, $T = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$
-$P: $
-\begin{itemize}	\setlength\itemsep{-0.5em}
-	\item INT -> CIPHER INT | CIPHER
-	\item CIPHER -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 
-\end{itemize}
-Take a note that the language defined by this grammar accepts numbers with unlimited leading zeros, which is usually not desired and to prevent this, we would have to define a more complex grammar.
+\subsection{Analysis}
+The blazon language is constructed upon a variety of spoken languages, such as English, Scottish, Czech, German, etc...
+For this reason, it was chosen to construct the terminal symbols through vocabularies in form of \textit{comma separated values} files which are composed into a \textbf{Vocabulary} structure.
 
-\subsection{Blazon}
+\section{Blazon}
 The emergence of heraldry as we know it today was linked to the need to distinguish participants quickly and easily in combat \cite{InternationalHeraldry}.
 While quick distinction in battle is the primary reason for blazoning, it's also used as a way to display achievements or clan relations.
 
@@ -173,8 +159,59 @@ Quarterly 1st and 4th Sable a lion rampant on a canton Argent a cross Gules;
 
 In this example, there can be seen a quarterly division being used with field repetition using the ordinal numbers specifying which fields are being described. Placement of inescutcheon in chief and another inescutcheon within is also demonstrated.
 
+\section{Formal language}
+In order to define a formal language, we need to understand the parts it is composed of - the words and the alphabet.
+A word (or string) is a finite sequence of items, so-called symbols or letters chosen from a specified finite set called the alphabet.
+Examples of common alphabets are e.g. letters in the Latin alphabet (+ interword space, punctuation marks, etc.), and the bits 0 and 1.\cite{ruohonen2009formal}
+By definition formal language is a set of words over some alphabet and in other words, formal language is a rule set enumerating possible combinations of words that are.
+
+Current implementation of blazon consists of 15 non-terminal symbols, which are directly rewritten into terminals.
+
+These symbols are:
+\begin{itemize}
+\setlength\itemsep{-0.5em}
+\item \textbf{Tincture (15)} A color or fur-like material,
+\item \textbf{Field division(11)} Mean of dividing a field,
+\item \textbf{Field variation(9)} Filling pattern definition,
+\item \textbf{Division line(9)} Style of dividing line,
+\item \textbf{Position(8)},
+\item \textbf{Keywords(8)},
+\item \textbf{Numbers(20)} 1 through 10 of ordinal and cardinal numbers,
+\item \textbf{Ordinaries(18)} Ordinary charges,
+\item \textbf{Sub-ordinaries(17)} Subordinary shapes,
+\item \textbf{Shape(11)} Shape,
+\item \textbf{Shape type(3)} Whether shape is Solid / hollowed,
+\item \textbf{Charge properties(5)},
+\item \textbf{Charge attitudes(15)},
+\item \textbf{Charge attitude directions(3}),
+\item \textbf{Charge features(7)}.
+\end{itemize}
+
+\newpage
+\subsection{Grammar}
+Grammar is necessary in order to describe a language and is usually denoted as a quadruple $G = (N, T, S, P)$, where:
+\begin{itemize}	\setlength\itemsep{-0.5em}
+\item \textbf{N} is a set of non-terminal symbols, which are rewritten into other symbols using production rules,
+\item \textbf{T} is a set of terminal symbols, which with few exceptions are never rewritten once defined,
+\item \textbf{S} describes the initial symbol of a word,
+\item \textbf{P} is a set of production rules.
+\end{itemize}
+
+The non-terminal symbols of blazon grammar are listed in previous section and some of these symbols can have subtype technically creating more non-terminal symbols.
+
+The grammar also consists of generic lists which can be made of multiple occurences of any existing symbol separated by \textbf{comma} keywords and the \textbf{and} keyword.
+
+The terminal symbols are loaded into a symbol vocabulary dynamically according to language specified and currently only the old English vocabulary is implemented.
+
+The initial symbol represents the whole coat of arms and the set of production rules is going to be described in section \texttt{Syntactic analysis}.
+
+
 \section{Compilation}
-As previously stated, a language consists of symbols which form words when put together. For blazon these symbols are for instance \textit{Tinctures}, \textit{divisions of field}, \textit{charges} and other elements. Recognizing and joining these symbols together are first two main disciplines of the compilation with the last stage being interpretation of a recognized word.
+As previously stated, a language consists of symbols which form words when put together.
+For blazon these symbols are for instance \textit{Tinctures}, \textit{divisions of field}, \textit{charges} and other elements.
+
+Recognizing and joining these symbols together are first two main disciplines of the compilation whose result is a word or in this case, a blazon instance.
+The last stage of compilation is interpretation of a recognized word.
 
 
 \subsection{Lexical analysis} 
@@ -183,7 +220,9 @@ In this phase the input text is converted into a list of tokens defined by the t
 
 Most elements of blazon like Tinctures, ordinaries or field divisions are strictly defined and are not likely to change. 
 Thanks to this, they are listed in a lexical vocabulary and easily transformed.
-On contrary, with exception of geometrical shapes, it would be practically impossible to list every charge. Because of this, the tokenization is run in two phases: first the vocabulary conversion is run and then the remaining text is interpreted as Charge tokens.
+
+On contrary, with exception of geometrical shapes, it would be practically impossible to list every charge.
+Because of this, the tokenization is run in two phases: first the vocabulary conversion is run and then the remaining text is interpreted as Charge tokens.
 
 
 
@@ -192,6 +231,8 @@ This step verifies that the tokens recognized by Lexical analysis follow the gra
 Each non-terminal symbol from the grammar can be represented as a state while terminal symbols are the tokens being processed.
 
 Because of the blazon nature of field division rules, the constructed representation resembles a tree with its root being the whole coat of arms, its branches representing field divisions and its leaves describing blazon elements.
+
+The production rules are realized by marked methods of \textit{Compiler} classes in the \textbf{Heraldry.SyntacticAnalysis.Compilers} namespace. These methods form a structure which validates a correct 
 
 \subsubsection{Semantic analysis} 
 An optional step after syntactic analysis comes the Semantic analysis whose role is to verify the structure it built.
