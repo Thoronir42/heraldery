@@ -90,6 +90,11 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return TokenIs(PeekToken(), type, subtype);
         }
 
+        protected bool NextTokenIs(params TokenType[] tokenTypes)
+        {
+            return TokenIs(PeekToken(), tokenTypes);
+        }
+
         /// <summary>
         /// Checks whether token type matches expected type and if provided, if tokens subtype matches expected subtype
         /// </summary>
@@ -98,25 +103,22 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return token != null && token.Type == expectedType && (expSubtype == null || expSubtype.Equals(token.Subtype));
         }
 
-        /// <summary>
-        /// Checks whether the definition of the token is charge: charge, ordinary, ...
-        /// </summary>
-        /// <param name="token">Token whose definition will be checked.</param>
-        /// <returns>True if the token contains charge definition.</returns>
-        protected bool IsTokenCharge(Token token)
+        protected bool TokenIs(Token token, params TokenType[] expectedTypes)
         {
+            if (expectedTypes.Length == 0)
+            {
+                throw new ArgumentException("Token type check needs at least one expected type"); ;
+            }
             if (token == null)
             {
                 return false;
             }
-            switch (token.Type)
-            {
-                case DefinitionType.Charge:
-                case DefinitionType.Ordinary:
-                    return true;
-            }
 
-            return false;
+            return expectedTypes.Any(type =>
+            {
+                return token.Type == type.Type &&
+                    (type.Subtype == null || type.Subtype.Equals(token.Subtype));
+            });
         }
     }
 }

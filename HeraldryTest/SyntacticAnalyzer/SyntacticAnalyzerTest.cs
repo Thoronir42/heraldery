@@ -45,7 +45,7 @@ namespace HeraldryTest
             };
 
             // feed the parser
-            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            SyntacticAnalyzer sa = new SyntacticAnalyzer(false);
             BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result
@@ -84,7 +84,7 @@ namespace HeraldryTest
             };
 
             // feed the parser
-            SyntacticAnalyzer sa = new SyntacticAnalyzer();
+            SyntacticAnalyzer sa = new SyntacticAnalyzer(false);
             BlazonInstance blazon = sa.Execute(tokens);
 
             // check the result

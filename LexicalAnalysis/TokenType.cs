@@ -30,7 +30,7 @@ namespace Heraldry.LexicalAnalysis
                 .ToArray();
         }
 
-        public static TokenType[] Subtypes(DefinitionType type, params object[] subtypes)
+        public static TokenType[] Subtypes<TSubtype>(DefinitionType type, params TSubtype[] subtypes)
         {
             if(subtypes.Length == 0)
             {

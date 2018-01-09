@@ -97,7 +97,8 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 PopToken();
             }
 
-            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Determiner) || IsTokenCharge(PeekToken()))
+            if (NextTokenIs(DefinitionType.KeyWord, KeyWord.Determiner) || 
+                NextTokenIs(TokenType.Types(DefinitionType.Charge, DefinitionType.Ordinary)))
             {
                 field.Charge = Compilers.Charge.PrincipalCharge();
             }

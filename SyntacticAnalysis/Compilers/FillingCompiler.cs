@@ -23,12 +23,12 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         [SyntacticRule]
         public Filling Filling()
         {
-            if(NextTokenIs(DefinitionType.Tincture))
+            if (NextTokenIs(DefinitionType.Tincture))
             {
                 return new SolidFilling(Tincture());
             }
 
-            if(NextTokenIs(DefinitionType.Variation))
+            if (NextTokenIs(DefinitionType.Variation))
             {
                 return VariatedFilling();
             }
@@ -40,8 +40,8 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         {
             // first, the type of variation follows, then variation tinctures should be defined
             FieldVariationDefinition definition = PopDefinition<FieldVariationDefinition>(DefinitionType.Variation);
-            
-           switch (Blazon.Structure.Filling.TypeByVariation(definition.VariationType))
+
+            switch (Blazon.Structure.Filling.TypeByVariation(definition.VariationType))
             {
                 // todo: implement various field variation
                 case FillingType.NPattern:
@@ -93,20 +93,28 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         [SyntacticRule]
         public Tincture Tincture()
         {
-            TinctureDefinition tinctureDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
-            var tincture = tinctureDef.Tincture;
-
-            if (tincture.TinctureType == TinctureType.Colour || tincture.TinctureType == TinctureType.Metal)
+            if (!NextTokenIs(DefinitionType.Tincture))
             {
+                throw new ExpectedTokenNotFoundException(DefinitionType.Tincture);
+            }
+
+            if (NextTokenIs(TokenType.Subtypes(DefinitionType.Tincture, TinctureType.Colour, TinctureType.Metal)))
+            {
+                TinctureDefinition tinctureDef = PopDefinition<TinctureDefinition>(DefinitionType.Tincture);
+                var tincture = tinctureDef.Tincture;
+
                 return tincture;
             }
-            if (tincture.TinctureType == TinctureType.Fur)
+
+            if (NextTokenIs(DefinitionType.Tincture, TinctureType.Fur))
             {
-                // call fur rule
-                return Fur(tinctureDef);
+                return Fur();
             }
 
-            throw new ArgumentException("TinctureType " + tincture.TinctureType + " not recognized");
+            var token = PeekToken();
+
+            throw new ExpectedTokenNotFoundException(TokenType.Subtypes(DefinitionType.Tincture,
+                TinctureType.Colour, TinctureType.Fur, TinctureType.Metal));
         }
 
         /// <summary>
@@ -114,18 +122,18 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         /// 
         /// </summary>
         /// <returns>Parsed fur.</returns>
-        protected Tincture Fur(TinctureDefinition definition)
+        public  FurTincture Fur()
         {
+            var definition = PopDefinition<TinctureDefinition>(DefinitionType.Tincture, TinctureType.Fur);
             FurTincture tincture = definition.Tincture as FurTincture;
 
-            var nextToken = PeekToken();
-            if(nextToken.Type == DefinitionType.Tincture)
+            if(NextTokenIs(DefinitionType.Tincture))
             {
                 tincture.PrimaryColor = NonFurTincture();
                 PopTokenAs(DefinitionType.KeyWord, KeyWord.And);
                 tincture.SecondaryColor = NonFurTincture();
             }
-
+            
             return tincture;
         }
 
