@@ -23,16 +23,25 @@ namespace Heraldry.App
             try
             {
                 settings.ProcessArguments(args);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                if(!(ex is ShowHelpException))
+                {
+                    Console.Error.WriteLine(ex.Message);
+                }
+
                 settings.PrintHelp();
 
-                Console.WriteLine("Press enter to exit");
-                Console.ReadLine();
+                if(!(ex is ShowHelpException))
+                {
+                    Console.WriteLine("Press enter to exit");
+                    Console.ReadLine();
+                }
+
                 return;
             }
-            
+
             var print = settings.GetPrintSettings();
 
             if (print.PrintSetupInfo)
@@ -43,15 +52,24 @@ namespace Heraldry.App
                 Console.WriteLine(" OutputFile : " + Path.GetFullPath(settings.OutputFile));
                 Console.WriteLine(" RenderType : " + settings.RenderType);
             }
-            if(print.PrintVocabularyLoadProgress)
+            if (print.PrintVocabularyLoadProgress)
             {
                 Console.WriteLine("\n=== Loading blazon vocabulary from " + settings.Language);
             }
-            
-            BlazonVocabulary vocabulary = new VocabularyLoader(".\\resources\\" + settings.Language + "\\") { PrintSettings = settings.GetPrintSettings() }.Load();
 
-
-            string input = File.ReadAllText(settings.InputFile);
+            BlazonVocabulary vocabulary;
+            string input;
+            try
+            {
+                var blazonDirectory = ".\\resources\\" + settings.Language + "\\";
+                vocabulary = (new VocabularyLoader(blazonDirectory) { PrintSettings = settings.GetPrintSettings() }).Load();
+                input = File.ReadAllText(settings.InputFile);
+            }
+            catch(IOException ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return;
+            }
 
             Stream stream = File.Open(settings.OutputFile, FileMode.Create);
 
@@ -68,7 +86,7 @@ namespace Heraldry.App
                 {
                     if (result.Success)
                     {
-                        if(print.PrintResult)
+                        if (print.PrintResult)
                         {
                             Console.WriteLine("Rendition to file '{0}' finished successfully.",
                                 Path.GetFullPath(settings.OutputFile));
@@ -94,7 +112,7 @@ namespace Heraldry.App
                 Console.WriteLine(input.Substring(ex.TokenPosition + ex.TokenText.Length));
             }
 
-            if(print.PromptExit)
+            if (print.PromptExit)
             {
                 Console.WriteLine("Press Enter to exit.");
                 Console.ReadLine();

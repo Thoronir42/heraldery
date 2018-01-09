@@ -15,7 +15,7 @@ namespace Heraldry.App
 
         public CommandLineInterface()
         {
-            this.Option("help", "h", 0, args => PrintHelp(), "Displays this help");
+            this.Option("help", "h", 0, args => throw new ShowHelpException(), "Displays this help");
         }
 
         public CommandLineInterface Option(string name, string shortcut, int argc, Action<string[]> action,
@@ -54,12 +54,19 @@ namespace Heraldry.App
             int n = 0;
             while (i < args.Length)
             {
-                var option = options.Find(opt => opt.IsMatch(args[i]));
-                if(option != null) {
+                if(args[i][0] == '-')
+                {
+                    var option = options.Find(opt => opt.IsMatch(args[i]));
+                    if (option == null)
+                    {
+                        throw new ArgumentException("Option " + args[i] + " not recognized");
+                    }
+
                     option.Action(args.Skip(i + 1).Take(option.Argc).ToArray());
                     i += option.Argc + 1;
                     continue;
                 }
+                
 
                 if(n >= parameters.Count)
                 {
@@ -132,6 +139,10 @@ namespace Heraldry.App
                 Required = required;
             }
         }
+    }
+
+    public class ShowHelpException : Exception
+    {
     }
 
 

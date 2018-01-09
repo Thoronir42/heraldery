@@ -84,6 +84,11 @@ namespace Heraldry.Blazon.Vocabulary
                 Console.Write(String.Format("Loading {0,-30}", itemsLabel + " ..."));
             }
 
+            if(!File.Exists(file))
+            {
+                throw new FileNotFoundException("Failed to load " + itemsLabel + ", file not found: " + file);
+            }
+
             List<T> list = loadFunc(file);
             totalDefinitions += list.Count();
             definitionTypes++;
