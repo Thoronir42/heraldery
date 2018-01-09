@@ -21,12 +21,8 @@ namespace HeraldryTest.Helpers
 
         public static ContentField SolidColorField(string color, TinctureType tinctureType = TinctureType.Colour)
         {
-            return new ContentField()
-            {
-                Background = SolidFilling(color, tinctureType)
-            };
+            return new ContentField(SolidFilling(color, tinctureType));
         }
-
 
         public static Filling SolidFilling(string color, TinctureType tinctureType = TinctureType.Colour)
         {

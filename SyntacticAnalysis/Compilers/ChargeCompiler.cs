@@ -36,30 +36,20 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                 PopToken();
             }
 
-            Charge charge = Charge();
-
-            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Attitude))
+            Charge charge = null;
+            if (NextTokenIs(DefinitionType.Ordinary))
             {
-                charge.Attitude = Attitude();
+                charge = OrdinaryCharge();
             }
 
-            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Tail) || NextTokenIs(DefinitionType.ChargeProperty, PropertyType.TailStyle))
+            if (NextTokenIs(DefinitionType.Charge))
             {
-                charge.Tail = Tail();
+                charge = PropertyfullCharge();
             }
 
-            var filling = charge.Filling = Compilers.Filling.Filling();
-
-            while (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Feature))
+            if (charge == null)
             {
-                var list = PopList(DefinitionType.ChargeProperty, PropertyType.Feature, (FeaturePropertyDefinition def) => def.Feature);
-
-                filling = Compilers.Filling.Filling();
-
-                foreach (var feature in list)
-                {
-                    charge.Features.Add(new FeatureProperty(feature, filling));
-                }
+                throw new ExpectedTokenNotFoundException(new TokenType(DefinitionType.Charge), new TokenType(DefinitionType.Ordinary));
             }
 
             return charge;
@@ -94,23 +84,47 @@ namespace Heraldry.SyntacticAnalysis.Compilers
             return new TailProperty(def.Style);
         }
 
-        private Charge Charge()
+        public OrdinaryCharge OrdinaryCharge()
         {
-            var nextToken = PeekToken();
-            switch (nextToken.Type)
+            var definition = PopDefinition<OrdinaryDefinition>(DefinitionType.Ordinary);
+
+            var content = Compilers.Field.ContentField();
+
+            return new OrdinaryCharge(definition.Type, content, definition.Size);
+        }
+
+        public Charge PropertyfullCharge()
+        {
+            var def = PopDefinition<ChargeDefinition>(DefinitionType.Charge);
+
+            var charge = new GenericCharge((def.Charge as GenericCharge).Value);
+
+            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Attitude))
             {
-                case DefinitionType.Ordinary:
-                    var ordDef = PopDefinition<OrdinaryDefinition>(DefinitionType.Ordinary);
-
-                    return new OrdinaryCharge(ordDef.Type, ordDef.Size);
-
-                case DefinitionType.Charge:
-                    var def = PopDefinition<ChargeDefinition>(DefinitionType.Charge);
-
-                    return def.Charge;
+                charge.Attitude = Attitude();
             }
 
-            throw new ExpectedTokenNotFoundException(new TokenType(DefinitionType.Charge), new TokenType(DefinitionType.Ordinary));
+            if (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Tail) || NextTokenIs(DefinitionType.ChargeProperty, PropertyType.TailStyle))
+            {
+                charge.Tail = Tail();
+            }
+
+            var filling = charge.Filling = Compilers.Filling.Filling();
+
+            while (NextTokenIs(DefinitionType.ChargeProperty, PropertyType.Feature))
+            {
+                var list = PopList(DefinitionType.ChargeProperty, PropertyType.Feature, (FeaturePropertyDefinition d) => d.Feature);
+
+                filling = Compilers.Filling.Filling();
+
+                foreach (var feature in list)
+                {
+                    charge.Features.Add(new FeatureProperty(feature, filling));
+                }
+            }
+
+            return charge;
+
         }
     }
 }

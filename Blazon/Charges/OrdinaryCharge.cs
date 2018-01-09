@@ -26,7 +26,7 @@ namespace Heraldry.Blazon.Charges
         /// </summary>
         public OrdinarySize OrdinarySize { get; set; }
 
-        public OrdinaryCharge(Ordinary type, OrdinarySize size = OrdinarySize.Honourable) : base(ChargeType.Ordinary)
+        public OrdinaryCharge(Ordinary type, ContentField content, OrdinarySize size = OrdinarySize.Honourable) : base(ChargeType.Ordinary, content)
         {
             OrdinaryType = type;
             OrdinarySize = size;

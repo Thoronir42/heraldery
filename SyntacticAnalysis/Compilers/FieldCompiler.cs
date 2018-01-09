@@ -61,7 +61,7 @@ namespace Heraldry.SyntacticAnalysis.Compilers
         }
 
 
-        protected ContentField ContentField()
+        public ContentField ContentField()
         {
             ContentField field;
 
@@ -78,13 +78,13 @@ namespace Heraldry.SyntacticAnalysis.Compilers
                     }
                     else
                     {
-                        field = new ContentField { Background = new SolidFilling(tincture) };
+                        field = new ContentField(new SolidFilling(tincture));
                     }
 
                     break;
 
                 case DefinitionType.Variation:
-                    field = new ContentField { Background = Compilers.Filling.Filling() };
+                    field = new ContentField(Compilers.Filling.Filling());
                     break;
 
                 default:

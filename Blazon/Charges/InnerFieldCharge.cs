@@ -15,10 +15,11 @@ namespace Heraldry.Blazon.Charges
             set { Content.Background = value; }
         }
 
-        public ContentField Content { get; set; } = new ContentField();
+        public ContentField Content { get; set; }
 
-        protected InnerFieldCharge(ChargeType type) : base(type)
+        protected InnerFieldCharge(ChargeType type, ContentField content) : base(type)
         {
+            Content = content;
         }
     }
 }

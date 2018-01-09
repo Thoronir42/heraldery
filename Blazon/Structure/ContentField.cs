@@ -11,5 +11,10 @@ namespace Heraldry.Blazon.Structure
     {
         public Filling Background { get; set; }
         public Charge Charge { get; set; }
+
+        public ContentField(Filling background)
+        {
+            Background = background;
+        }
     }
 }

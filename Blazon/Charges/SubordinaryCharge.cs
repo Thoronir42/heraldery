@@ -11,12 +11,10 @@ namespace Heraldry.Blazon.Charges
     public class SubordinaryCharge : InnerFieldCharge
     {
         public Subordinary Subordinary { get; }
-        public ContentField Field { get; }
 
-        public SubordinaryCharge(Subordinary subordinary, ContentField field) : base(ChargeType.Subordinary)
+        public SubordinaryCharge(Subordinary subordinary, ContentField content) : base(ChargeType.Subordinary, content)
         {
             Subordinary = subordinary;
-            Field = field;
         }
     }
 }
