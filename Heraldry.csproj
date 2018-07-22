@@ -48,8 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\CommandLineInterface.cs" />
-    <Compile Include="App\ParseProcess.cs" />
+    <Compile Include="Api\ApiToken.cs" />
+    <Compile Include="Api\Request.cs" />
+    <Compile Include="Api\Response.cs" />
+    <Compile Include="Cli\CommandLineInterface.cs" />
+    <Compile Include="Cli\ParseProcess.cs" />
     <Compile Include="Blazon\Charges\GenericCharge.cs" />
     <Compile Include="Blazon\Charges\InnerFieldCharge.cs" />
     <Compile Include="Blazon\Charges\Properties\AttitudeProperty.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="Blazon\Vocabulary\VocabularyDefiner.cs" />
     <Compile Include="Blazon\Vocabulary\VocabularyLoader.cs" />
     <Compile Include="LexicalAnalysis\DebugPrinter.cs" />
+    <Compile Include="Program\TranslationStats.cs" />
     <Compile Include="Rendering\RenderType.cs" />
     <Compile Include="Rendering\Svg\SvgRenderer.cs" />
     <Compile Include="Rendering\Text\Printers\BasePrinter.cs" />
@@ -133,11 +137,11 @@
     <Compile Include="SyntacticAnalysis\Formulas\QuaterlyDividedField.cs" />
     <Compile Include="Blazon\Vocabulary\Entries\TinctureDefinition.cs" />
     <Compile Include="Blazon\Vocabulary\KeyWord.cs" />
-    <Compile Include="App\CliSettings.cs" />
+    <Compile Include="Cli\CliSettings.cs" />
     <Compile Include="LexicalAnalysis\LexAnalyzer.cs" />
     <Compile Include="LexicalAnalysis\Token.cs" />
     <Compile Include="Blazon\Vocabulary\DefinitionType.cs" />
-    <Compile Include="App\Program.cs" />
+    <Compile Include="Cli\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\CrestRenderer.cs" />
     <Compile Include="Rendering\Svg\SvgLoader.cs" />

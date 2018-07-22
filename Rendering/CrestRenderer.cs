@@ -1,4 +1,4 @@
-﻿using Heraldry.App;
+﻿using Heraldry.Program;
 using Heraldry.Blazon;
 using Heraldry.Blazon.Structure;
 using Heraldry.Rendering.Svg;
@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Heraldry.Cli;
 
 namespace Heraldry.Rendering
 {
@@ -15,6 +16,8 @@ namespace Heraldry.Rendering
     {
         protected Stream PrintStream { get; }
         public bool CloseWhenDone { get; set; } = false;
+
+        public List<string> RenderErrors { get; } = new List<string>();
 
         public CrestRenderer(Stream printStream)
         {

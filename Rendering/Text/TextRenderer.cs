@@ -7,7 +7,7 @@ using Heraldry.Blazon.Structure;
 using System.IO;
 using Heraldry.Rendering.Text.Printers;
 using Heraldry.Blazon.Vocabulary;
-using Heraldry.App;
+using Heraldry.Cli;
 
 namespace Heraldry.Rendering.Text
 {

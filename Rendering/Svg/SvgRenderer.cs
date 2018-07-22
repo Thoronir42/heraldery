@@ -8,7 +8,7 @@ using Svg;
 using Heraldry.Blazon.Structure;
 using System.IO;
 using System.Drawing.Imaging;
-using Heraldry.App;
+using Heraldry.Cli;
 
 namespace Heraldry.Rendering.Svg
 {

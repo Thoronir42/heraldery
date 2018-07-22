@@ -1,4 +1,4 @@
-﻿using Heraldry.App;
+﻿using Heraldry.Cli;
 using Heraldry.Blazon.Charges;
 using Heraldry.Blazon.Charges.Properties;
 using Heraldry.Blazon.Elements;

@@ -5,6 +5,6 @@
     </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>-l en_olde -v -r Text .\\resources\\input\\Dispenser.txt .\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt</StartArguments>
+    <StartArguments>-l en_olde -v -r Text ".\\resources\\input\\Arms of Churchil.txt" .\\..\\..\\out\\Czech-SimpleSilesia-rendered.txt</StartArguments>
   </PropertyGroup>
 </Project>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heraldry.App
+namespace Heraldry.Cli
 {
     public class ParseProcess : ParseProcess<object>
     {
